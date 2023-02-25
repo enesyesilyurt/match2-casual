@@ -10,12 +10,7 @@ namespace Casual.Controllers.Items
         public void PrepareCubeItem(ItemBase itemBase, Colour colour)
         {
             base.colour = colour;
-            Prepare(itemBase, GetSpritesForMatchType());
-        }
-
-        private Sprite GetSpritesForMatchType()
-        {
-            return ImageLibrary.Instance.GetSprite(colour);
+            Prepare(itemBase, ImageLibrary.Instance.GetSprite(colour));
         }
     }
 }

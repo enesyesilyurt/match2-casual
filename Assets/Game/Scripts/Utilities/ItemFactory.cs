@@ -1,10 +1,13 @@
+using System;
 using System.Collections.Generic;
 using Casual.Abstracts;
 using Casual.Controllers;
 using Casual.Controllers.Items;
 using Casual.Enums;
 using Casual.Managers;
+using UnityEditor;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Casual.Utilities
 {
@@ -27,16 +30,26 @@ namespace Casual.Utilities
             PrepareRatios();
         }
         
-        public Item CreateItem(Colour colour, Transform parent)
+        public Item CreateItem(Colour colour, Transform parent, ItemType itemType = ItemType.Default)
         {
-            if (colour == Colour.None)
-            {
-                return null;
-            }
-
             var itemBase = Instantiate(itemBasePrefab, Vector3.zero, Quaternion.identity, parent);
 
-            return CreateCubeItem(itemBase, colour);
+            Item item = null;
+            switch (itemType)
+            {
+                case ItemType.Default:
+                    item = CreateCubeItem(itemBase, colour);
+                    break;
+                case ItemType.Rocket:
+                    break;
+                case ItemType.DiscoBall:
+                    break;
+                case ItemType.BombItem:
+                    item = CreateBombItem(itemBase);
+                    break;
+            }
+
+            return item;
         }
 
         public Item CreateRandomItem(Transform parent)
@@ -81,6 +94,14 @@ namespace Casual.Utilities
             cubeItem.PrepareCubeItem(itemBase, colour);
 
             return cubeItem;
+        }
+
+        private Item CreateBombItem(ItemBase itemBase)
+        {
+            var bombItem = itemBase.gameObject.AddComponent<BombItem>();
+            bombItem.PrepareBombItem(itemBase);
+
+            return bombItem;
         }
     }
 }

@@ -98,7 +98,7 @@ namespace Casual.Controllers
             else if (cellController.Item.ItemType == ItemType.Default) 
                 ExplodeMatchingCells(cells);
             else 
-                TappedSpecialItemRoutine(cellController.transform.position, cells);
+                StartCoroutine(TappedSpecialItemRoutine(cellController, cells));
         }
 
         private void FailMatchSequence(Transform target)
@@ -110,7 +110,7 @@ namespace Casual.Controllers
             sequence.OnComplete(() => target.rotation = quaternion.identity);
         }
 
-        private void TappedSpecialItemRoutine(Vector3 cellPoint, List<CellController> cells)
+        private IEnumerator TappedSpecialItemRoutine(CellController cell, List<CellController> cells)
         {
             onAnim = true;
             FallAndFillManager.Instance.StopFalls();
@@ -120,15 +120,26 @@ namespace Casual.Controllers
                 var item = explodedCell.Item;
                 item.IncreaseSortingOrder(rowCount);
                 item.FallAnimation.PrepareRemove();
-                item.transform.DOMove(cellPoint, GameManager.Instance.SpecialMergeTime)
+                item.transform.DOMove(cell.transform.position, GameManager.Instance.SpecialMergeTime)
                     .SetEase(Ease.InBack, GameManager.Instance.SpecialMergeOverShoot)
                     .OnComplete(() =>
                     {
                         item.RemoveItem();
                         onAnim = false;
-                        FallAndFillManager.Instance.StartFalls();
                     });
             }
+
+            yield return new WaitForSeconds(GameManager.Instance.SpecialMergeTime + .1f);
+            CreateBomb(cell);
+            FallAndFillManager.Instance.StartFalls();
+        }
+
+        private void CreateBomb(CellController cell)
+        {
+            cell.Item = ItemFactory.Instance.CreateItem(
+                Colour.None, this.ItemsParent, ItemType.BombItem);
+            cell.Item.transform.position = cell.transform.position;
+            cell.Item.Fall();
         }
         
         private void ExplodeMatchingCells(List<CellController> cells)

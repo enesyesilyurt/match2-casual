@@ -8,6 +8,8 @@ namespace Casual.Utilities
     public class ImageLibrary : MonoSingleton<ImageLibrary>
     {
         [SerializeField] private SpriteSet[] colourSets;
+
+        [Header("Specials")] [SerializeField] private Sprite bombSprite;
         
         private Dictionary<Colour, SpriteSet> colourSetsDict = new();
 
@@ -31,6 +33,17 @@ namespace Casual.Utilities
                     return colourSetsDict[colour].SpecialSprite;
                 default:
                     return colourSetsDict[colour].DefaultSprite;
+            }
+        }
+
+        public Sprite GetSpecialSprite(ItemType itemType)
+        {
+            switch (itemType)
+            {
+                case ItemType.BombItem:
+                    return bombSprite;
+                default:
+                    return bombSprite;
             }
         }
     }

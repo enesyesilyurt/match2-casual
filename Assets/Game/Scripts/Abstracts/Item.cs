@@ -19,7 +19,7 @@ namespace Casual.Abstracts
 
         public Colour Colour => colour;
         
-        public ItemType ItemType { get; private set; }
+        public ItemType ItemType { get; protected set; }
         
         public CellController CellController
         {
@@ -72,6 +72,7 @@ namespace Casual.Abstracts
 
         public int CheckMatches()
         {
+            if (ItemType == ItemType.BombItem) return 0;
             var matchCount = BoardController.Instance.MatchFinder.FindMatches(cellController, colour).Count;
             SetSprite(matchCount);
             return matchCount - 1;
