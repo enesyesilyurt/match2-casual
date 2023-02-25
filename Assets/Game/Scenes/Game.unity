@@ -721,36 +721,36 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colourSets:
-  - colour: 2
-    defaultSprite: {fileID: 21300000, guid: 8fa4f80686b14474fa252c2c3dd8cc3a, type: 3}
-    bombSprite: {fileID: 21300000, guid: 8fa4f80686b14474fa252c2c3dd8cc3a, type: 3}
-    rocketSprite: {fileID: 21300000, guid: 8fa4f80686b14474fa252c2c3dd8cc3a, type: 3}
-    specialSprite: {fileID: 21300000, guid: 8fa4f80686b14474fa252c2c3dd8cc3a, type: 3}
   - colour: 1
-    defaultSprite: {fileID: 21300000, guid: 16a2b5127240a5245b39bad34bc0d824, type: 3}
-    bombSprite: {fileID: 21300000, guid: 16a2b5127240a5245b39bad34bc0d824, type: 3}
-    rocketSprite: {fileID: 21300000, guid: 16a2b5127240a5245b39bad34bc0d824, type: 3}
-    specialSprite: {fileID: 21300000, guid: 16a2b5127240a5245b39bad34bc0d824, type: 3}
+    defaultSprite: {fileID: 21300000, guid: 5e5d1b718aef8664ea2375d674caf446, type: 3}
+    bombSprite: {fileID: 21300000, guid: e13ddc082ac1bae4bb5c14b51f22b826, type: 3}
+    rocketSprite: {fileID: 21300000, guid: bf9dbe9f93e3d8342bd3d75f7dd8db67, type: 3}
+    specialSprite: {fileID: 21300000, guid: 323ed2f75002c244abc3b1c15844e693, type: 3}
+  - colour: 2
+    defaultSprite: {fileID: 21300000, guid: caad5af19bf27fe418dd3b9f4d2f5b46, type: 3}
+    bombSprite: {fileID: 21300000, guid: bc7ff4969995cdf42b7bc3387a949a15, type: 3}
+    rocketSprite: {fileID: 21300000, guid: ae9559b34b3137f44b0a088fa3f26239, type: 3}
+    specialSprite: {fileID: 21300000, guid: f50212e35be09bb44b60d594bc939320, type: 3}
   - colour: 3
-    defaultSprite: {fileID: 21300000, guid: e6f77e3c1b4826049b7fb28337b929b8, type: 3}
-    bombSprite: {fileID: 21300000, guid: e6f77e3c1b4826049b7fb28337b929b8, type: 3}
-    rocketSprite: {fileID: 21300000, guid: e6f77e3c1b4826049b7fb28337b929b8, type: 3}
-    specialSprite: {fileID: 21300000, guid: e6f77e3c1b4826049b7fb28337b929b8, type: 3}
+    defaultSprite: {fileID: 21300000, guid: ea3d40ad91149224d8407dd758ee99cc, type: 3}
+    bombSprite: {fileID: 21300000, guid: 6d179322490a47840aa9f21706fde203, type: 3}
+    rocketSprite: {fileID: 21300000, guid: 6ae3dba0c4f106b448879946cfa9ad8f, type: 3}
+    specialSprite: {fileID: 21300000, guid: 8e140d4157a5f4546b1629e69cdd846e, type: 3}
   - colour: 4
-    defaultSprite: {fileID: 21300000, guid: 205f43ec361c838498888cc2ce0093ca, type: 3}
-    bombSprite: {fileID: 21300000, guid: 205f43ec361c838498888cc2ce0093ca, type: 3}
-    rocketSprite: {fileID: 21300000, guid: 205f43ec361c838498888cc2ce0093ca, type: 3}
-    specialSprite: {fileID: 21300000, guid: 205f43ec361c838498888cc2ce0093ca, type: 3}
+    defaultSprite: {fileID: 21300000, guid: ef16783f4a9234c4cb18b0b23d24c0db, type: 3}
+    bombSprite: {fileID: 21300000, guid: bd4e728711cf9254faa25232a6b349f7, type: 3}
+    rocketSprite: {fileID: 21300000, guid: f349d076fbaae954d97de463a9509fbe, type: 3}
+    specialSprite: {fileID: 21300000, guid: 679dcf3defee23d439e8546fc8094353, type: 3}
   - colour: 5
-    defaultSprite: {fileID: 21300000, guid: 2ac602fc347f601489b15ff99f33ae18, type: 3}
-    bombSprite: {fileID: 21300000, guid: 2ac602fc347f601489b15ff99f33ae18, type: 3}
-    rocketSprite: {fileID: 21300000, guid: 2ac602fc347f601489b15ff99f33ae18, type: 3}
-    specialSprite: {fileID: 21300000, guid: 2ac602fc347f601489b15ff99f33ae18, type: 3}
+    defaultSprite: {fileID: 21300000, guid: 50a607b7a89b7e64a82aa0dedd52d416, type: 3}
+    bombSprite: {fileID: 21300000, guid: 4e1b702f6e1030749bb2c3892ad49fa9, type: 3}
+    rocketSprite: {fileID: 21300000, guid: e06fe33369ba8e74fba15f90fcefef7c, type: 3}
+    specialSprite: {fileID: 21300000, guid: 00d010feed7dc404da5235f7bcad308a, type: 3}
   - colour: 6
-    defaultSprite: {fileID: 21300000, guid: fb8f713f08bf8354bb0342fd4005599c, type: 3}
-    bombSprite: {fileID: 21300000, guid: fb8f713f08bf8354bb0342fd4005599c, type: 3}
-    rocketSprite: {fileID: 21300000, guid: fb8f713f08bf8354bb0342fd4005599c, type: 3}
-    specialSprite: {fileID: 21300000, guid: fb8f713f08bf8354bb0342fd4005599c, type: 3}
+    defaultSprite: {fileID: 21300000, guid: c8311ecb7bf119c44ab6ac5b40e5e61b, type: 3}
+    bombSprite: {fileID: 21300000, guid: e51472cc7437fd94a859be832b24981f, type: 3}
+    rocketSprite: {fileID: 21300000, guid: c0d609371826bb04fbfc5824a1330e0c, type: 3}
+    specialSprite: {fileID: 21300000, guid: e7f0cc6d7cf0b9847884c3c24cc2d4f2, type: 3}
 --- !u!1 &996512230
 GameObject:
   m_ObjectHideFlags: 0
@@ -1105,8 +1105,8 @@ MonoBehaviour:
   specialMergeTime: 0.35
   specialMergeOverShoot: 1.15
   shuffleSpeed: 0.6
-  offsetX: 1
-  offsetY: 1
+  offsetX: 0.925
+  offsetY: 0.93
   bombMatchCount: 5
   rocketMatchCount: 8
   discoBallMatchCount: 10
