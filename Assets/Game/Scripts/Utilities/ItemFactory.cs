@@ -40,9 +40,11 @@ namespace Casual.Utilities
                 case ItemType.Default:
                     item = CreateCubeItem(itemBase, colour);
                     break;
-                case ItemType.Rocket:
+                case ItemType.RocketItem:
+                    item = CreateRocketItem(itemBase);
                     break;
-                case ItemType.DiscoBall:
+                case ItemType.PropellerItem:
+                    item = CreatePropellerItem(itemBase);
                     break;
                 case ItemType.BombItem:
                     item = CreateBombItem(itemBase);
@@ -90,18 +92,34 @@ namespace Casual.Utilities
         
         private Item CreateCubeItem(ItemBase itemBase, Colour colour)
         {
-            var cubeItem = itemBase.gameObject.AddComponent<CubeItem>();
-            cubeItem.PrepareCubeItem(itemBase, colour);
+            var item = itemBase.gameObject.AddComponent<CubeItem>();
+            item.PrepareCubeItem(itemBase, colour);
 
-            return cubeItem;
+            return item;
         }
 
         private Item CreateBombItem(ItemBase itemBase)
         {
-            var bombItem = itemBase.gameObject.AddComponent<BombItem>();
-            bombItem.PrepareBombItem(itemBase);
+            var item = itemBase.gameObject.AddComponent<BombItem>();
+            item.PrepareBombItem(itemBase);
 
-            return bombItem;
+            return item;
+        }
+
+        private Item CreateRocketItem(ItemBase itemBase)
+        {
+            var item = itemBase.gameObject.AddComponent<RocketItem>();
+            item.PrepareRocketItem(itemBase);
+
+            return item;
+        }
+
+        private Item CreatePropellerItem(ItemBase itemBase)
+        {
+            var item = itemBase.gameObject.AddComponent<PropellerItem>();
+            item.PreparePropellerItem(itemBase);
+
+            return item;
         }
     }
 }

@@ -5,7 +5,9 @@ namespace Casual.Enums
         Default,
         Bomb,
         Rocket,
-        DiscoBall,
-        BombItem
+        Propeller,
+        BombItem,
+        RocketItem,
+        PropellerItem
     }
 }

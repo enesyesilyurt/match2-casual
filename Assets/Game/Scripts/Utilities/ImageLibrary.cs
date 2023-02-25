@@ -9,7 +9,10 @@ namespace Casual.Utilities
     {
         [SerializeField] private SpriteSet[] colourSets;
 
-        [Header("Specials")] [SerializeField] private Sprite bombSprite;
+        [Header("Specials")] 
+        [SerializeField] private Sprite bombSprite;
+        [SerializeField] private Sprite rocketSprite;
+        [SerializeField] private Sprite propellerSprite;
         
         private Dictionary<Colour, SpriteSet> colourSetsDict = new();
 
@@ -29,7 +32,7 @@ namespace Casual.Utilities
                     return colourSetsDict[colour].BombSprite;
                 case ItemType.Rocket:
                     return colourSetsDict[colour].RocketSprite;
-                case ItemType.DiscoBall:
+                case ItemType.Propeller:
                     return colourSetsDict[colour].SpecialSprite;
                 default:
                     return colourSetsDict[colour].DefaultSprite;
@@ -42,6 +45,10 @@ namespace Casual.Utilities
             {
                 case ItemType.BombItem:
                     return bombSprite;
+                case ItemType.RocketItem:
+                    return rocketSprite;
+                case ItemType.PropellerItem:
+                    return propellerSprite;
                 default:
                     return bombSprite;
             }

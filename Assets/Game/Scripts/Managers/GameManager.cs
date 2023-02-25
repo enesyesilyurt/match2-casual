@@ -1,6 +1,7 @@
 using UnityEngine;
 using Casual.Utilities;
 using DG.Tweening;
+using UnityEngine.Serialization;
 
 namespace Casual.Managers
 {
@@ -15,11 +16,11 @@ namespace Casual.Managers
         [SerializeField] private float offsetY;
         [SerializeField, Header("Match Counts")] private int bombMatchCount = 5;
         [SerializeField] private int rocketMatchCount = 8;
-        [SerializeField] private int discoBallMatchCount = 10;
+        [SerializeField] private int propellerMatchCount = 10;
 
         public int BombMatchCount => bombMatchCount;
         public int RocketMatchCount => rocketMatchCount;
-        public int DiscoBallMatchCount => discoBallMatchCount;
+        public int PropellerMatchCount => propellerMatchCount;
         public float CubeMaxSpeed => cubeMaxSpeed;
         public float ShuffleSpeed => shuffleSpeed;
         public float SpecialMergeTime => specialMergeTime;

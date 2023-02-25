@@ -114,6 +114,7 @@ namespace Casual.Controllers
         {
             onAnim = true;
             FallAndFillManager.Instance.StopFalls();
+            var itemType = cell.Item.ItemType;
             for (var i = 0; i < cells.Count; i++)
             {
                 var explodedCell = cells[i];
@@ -130,7 +131,19 @@ namespace Casual.Controllers
             }
 
             yield return new WaitForSeconds(GameManager.Instance.SpecialMergeTime + .1f);
-            CreateBomb(cell);
+
+            if (itemType == ItemType.Bomb)
+            {
+                CreateBomb(cell);
+            }
+            else if(itemType == ItemType.Rocket)
+            {
+                CreateRocket(cell);
+            }
+            else if(itemType == ItemType.Propeller)
+            {
+                CreatePropeller(cell);
+            }
             FallAndFillManager.Instance.StartFalls();
         }
 
@@ -138,6 +151,22 @@ namespace Casual.Controllers
         {
             cell.Item = ItemFactory.Instance.CreateItem(
                 Colour.None, this.ItemsParent, ItemType.BombItem);
+            cell.Item.transform.position = cell.transform.position;
+            cell.Item.Fall();
+        }
+
+        private void CreateRocket(CellController cell)
+        {
+            cell.Item = ItemFactory.Instance.CreateItem(
+                Colour.None, this.ItemsParent, ItemType.RocketItem);
+            cell.Item.transform.position = cell.transform.position;
+            cell.Item.Fall();
+        }
+
+        private void CreatePropeller(CellController cell)
+        {
+            cell.Item = ItemFactory.Instance.CreateItem(
+                Colour.None, this.ItemsParent, ItemType.PropellerItem);
             cell.Item.transform.position = cell.transform.position;
             cell.Item.Fall();
         }

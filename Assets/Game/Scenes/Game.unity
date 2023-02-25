@@ -752,6 +752,8 @@ MonoBehaviour:
     rocketSprite: {fileID: 21300000, guid: c0d609371826bb04fbfc5824a1330e0c, type: 3}
     specialSprite: {fileID: 21300000, guid: e7f0cc6d7cf0b9847884c3c24cc2d4f2, type: 3}
   bombSprite: {fileID: 21300000, guid: 178311532f2b20f459cce863cae6702c, type: 3}
+  rocketSprite: {fileID: 21300000, guid: 237add0575042964f96a884c33879e15, type: 3}
+  propellerSprite: {fileID: 21300000, guid: ff7ea5901ac930a45b46b04a5c7db274, type: 3}
 --- !u!1 &996512230
 GameObject:
   m_ObjectHideFlags: 0
@@ -1110,7 +1112,7 @@ MonoBehaviour:
   offsetY: 0.93
   bombMatchCount: 5
   rocketMatchCount: 8
-  discoBallMatchCount: 10
+  propellerMatchCount: 10
 --- !u!1 &2100265129
 GameObject:
   m_ObjectHideFlags: 0

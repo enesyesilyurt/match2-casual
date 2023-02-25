@@ -72,7 +72,7 @@ namespace Casual.Abstracts
 
         public int CheckMatches()
         {
-            if (ItemType == ItemType.BombItem) return 0;
+            if (ItemType == ItemType.BombItem || ItemType == ItemType.RocketItem || ItemType == ItemType.PropellerItem) return 0;
             var matchCount = BoardController.Instance.MatchFinder.FindMatches(cellController, colour).Count;
             SetSprite(matchCount);
             return matchCount - 1;
@@ -90,15 +90,15 @@ namespace Casual.Abstracts
                 spriteRenderer.sprite = ImageLibrary.Instance.GetSprite(colour, ItemType.Bomb);
                 ItemType = ItemType.Bomb;
             }
-            else if (matchCount < GameManager.Instance.DiscoBallMatchCount)
+            else if (matchCount < GameManager.Instance.PropellerMatchCount)
             {
                 spriteRenderer.sprite = ImageLibrary.Instance.GetSprite(colour, ItemType.Rocket);
                 ItemType = ItemType.Rocket;
             }
             else
             {
-                spriteRenderer.sprite = ImageLibrary.Instance.GetSprite(colour, ItemType.DiscoBall);
-                ItemType = ItemType.DiscoBall;
+                spriteRenderer.sprite = ImageLibrary.Instance.GetSprite(colour, ItemType.Propeller);
+                ItemType = ItemType.Propeller;
             }
         }
         
