@@ -92,10 +92,14 @@ namespace Casual.Controllers
             if(cellController.Item.FallAnimation.IsFalling) return;
             
             var cells = matchFinder.FindMatches(cellController, cellController.Item.Colour);
-            
-            if (cells.Count < MinimumMatchCount) 
+
+            if (cellController.Item.ItemType == ItemType.BombItem)
+            {
+                cellController.Item.TryExecute();
+            }
+            else if (cells.Count < MinimumMatchCount) 
                 FailMatchSequence(cellController.Item.transform);
-            else if (cellController.Item.ItemType == ItemType.Default) 
+            else if (cellController.Item.ItemType == ItemType.Cube) 
                 ExplodeMatchingCells(cells);
             else 
                 StartCoroutine(TappedSpecialItemRoutine(cellController, cells));
@@ -125,7 +129,7 @@ namespace Casual.Controllers
                     .SetEase(Ease.InBack, GameManager.Instance.SpecialMergeOverShoot)
                     .OnComplete(() =>
                     {
-                        item.RemoveItem();
+                        item.TryExecute();
                         onAnim = false;
                     });
             }
@@ -178,7 +182,7 @@ namespace Casual.Controllers
                 var explodedCell = cells[i];
                 var item = explodedCell.Item;
                 item.FallAnimation.PrepareRemove();
-                item.RemoveItem();
+                item.TryExecute();
             }
         }
 

@@ -754,6 +754,15 @@ MonoBehaviour:
   bombSprite: {fileID: 21300000, guid: 178311532f2b20f459cce863cae6702c, type: 3}
   rocketSprite: {fileID: 21300000, guid: 237add0575042964f96a884c33879e15, type: 3}
   propellerSprite: {fileID: 21300000, guid: ff7ea5901ac930a45b46b04a5c7db274, type: 3}
+  BlueCube: {fileID: 2800000, guid: 5e5d1b718aef8664ea2375d674caf446, type: 3}
+  GreenCube: {fileID: 2800000, guid: caad5af19bf27fe418dd3b9f4d2f5b46, type: 3}
+  PinkCube: {fileID: 2800000, guid: ea3d40ad91149224d8407dd758ee99cc, type: 3}
+  PurpleCube: {fileID: 2800000, guid: ef16783f4a9234c4cb18b0b23d24c0db, type: 3}
+  RedCube: {fileID: 2800000, guid: 50a607b7a89b7e64a82aa0dedd52d416, type: 3}
+  YellowCube: {fileID: 2800000, guid: c8311ecb7bf119c44ab6ac5b40e5e61b, type: 3}
+  Bomb: {fileID: 2800000, guid: 178311532f2b20f459cce863cae6702c, type: 3}
+  Propeller: {fileID: 2800000, guid: ff7ea5901ac930a45b46b04a5c7db274, type: 3}
+  Rocket: {fileID: 2800000, guid: 237add0575042964f96a884c33879e15, type: 3}
 --- !u!1 &996512230
 GameObject:
   m_ObjectHideFlags: 0

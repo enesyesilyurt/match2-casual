@@ -13,6 +13,17 @@ namespace Casual.Utilities
         [SerializeField] private Sprite bombSprite;
         [SerializeField] private Sprite rocketSprite;
         [SerializeField] private Sprite propellerSprite;
+
+        [Header("EditorTextures")] 
+        public Texture BlueCube;
+        public Texture GreenCube;
+        public Texture PinkCube;
+        public Texture PurpleCube;
+        public Texture RedCube;
+        public Texture YellowCube;
+        public Texture Bomb;
+        public Texture Propeller;
+        public Texture Rocket;
         
         private Dictionary<Colour, SpriteSet> colourSetsDict = new();
 
@@ -24,7 +35,7 @@ namespace Casual.Utilities
             }
         }
 
-        public Sprite GetSprite(Colour colour, ItemType itemType = ItemType.Default)
+        public Sprite GetSprite(Colour colour, ItemType itemType = ItemType.Cube)
         {
             switch (itemType)
             {

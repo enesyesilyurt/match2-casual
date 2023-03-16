@@ -83,7 +83,7 @@ namespace Casual.Abstracts
             if (matchCount < GameManager.Instance.BombMatchCount)
             {
                 spriteRenderer.sprite = ImageLibrary.Instance.GetSprite(colour);
-                ItemType = ItemType.Default;
+                ItemType = ItemType.Cube;
             }
             else if (matchCount < GameManager.Instance.RocketMatchCount)
             {
@@ -107,12 +107,15 @@ namespace Casual.Abstracts
             FallAnimation.FallToTarget(CellController.GetFallTarget());
         }
 
-        public void RemoveItem()
+        public virtual void TryExecute()
+        {
+            RemoveItem();
+        }
+
+        private void RemoveItem()
         {
             CellController.Item = null;
             CellController = null;
-            Instantiate(ParticleLibrary.Instance.GetParticle(colour).gameObject, transform.position,
-                quaternion.identity);
 
             Destroy(gameObject);
         }

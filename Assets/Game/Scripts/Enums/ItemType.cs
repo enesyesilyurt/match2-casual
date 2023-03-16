@@ -2,7 +2,9 @@ namespace Casual.Enums
 {
     public enum ItemType
     {
-        Default,
+        None,
+        Cube,
+        Egg,
         Bomb,
         Rocket,
         Propeller,

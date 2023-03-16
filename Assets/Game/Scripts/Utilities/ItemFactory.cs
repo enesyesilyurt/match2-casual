@@ -30,14 +30,14 @@ namespace Casual.Utilities
             PrepareRatios();
         }
         
-        public Item CreateItem(Colour colour, Transform parent, ItemType itemType = ItemType.Default)
+        public Item CreateItem(Colour colour, Transform parent, ItemType itemType = ItemType.Cube)
         {
             var itemBase = Instantiate(itemBasePrefab, Vector3.zero, Quaternion.identity, parent);
 
             Item item = null;
             switch (itemType)
             {
-                case ItemType.Default:
+                case ItemType.Cube:
                     item = CreateCubeItem(itemBase, colour);
                     break;
                 case ItemType.RocketItem:

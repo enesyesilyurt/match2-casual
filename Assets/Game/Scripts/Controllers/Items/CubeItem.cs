@@ -12,5 +12,17 @@ namespace Casual.Controllers.Items
             base.colour = colour;
             Prepare(itemBase, ImageLibrary.Instance.GetSprite(colour));
         }
+
+        public override void TryExecute()
+        {
+            CreateParticle();
+            base.TryExecute();
+        }
+
+        private void CreateParticle()
+        {
+            Instantiate(ParticleLibrary.Instance.GetParticle(colour).gameObject, transform.position,
+                Quaternion.identity);
+        }
     }
 }
