@@ -254,9 +254,7 @@ MonoBehaviour:
   currentLevelIndex: 0
   levels:
   - {fileID: 11400000, guid: 3bf582ba35e1f254e9c62b4dea5248e1, type: 2}
-  - {fileID: 11400000, guid: 02aebe5a653e99f48870aff0582a7855, type: 2}
-  - {fileID: 11400000, guid: 9207110db460c0c488f0acdf5d28c08e, type: 2}
-  - {fileID: 11400000, guid: bd611d6e7da059c4f8a6e862752692f3, type: 2}
+  - {fileID: 11400000, guid: 74c637d18d0ec1b4b8287d0f1edbccf3, type: 2}
   boardController: {fileID: 1885619620}
   fallAndFillManager: {fileID: 2100265131}
 --- !u!1 &242963756
@@ -964,9 +962,6 @@ MonoBehaviour:
   cellControllerPrefab: {fileID: 7533777346860213195, guid: bacd890df5ffe7b45ad5aa3a7ede4023, type: 3}
   cellParent: {fileID: 584894521}
   itemsParent: {fileID: 903857870}
-  spriteMaskTransform: {fileID: 486480239}
-  borderSprite: {fileID: 117192043}
-  borderSprite2: {fileID: 396107321}
   Cells: []
 --- !u!4 &1885619621
 Transform:
