@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Casual.Abstracts;
 using Casual.Enums;
 using Casual.Managers;
@@ -33,6 +34,7 @@ namespace Casual.Controllers
 
         private MatchFinder matchFinder = new();
         private bool onAnim = false;
+        private int cellCount;
 
         public Transform ItemsParent => itemsParent;
         public MatchFinder MatchFinder => matchFinder;
@@ -74,7 +76,10 @@ namespace Casual.Controllers
             {
                 for (var row = 0; row < rowCount; row++)
                 {
-                    var cell = Instantiate(cellControllerPrefab, Vector3.zero, Quaternion.identity, cellParent);
+                    if (LevelManager.Instance.CurrentLevel.Blocks[column * ColumnCount + row].ItemType == ItemType.None) continue;
+                    cellCount++;
+                    var cell = SimplePool.Spawn(cellControllerPrefab.gameObject, Vector3.zero, Quaternion.identity).GetComponent<CellController>();
+                    cell.transform.SetParent(cellParent);
                     Cells[column * ColumnCount + row] = cell;
                 }
             }
@@ -86,6 +91,7 @@ namespace Casual.Controllers
             {
                 for (var row = 0; row < ColumnCount; row++)
                 {
+                    if (LevelManager.Instance.CurrentLevel.Blocks[column * ColumnCount + row].ItemType == ItemType.None) continue;
                     Cells[column * ColumnCount + row].Prepare(row, column, this);
                 }
             }
@@ -97,9 +103,7 @@ namespace Casual.Controllers
             if (cellController == null) return;
             if (!cellController.HasItem()) return;
             if(cellController.Item.FallAnimation.IsFalling) return;
-            
             var cells = matchFinder.FindMatches(cellController, cellController.Item.Colour);
-
             if (cellController.Item.ItemType == ItemType.BombItem)
             {
                 cellController.Item.TryExecute();
@@ -201,14 +205,14 @@ namespace Casual.Controllers
             {
                 for (var row = 0; row < rowCount; row++)
                 {
-                    if (Cells[column * ColumnCount + row] == null) return;
-                    if(Cells[column * ColumnCount + row].Item == null) return;
+                    if (Cells[column * ColumnCount + row] == null) continue;
+                    if(Cells[column * ColumnCount + row].Item == null) continue;
                     totalMatchCount += Cells[column * ColumnCount + row].Item.CheckMatches();
                     counter++;
                 }
             }
 
-            if (totalMatchCount <= 0 && counter == rowCount * ColumnCount)
+            if (totalMatchCount <= 0 && counter == cellCount)
             {
                 onAnim = true;
                 StartCoroutine(ShuffleRoutine());
@@ -226,6 +230,7 @@ namespace Casual.Controllers
             {
                 for (var row = 0; row < rowCount; row++)
                 {
+                    if(Cells[coloumn * ColumnCount + row] == null) continue;
                     items.Add(Cells[coloumn * ColumnCount + row].Item);
                     Cells[coloumn * ColumnCount + row].Item = null;
                 }
@@ -235,6 +240,7 @@ namespace Casual.Controllers
             {
                 for (var row = 0; row < rowCount; row++)
                 {
+                    if(Cells[column * ColumnCount + row] == null) continue;
                     var index = Random.Range(0, items.Count);
                     Cells[column * ColumnCount + row].Item = items[index];
                     items.RemoveAt(index);
@@ -255,7 +261,7 @@ namespace Casual.Controllers
             var column = cellController.Column + directions[(int)direction].y;
 
             if (row >= ColumnCount || row < 0 || column >= rowCount || column < 0) return null;
-
+            if (LevelManager.Instance.CurrentLevel.Blocks[column * ColumnCount + row].ItemType == ItemType.None) return null;
             return Cells[column * ColumnCount + row];
         }
     }

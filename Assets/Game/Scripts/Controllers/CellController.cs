@@ -2,12 +2,16 @@ using System.Collections.Generic;
 using Casual.Abstracts;
 using Casual.Enums;
 using Casual.Managers;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Casual.Controllers
 {
     public class CellController : MonoBehaviour
     {
+        [SerializeField] private Transform mask;
+        [SerializeField] private Transform backGround;
+        
         private int row;
         private int column;
         private CellController firstCellBelow;
@@ -49,7 +53,9 @@ namespace Casual.Controllers
             this.column = column;
             transform.localPosition = new Vector3(row * GameManager.Instance.OffsetX, column * GameManager.Instance.OffsetY);
             GetComponent<BoxCollider2D>().size = new Vector2(GameManager.Instance.OffsetX, GameManager.Instance.OffsetY);
-            isFillingCell = Column == LevelManager.Instance.CurrentLevel.ColumnCount - 1;
+
+            mask.localScale = new Vector3(GameManager.Instance.OffsetX, GameManager.Instance.OffsetY, 1);
+            backGround.localScale = new Vector3(GameManager.Instance.OffsetX, GameManager.Instance.OffsetY, 1);
             
             UpdateLabel();
             UpdateNeighbours(boardController);
@@ -62,6 +68,32 @@ namespace Casual.Controllers
             var down = boardController.GetNeighbourWithDirection(this, Direction.Down);
             var left = boardController.GetNeighbourWithDirection(this, Direction.Left);
             var right = boardController.GetNeighbourWithDirection(this, Direction.Right);
+
+            if (up == null)
+            {
+                var border = SimplePool.Spawn(GameManager.Instance.Border, transform.position, Quaternion.identity);
+                border.SetActive(true);
+                border.transform.parent = transform;
+                isFillingCell = true;
+            }
+            if (down == null)
+            {
+                var border = SimplePool.Spawn(GameManager.Instance.Border, transform.position, Quaternion.Euler(0,0,180));
+                border.SetActive(true);
+                border.transform.parent = transform;
+            }
+            if (left == null)
+            {
+                var border = SimplePool.Spawn(GameManager.Instance.Border, transform.position, Quaternion.Euler(0,0,90));
+                border.SetActive(true);
+                border.transform.parent = transform;
+            }
+            if (right == null)
+            {
+                var border = SimplePool.Spawn(GameManager.Instance.Border, transform.position, Quaternion.Euler(0,0,270));
+                border.SetActive(true);
+                border.transform.parent = transform;
+            }
 			    
             if(up!=null) Neighbours.Add(up);
             if(down!=null) Neighbours.Add(down);

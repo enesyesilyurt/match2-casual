@@ -18,6 +18,9 @@ namespace Casual.Managers
         [SerializeField] private int rocketMatchCount = 8;
         [SerializeField] private int propellerMatchCount = 10;
 
+        [SerializeField] private GameObject border;
+
+        public GameObject Border => border;
         public int BombMatchCount => bombMatchCount;
         public int RocketMatchCount => rocketMatchCount;
         public int PropellerMatchCount => propellerMatchCount;

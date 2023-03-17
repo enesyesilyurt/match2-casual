@@ -139,7 +139,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &117192043
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -253,7 +253,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentLevelIndex: 0
   levels:
-  - {fileID: 11400000, guid: 109e7881142fdf247a87fd6e98984698, type: 2}
+  - {fileID: 11400000, guid: 1c2d7c42cf5dc354eae21a4afcf9aea9, type: 2}
   - {fileID: 11400000, guid: 02aebe5a653e99f48870aff0582a7855, type: 2}
   - {fileID: 11400000, guid: 9207110db460c0c488f0acdf5d28c08e, type: 2}
   - {fileID: 11400000, guid: bd611d6e7da059c4f8a6e862752692f3, type: 2}
@@ -309,7 +309,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!212 &396107321
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -393,7 +393,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &486480239
 Transform:
   m_ObjectHideFlags: 0
@@ -1123,6 +1123,7 @@ MonoBehaviour:
   bombMatchCount: 5
   rocketMatchCount: 8
   propellerMatchCount: 10
+  border: {fileID: 2803017040439846520, guid: 88a6532822966f142ac2844f7363c32d, type: 3}
 --- !u!1 &2100265129
 GameObject:
   m_ObjectHideFlags: 0

@@ -58,6 +58,7 @@ namespace Casual.Managers
                 for (var row = 0; row < rowCount; row++)
                 {
                     var cell = boardController.Cells[ColumnCount * column + row];
+                    if(cell == null) continue;
                     if (cell.Item != null && cell.FirstCellBelow != null && cell.FirstCellBelow.Item == null)
                     {
                         cell.Item.Fall();

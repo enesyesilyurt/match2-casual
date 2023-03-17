@@ -10,6 +10,7 @@ namespace Casual.Controllers.Items
         public void PrepareCubeItem(ItemBase itemBase, Colour colour)
         {
             base.colour = colour;
+            base.ItemType = ItemType.Cube;
             Prepare(itemBase, ImageLibrary.Instance.GetSprite(colour));
         }
 

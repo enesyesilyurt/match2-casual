@@ -38,6 +38,7 @@ namespace Casual.Managers
 		    {
 			    for (var row = 0; row < CurrentLevel.RowCount; row++)
 			    {
+				    if (CurrentLevel.Blocks[column * CurrentLevel.ColumnCount + row].ItemType == ItemType.None) continue;
 				    var cell = boardController.Cells[column * CurrentLevel.ColumnCount + row];
 				    var colour = CurrentLevel.Blocks[CurrentLevel.RowCount * column + row].Colour;
 				    var item = colour == Colour.None
