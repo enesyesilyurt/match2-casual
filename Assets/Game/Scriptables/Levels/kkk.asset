@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f943bee3d8669fc4997bb1c300478fbe, type: 3}
+  m_Name: kkk
+  m_EditorClassIdentifier: 
+  ColumnCount: 0
+  RowCount: 0
+  maxMove: 0
+  ColourRatios: []
+  Blocks: []
+  Targets: []

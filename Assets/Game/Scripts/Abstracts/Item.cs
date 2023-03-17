@@ -3,6 +3,7 @@ using Casual.Enums;
 using Casual.Managers;
 using Casual.Utilities;
 using Unity.Mathematics;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace Casual.Abstracts
@@ -63,8 +64,17 @@ namespace Casual.Abstracts
 
         private void AddSprite(Sprite sprite)
         {
-            spriteRenderer = new GameObject("Sprite_").AddComponent<SpriteRenderer>();
-            spriteRenderer.transform.SetParent(transform);
+            var tempRenderer = GetComponentInChildren<SpriteRenderer>();
+            if (tempRenderer == null)
+            {
+                spriteRenderer = new GameObject("Sprite_").AddComponent<SpriteRenderer>();
+                spriteRenderer.transform.SetParent(transform);
+            }
+            else
+            {
+                spriteRenderer = tempRenderer;
+            }
+            
             spriteRenderer.sprite = sprite;
             spriteRenderer.sortingOrder = BaseSortingOrder;
             spriteRenderer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
@@ -116,8 +126,9 @@ namespace Casual.Abstracts
         {
             CellController.Item = null;
             CellController = null;
-
-            Destroy(gameObject);
+            
+            Destroy(gameObject.GetComponent<Item>());
+            SimplePool.Despawn(gameObject);
         }
     }
 }

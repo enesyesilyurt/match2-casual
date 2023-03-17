@@ -14,6 +14,13 @@ namespace Casual.Controllers
     public class BoardController : MonoSingleton<BoardController>
     {
         public const int MinimumMatchCount = 2;
+        private Vector2Int[] directions = new[]
+        {
+            Vector2Int.up, new Vector2Int(1,1),
+            Vector2Int.right, new Vector2Int(1,-1),
+            Vector2Int.down, new Vector2Int(-1,-1),
+            Vector2Int.left, new Vector2Int(-1,1)
+        };
 
         [SerializeField] private CellController cellControllerPrefab;
         [SerializeField] private Transform cellParent;
@@ -30,11 +37,11 @@ namespace Casual.Controllers
         public Transform ItemsParent => itemsParent;
         public MatchFinder MatchFinder => matchFinder;
         private int rowCount => LevelManager.Instance.CurrentLevel.RowCount;
-        private int ColoumnCount => LevelManager.Instance.CurrentLevel.ColoumnCount;
+        private int ColumnCount => LevelManager.Instance.CurrentLevel.ColumnCount;
             
         public void Prepare()
         {
-            Cells = new CellController[ColoumnCount * rowCount];
+            Cells = new CellController[ColumnCount * rowCount];
             matchFinder.Setup();
             
             SetBoardElements();
@@ -45,10 +52,10 @@ namespace Casual.Controllers
         private void SetBoardElements()
         {
             var boardSize = new Vector2(
-                ColoumnCount * GameManager.Instance.OffsetX + .15f, 
+                ColumnCount * GameManager.Instance.OffsetX + .15f, 
                 rowCount * GameManager.Instance.OffsetY + .15f);
             var boardPosition =
-                Vector3.left * (ColoumnCount * GameManager.Instance.OffsetX / 2f - GameManager.Instance.OffsetX / 2f) +
+                Vector3.left * (ColumnCount * GameManager.Instance.OffsetX / 2f - GameManager.Instance.OffsetX / 2f) +
                 Vector3.down * (rowCount * GameManager.Instance.OffsetY / 2f - GameManager.Instance.OffsetY / 2f);
             
             borderSprite.size = boardSize;
@@ -63,23 +70,23 @@ namespace Casual.Controllers
         
         private void CreateCells()
         {
-            for (var coloumn = 0; coloumn < ColoumnCount; coloumn++)
+            for (var column = 0; column < ColumnCount; column++)
             {
                 for (var row = 0; row < rowCount; row++)
                 {
                     var cell = Instantiate(cellControllerPrefab, Vector3.zero, Quaternion.identity, cellParent);
-                    Cells[coloumn * ColoumnCount + row] = cell;
+                    Cells[column * ColumnCount + row] = cell;
                 }
             }
         }
         
         private void PrepareCells()
         {
-            for (var coloumn = 0; coloumn < ColoumnCount; coloumn++)
+            for (var column = 0; column < ColumnCount; column++)
             {
-                for (var row = 0; row < ColoumnCount; row++)
+                for (var row = 0; row < ColumnCount; row++)
                 {
-                    Cells[coloumn * ColoumnCount + row].Prepare(row, coloumn, this);
+                    Cells[column * ColumnCount + row].Prepare(row, column, this);
                 }
             }
         }
@@ -190,18 +197,18 @@ namespace Casual.Controllers
         {
             int totalMatchCount = 0;
             int counter = 0;
-            for (var coloumn = 0; coloumn < ColoumnCount; coloumn++)
+            for (var column = 0; column < ColumnCount; column++)
             {
                 for (var row = 0; row < rowCount; row++)
                 {
-                    if (Cells[coloumn * ColoumnCount + row] == null) return;
-                    if(Cells[coloumn * ColoumnCount + row].Item == null) return;
-                    totalMatchCount += Cells[coloumn * ColoumnCount + row].Item.CheckMatches();
+                    if (Cells[column * ColumnCount + row] == null) return;
+                    if(Cells[column * ColumnCount + row].Item == null) return;
+                    totalMatchCount += Cells[column * ColumnCount + row].Item.CheckMatches();
                     counter++;
                 }
             }
 
-            if (totalMatchCount <= 0 && counter == rowCount * ColoumnCount)
+            if (totalMatchCount <= 0 && counter == rowCount * ColumnCount)
             {
                 onAnim = true;
                 StartCoroutine(ShuffleRoutine());
@@ -215,23 +222,23 @@ namespace Casual.Controllers
 
             List<Item> items = new();
             
-            for (var coloumn = 0; coloumn < ColoumnCount; coloumn++)
+            for (var coloumn = 0; coloumn < ColumnCount; coloumn++)
             {
                 for (var row = 0; row < rowCount; row++)
                 {
-                    items.Add(Cells[coloumn * ColoumnCount + row].Item);
-                    Cells[coloumn * ColoumnCount + row].Item = null;
+                    items.Add(Cells[coloumn * ColumnCount + row].Item);
+                    Cells[coloumn * ColumnCount + row].Item = null;
                 }
             }
             
-            for (var coloumn = 0; coloumn < ColoumnCount; coloumn++)
+            for (var column = 0; column < ColumnCount; column++)
             {
                 for (var row = 0; row < rowCount; row++)
                 {
                     var index = Random.Range(0, items.Count);
-                    Cells[coloumn * ColoumnCount + row].Item = items[index];
+                    Cells[column * ColumnCount + row].Item = items[index];
                     items.RemoveAt(index);
-                    Cells[coloumn * ColoumnCount + row].Item.transform.DOMove(Cells[coloumn * ColoumnCount + row].transform.position, GameManager.Instance.ShuffleSpeed)
+                    Cells[column * ColumnCount + row].Item.transform.DOMove(Cells[column * ColumnCount + row].transform.position, GameManager.Instance.ShuffleSpeed)
                         .SetEase(Ease.InBack);
                 }
             }
@@ -244,45 +251,12 @@ namespace Casual.Controllers
         
         public CellController GetNeighbourWithDirection(CellController cellController, Direction direction)
         {
-            var row = cellController.X;
-            var coloumn = cellController.Y;
-            switch (direction)
-            {
-                case Direction.None:
-                    break;
-                case Direction.Up:
-                    coloumn += 1;
-                    break;
-                case Direction.UpRight:
-                    coloumn += 1;
-                    row += 1;
-                    break;
-                case Direction.Right:
-                    row += 1;
-                    break;
-                case Direction.DownRight:
-                    coloumn -= 1;
-                    row += 1;
-                    break;
-                case Direction.Down:
-                    coloumn -= 1;
-                    break;
-                case Direction.DownLeft:
-                    coloumn -= 1;
-                    row -= 1;
-                    break;
-                case Direction.Left:
-                    row -= 1;
-                    break;
-                case Direction.UpLeft:
-                    coloumn += 1;
-                    row -= 1;
-                    break;
-            }
+            var row = cellController.Row + directions[(int)direction].x;
+            var column = cellController.Column + directions[(int)direction].y;
 
-            if (row >= ColoumnCount || row < 0 || coloumn >= rowCount || coloumn < 0) return null;
+            if (row >= ColumnCount || row < 0 || column >= rowCount || column < 0) return null;
 
-            return Cells[coloumn * ColoumnCount + row];
+            return Cells[column * ColumnCount + row];
         }
     }
 }

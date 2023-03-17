@@ -8,15 +8,15 @@ namespace Casual.Controllers
 {
     public class CellController : MonoBehaviour
     {
-        private int x;
-        private int y;
-        private CellController _firstCellBelow;
+        private int row;
+        private int column;
+        private CellController firstCellBelow;
         private bool isFillingCell;
         private Item item;
 
-        public int X => x;
-        public int Y => y;
-        public CellController FirstCellBelow => _firstCellBelow;
+        public int Row => row;
+        public int Column => column;
+        public CellController FirstCellBelow => firstCellBelow;
         public bool IsFillingCell => isFillingCell;
         
         public List<CellController> Neighbours { get; private set; }
@@ -38,18 +38,18 @@ namespace Casual.Controllers
                 if (value != null)
                 {
                     value.CellController = this;
-                    value.SetSortingOrder(y);
+                    value.SetSortingOrder(column);
                 }
             }
         }
         
-        public void Prepare(int row, int coloumn, BoardController boardController)
+        public void Prepare(int row, int column, BoardController boardController)
         {
-            this.x = row;
-            this.y = coloumn;
-            transform.localPosition = new Vector3(row * GameManager.Instance.OffsetX, coloumn * GameManager.Instance.OffsetY);
+            this.row = row;
+            this.column = column;
+            transform.localPosition = new Vector3(row * GameManager.Instance.OffsetX, column * GameManager.Instance.OffsetY);
             GetComponent<BoxCollider2D>().size = new Vector2(GameManager.Instance.OffsetX, GameManager.Instance.OffsetY);
-            isFillingCell = Y == LevelManager.Instance.CurrentLevel.ColoumnCount - 1;
+            isFillingCell = Column == LevelManager.Instance.CurrentLevel.ColumnCount - 1;
             
             UpdateLabel();
             UpdateNeighbours(boardController);
@@ -68,12 +68,12 @@ namespace Casual.Controllers
             if(left!=null) Neighbours.Add(left);
             if(right!=null) Neighbours.Add(right);
 
-            if (down != null) _firstCellBelow = down;
+            if (down != null) firstCellBelow = down;
         }
         
         private void UpdateLabel()
         {
-            var cellName = X + ":" + Y;
+            var cellName = Row + ":" + Column;
             gameObject.name = "Cell " + cellName;
         }
 
@@ -85,9 +85,9 @@ namespace Casual.Controllers
         public CellController GetFallTarget() // todo
         {
             var targetCell = this;
-            while (targetCell._firstCellBelow != null && targetCell._firstCellBelow.Item == null)
+            while (targetCell.firstCellBelow != null && targetCell.firstCellBelow.Item == null)
             {
-                targetCell = targetCell._firstCellBelow;
+                targetCell = targetCell.firstCellBelow;
             }
             return targetCell;
         }

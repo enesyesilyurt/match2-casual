@@ -17,8 +17,8 @@ public class LevelEditor : EditorWindow
     private static Colour[] colours = new[]
         { Colour.Blue, Colour.Red, Colour.Green, Colour.Yellow, Colour.Pink, Colour.Purple };
     
-    static int maxRows = 9;
-    static int maxCols = 9;
+    static int maxRowCount = 9;
+    static int maxColumnCount = 9;
     private int maxMove;
     private string levelName;
     private bool isBlockSelected;
@@ -32,7 +32,7 @@ public class LevelEditor : EditorWindow
     {
         window = (LevelEditor)EditorWindow.GetWindow(typeof(LevelEditor));
         
-        levelSquares = new SquareBlock[maxCols * maxRows];
+        levelSquares = new SquareBlock[maxColumnCount * maxRowCount];
         for (int i = 0; i < levelSquares.Length; i++)
         {
 
@@ -143,28 +143,6 @@ public class LevelEditor : EditorWindow
         });
     }
 
-    // void SetSize()
-    // {
-    //     GUILayout.BeginHorizontal();
-    //     GUILayout.Label("Size(Columns/Rows):", EditorStyles.boldLabel, new GUILayoutOption[]
-    //     {
-    //         GUILayout.Width(200),
-    //         GUILayout.Height(15)
-    //     });
-    //     
-    //     rowCount = EditorGUILayout.IntField(rowCount, new GUILayoutOption[] {
-    //         GUILayout.Width (50)
-    //     });
-    //     coloumnCount = EditorGUILayout.IntField(coloumnCount, new GUILayoutOption[] {
-    //         GUILayout.Width (50)
-    //     });
-    //     
-    //     rowCount = Math.Clamp(rowCount, 3, maxRows);
-    //     coloumnCount = Math.Clamp(coloumnCount, 3, maxCols);
-    //
-    //     GUILayout.EndHorizontal();
-    // }
-
     void SetObstacles()
     {
         GUILayout.BeginHorizontal();
@@ -203,12 +181,12 @@ public class LevelEditor : EditorWindow
         
         GUILayout.BeginVertical();
 
-        for (int coloumn = 0; coloumn < maxCols; coloumn++)
+        for (int column = 0; column < maxColumnCount; column++)
         {
             GUILayout.BeginHorizontal();
-            for (int row = 0; row < maxRows; row++)
+            for (int row = 0; row < maxRowCount; row++)
             {
-                var sqr = levelSquares[coloumn * maxCols + row];
+                var sqr = levelSquares[column * maxColumnCount + row];
                 if (isBlockSelected)
                 {
                     if (sqr.ItemType == ItemType.None)
@@ -275,11 +253,11 @@ public class LevelEditor : EditorWindow
                 {
                     if (isBlockSelected)
                     {
-                        SetType(coloumn, row, selectedItemType, sqr.ObstacleType, selectedColour);
+                        SetType(column, row, selectedItemType, sqr.ObstacleType, selectedColour);
                     }
                     else
                     {
-                        SetType(coloumn, row, sqr.ItemType, selectedObstacleType, sqr.Colour);
+                        SetType(column, row, sqr.ItemType, selectedObstacleType, sqr.Colour);
                     }
                 }
             }
@@ -290,23 +268,29 @@ public class LevelEditor : EditorWindow
 
     void CreateLevel()
     {
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("Level Name:", new GUILayoutOption[]
+        {
+            GUILayout.Width(75),
+            GUILayout.Height(20)
+        });
         levelName = EditorGUILayout.TextField(levelName, new GUILayoutOption[]
         {
-            GUILayout.Width(200),
+            GUILayout.Width(100),
             GUILayout.Height(20)
         });
         
         if (GUILayout.Button("Create Level", new GUILayoutOption[]
             {
-                GUILayout.Width(150),
-                GUILayout.Height(50)
+                GUILayout.Width(100),
+                GUILayout.Height(20)
             }))
         {
             var scriptable = ScriptableObject.CreateInstance<LevelConfig>();
             AssetDatabase.CreateAsset(scriptable, "Assets/Game/Scriptables/Levels/" + levelName + ".asset");
 
-            scriptable.RowCount = maxRows;
-            scriptable.ColoumnCount = maxCols;
+            scriptable.RowCount = maxRowCount;
+            scriptable.ColumnCount = maxColumnCount;
             List<ColourRatio> temp = new ();
             for (int i = 0; i < colourRatios.Length; i++)
             {
@@ -334,17 +318,17 @@ public class LevelEditor : EditorWindow
                 scriptable.Targets = tempTarget.ToArray();
 
             scriptable.maxMove = maxMove;
-            scriptable.Blocks = new SquareBlock[maxRows * maxCols];
+            scriptable.Blocks = new SquareBlock[maxRowCount * maxColumnCount];
 
-            for (int coloumn = maxCols - 1; coloumn >= 0; coloumn--)
+            for (int column = maxColumnCount - 1; column >= 0; column--)
             {
-                for (int row = 0; row < maxRows; row++)
+                for (int row = 0; row < maxRowCount; row++)
                 {
                     var block = new SquareBlock();
-                    block.Colour = levelSquares[coloumn * maxCols + row].Colour;
-                    block.ItemType = levelSquares[coloumn * maxCols + row].ItemType;
-                    block.ObstacleType = levelSquares[coloumn * maxCols + row].ObstacleType;
-                    scriptable.Blocks[(maxCols - 1 - coloumn) * maxCols + row] = block;
+                    block.Colour = levelSquares[column * maxColumnCount + row].Colour;
+                    block.ItemType = levelSquares[column * maxColumnCount + row].ItemType;
+                    block.ObstacleType = levelSquares[column * maxColumnCount + row].ObstacleType;
+                    scriptable.Blocks[(maxColumnCount - 1 - column) * maxColumnCount + row] = block;
                 }
             }
 
@@ -353,6 +337,7 @@ public class LevelEditor : EditorWindow
 
             Selection.activeObject = scriptable;
         }
+        GUILayout.EndHorizontal();
     }
 
     void AddSelectedItemTypeButton(Texture texture, ItemType itemType, Colour colour)
@@ -446,10 +431,10 @@ public class LevelEditor : EditorWindow
         }
     }
 
-    void SetType(int coloumn, int row, ItemType itemType, ObstacleType obstacleType, Colour colour)
+    void SetType(int column, int row, ItemType itemType, ObstacleType obstacleType, Colour colour)
     {
-        levelSquares[coloumn * maxCols + row].ItemType = itemType;
-        levelSquares[coloumn * maxCols + row].ObstacleType = obstacleType;
-        levelSquares[coloumn * maxCols + row].Colour = colour;
+        levelSquares[column * maxColumnCount + row].ItemType = itemType;
+        levelSquares[column * maxColumnCount + row].ObstacleType = obstacleType;
+        levelSquares[column * maxColumnCount + row].Colour = colour;
     }
 }

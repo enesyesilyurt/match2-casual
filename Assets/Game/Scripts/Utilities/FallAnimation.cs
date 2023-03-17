@@ -30,7 +30,7 @@ namespace Casual.Utilities
 
         public void FallToTarget(CellController targetCellController)
         {
-            if (this.targetCellController != null && targetCellController.Y >= this.targetCellController.Y) return;
+            if (this.targetCellController != null && targetCellController.Column >= this.targetCellController.Column) return;
             
             if(jumpSequence != null)
                 jumpSequence.Kill();

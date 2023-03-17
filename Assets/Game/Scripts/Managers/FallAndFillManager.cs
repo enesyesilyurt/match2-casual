@@ -13,7 +13,7 @@ namespace Casual.Managers
         private bool isActive;
         
         private int rowCount => LevelManager.Instance.CurrentLevel.RowCount;
-        private int coloumnCount => LevelManager.Instance.CurrentLevel.ColoumnCount;
+        private int ColumnCount => LevelManager.Instance.CurrentLevel.ColumnCount;
 
         public void Init(BoardController boardController)
         {
@@ -25,11 +25,11 @@ namespace Casual.Managers
         private void CreateFillingCells()
         {
             var cellList = new List<CellController>();
-            for (var coloumn = 0; coloumn < coloumnCount; coloumn++)
+            for (var column = 0; column < ColumnCount; column++)
             {
                 for (var row = 0; row < rowCount; row++)
                 {
-                    var cell = boardController.Cells[coloumn * coloumnCount + row];
+                    var cell = boardController.Cells[column * ColumnCount + row];
                     if (cell != null && cell.IsFillingCell)
                     {
                         cellList.Add(cell);
@@ -53,11 +53,11 @@ namespace Casual.Managers
 
         private void DoFalls()
         {
-            for (var coloumn = 0; coloumn < coloumnCount; coloumn++)
+            for (var column = 0; column < ColumnCount; column++)
             {
                 for (var row = 0; row < rowCount; row++)
                 {
-                    var cell = boardController.Cells[coloumnCount * coloumn + row];
+                    var cell = boardController.Cells[ColumnCount * column + row];
                     if (cell.Item != null && cell.FirstCellBelow != null && cell.FirstCellBelow.Item == null)
                     {
                         cell.Item.Fall();

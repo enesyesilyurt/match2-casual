@@ -32,7 +32,9 @@ namespace Casual.Utilities
         
         public Item CreateItem(Colour colour, Transform parent, ItemType itemType = ItemType.Cube)
         {
-            var itemBase = Instantiate(itemBasePrefab, Vector3.zero, Quaternion.identity, parent);
+            var itemBase = SimplePool.Spawn(itemBasePrefab.gameObject, Vector3.zero, Quaternion.Euler(Vector3.zero)).GetComponent<ItemBase>();
+            itemBase.gameObject.SetActive(true);
+            itemBase.transform.parent = parent;
 
             Item item = null;
             switch (itemType)

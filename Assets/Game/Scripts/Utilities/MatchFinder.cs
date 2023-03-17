@@ -11,7 +11,7 @@ namespace Casual.Utilities
 
         public void Setup()
         {
-            visitedCells = new bool[LevelManager.Instance.CurrentLevel.RowCount, LevelManager.Instance.CurrentLevel.RowCount];
+            visitedCells = new bool[LevelManager.Instance.CurrentLevel.RowCount, LevelManager.Instance.CurrentLevel.ColumnCount];
         }
         
         public List<CellController> FindMatches(CellController cellController, Colour colour)
@@ -27,15 +27,15 @@ namespace Casual.Utilities
         {
             if (cellController == null) return;
 			    
-            var x = cellController.X;
-            var y = cellController.Y;
-            if (visitedCells[x, y]) return;
+            var row = cellController.Row;
+            var column = cellController.Column;
+            if (visitedCells[row, column]) return;
 
             if (cellController.HasItem()
                 && cellController.Item.Colour == colour
                 && cellController.Item.Colour != Colour.None)
             {
-                visitedCells[x, y] = true;
+                visitedCells[row, column] = true;
                 resultCells.Add(cellController);
 			    
                 var neighbours = cellController.Neighbours;
@@ -47,8 +47,8 @@ namespace Casual.Utilities
                 }
             }
         }
-        
-        public void ClearVisitedCells()
+
+        private void ClearVisitedCells()
         {
             for (var x = 0; x < visitedCells.GetLength(0); x++)
             {
