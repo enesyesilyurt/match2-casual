@@ -11,7 +11,7 @@ namespace Casual.Utilities
 
         public void Setup()
         {
-            visitedCells = new bool[LevelManager.Instance.CurrentLevel.Size.x, LevelManager.Instance.CurrentLevel.Size.y];
+            visitedCells = new bool[LevelManager.Instance.CurrentLevel.RowCount, LevelManager.Instance.CurrentLevel.RowCount];
         }
         
         public List<CellController> FindMatches(CellController cellController, Colour colour)

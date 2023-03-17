@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Casual.Entities;
 using Casual.Enums;
 using Casual.Utilities;
 using UnityEditor;
@@ -11,17 +12,19 @@ public class LevelEditor : EditorWindow
     private static LevelEditor window;
     public static SquareBlock[] levelSquares = new SquareBlock[81];
     public static SquareBlock[] targetSquares = new SquareBlock[4];
-    public static int[] colourRatios = new int[6];
+    public static ColourRatio[] colourRatios = new ColourRatio[6];
+
+    private static Colour[] colours = new[]
+        { Colour.Blue, Colour.Red, Colour.Green, Colour.Yellow, Colour.Pink, Colour.Purple };
     
     static int maxRows = 9;
     static int maxCols = 9;
-    int sizeX;
-    int sizeY;
     private int maxMove;
     private int target1;
     private int target2;
     private int target3;
     private int target4;
+    private string levelName;
     private bool isBlockSelected;
     private Texture itemTexture;
     private ItemType selectedItemType = ItemType.None;
@@ -61,7 +64,7 @@ public class LevelEditor : EditorWindow
         GUI.color = squareColor;
         
         GUILayout.Space(10);
-        SetSize();
+        // SetSize();
         GUILayout.Space(10);
         SetMaxMoves();
         GUILayout.Space(10);
@@ -74,6 +77,8 @@ public class LevelEditor : EditorWindow
         SetObstacles();
         GUILayout.Space(10);
         SetGrid();
+        GUILayout.Space(10);
+        CreateLevel();
     }
 
     void SetColourRatios()
@@ -118,9 +123,12 @@ public class LevelEditor : EditorWindow
         GUILayout.BeginHorizontal();
         for (int i = 0; i < 6; i++)
         {
-            colourRatios[i] = EditorGUILayout.IntField("", colourRatios[i], new GUILayoutOption[] {
+            var colourRatio = new ColourRatio();
+            colourRatio.Colour = colours[i];
+            colourRatio.Ratio = EditorGUILayout.IntField("", colourRatio.Ratio, new GUILayoutOption[] {
                 GUILayout.Width (51)
             });
+            colourRatios[i] = colourRatio;
         }
         GUILayout.EndHorizontal();
     }
@@ -139,27 +147,27 @@ public class LevelEditor : EditorWindow
         });
     }
 
-    void SetSize()
-    {
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Size(Columns/Rows):", EditorStyles.boldLabel, new GUILayoutOption[]
-        {
-            GUILayout.Width(200),
-            GUILayout.Height(15)
-        });
-        
-        sizeX = EditorGUILayout.IntField(sizeX, new GUILayoutOption[] {
-            GUILayout.Width (50)
-        });
-        sizeY = EditorGUILayout.IntField(sizeY, new GUILayoutOption[] {
-            GUILayout.Width (50)
-        });
-        
-        sizeX = Math.Clamp(sizeX, 3, maxRows);
-        sizeY = Math.Clamp(sizeY, 3, maxCols);
-
-        GUILayout.EndHorizontal();
-    }
+    // void SetSize()
+    // {
+    //     GUILayout.BeginHorizontal();
+    //     GUILayout.Label("Size(Columns/Rows):", EditorStyles.boldLabel, new GUILayoutOption[]
+    //     {
+    //         GUILayout.Width(200),
+    //         GUILayout.Height(15)
+    //     });
+    //     
+    //     rowCount = EditorGUILayout.IntField(rowCount, new GUILayoutOption[] {
+    //         GUILayout.Width (50)
+    //     });
+    //     coloumnCount = EditorGUILayout.IntField(coloumnCount, new GUILayoutOption[] {
+    //         GUILayout.Width (50)
+    //     });
+    //     
+    //     rowCount = Math.Clamp(rowCount, 3, maxRows);
+    //     coloumnCount = Math.Clamp(coloumnCount, 3, maxCols);
+    //
+    //     GUILayout.EndHorizontal();
+    // }
 
     void SetObstacles()
     {
@@ -198,12 +206,12 @@ public class LevelEditor : EditorWindow
         
         GUILayout.BeginVertical();
 
-        for (int i = 0; i < sizeX; i++)
+        for (int coloumn = 0; coloumn < maxCols; coloumn++)
         {
             GUILayout.BeginHorizontal();
-            for (int j = 0; j < sizeY; j++)
+            for (int row = 0; row < maxRows; row++)
             {
-                var sqr = levelSquares[j * maxCols + i];
+                var sqr = levelSquares[coloumn * maxCols + row];
                 if (isBlockSelected)
                 {
                     if (sqr.ItemType == ItemType.None)
@@ -266,17 +274,66 @@ public class LevelEditor : EditorWindow
                 {
                     if (isBlockSelected)
                     {
-                        SetType(i, j, selectedItemType, sqr.ObstacleType, selectedColour);
+                        SetType(coloumn, row, selectedItemType, sqr.ObstacleType, selectedColour);
                     }
                     else
                     {
-                        SetType(i, j, sqr.ItemType, selectedObstacleType, sqr.Colour);
+                        SetType(coloumn, row, sqr.ItemType, selectedObstacleType, sqr.Colour);
                     }
                 }
             }
             GUILayout.EndHorizontal();
         }
         GUILayout.EndVertical();
+    }
+
+    void CreateLevel()
+    {
+        levelName = EditorGUILayout.TextField(levelName, new GUILayoutOption[]
+        {
+            GUILayout.Width(200),
+            GUILayout.Height(20)
+        });
+        
+        if (GUILayout.Button("Create Level", new GUILayoutOption[]
+            {
+                GUILayout.Width(150),
+                GUILayout.Height(50)
+            }))
+        {
+            var scriptable = ScriptableObject.CreateInstance<LevelConfig>();
+            AssetDatabase.CreateAsset(scriptable, "Assets/Game/Scriptables/Levels/" + levelName + ".asset");
+
+            scriptable.RowCount = maxRows;
+            scriptable.ColoumnCount = maxCols;
+            List<ColourRatio> temp = new ();
+            for (int i = 0; i < colourRatios.Length; i++)
+            {
+                if(colourRatios[i].Ratio == 0) continue;
+                temp.Add(colourRatios[i]);
+            }
+            if(temp.Count > 0)
+                scriptable.ColourRatios = temp.ToArray();
+
+            scriptable.Blocks = new SquareBlock[maxRows * maxCols];
+
+            for (int coloumn = maxCols - 1; coloumn >= 0; coloumn--)
+            {
+                for (int row = 0; row < maxRows; row++)
+                {
+                    var block = new SquareBlock();
+                    block.Colour = levelSquares[coloumn * maxCols + row].Colour;
+                    block.ItemType = levelSquares[coloumn * maxCols + row].ItemType;
+                    block.ObstacleType = levelSquares[coloumn * maxCols + row].ObstacleType;
+                    scriptable.Blocks[(maxCols - 1 - coloumn) * maxCols + row] = block;
+                }
+            }
+
+            AssetDatabase.SaveAssets();
+            EditorUtility.FocusProjectWindow();
+
+            Selection.activeObject = scriptable;
+        }
     }
 
     void AddSelectedItemTypeButton(Texture texture, ItemType itemType, Colour colour)
@@ -291,11 +348,6 @@ public class LevelEditor : EditorWindow
             selectedColour = colour;
             isBlockSelected = true;
         }
-    }
-
-    void AddSpawnObjectsColourRatios()
-    {
-        
     }
     
     void AddTargetButtons()
@@ -381,10 +433,10 @@ public class LevelEditor : EditorWindow
         }
     }
 
-    void SetType(int col, int row, ItemType itemType, ObstacleType obstacleType, Colour colour)
+    void SetType(int coloumn, int row, ItemType itemType, ObstacleType obstacleType, Colour colour)
     {
-        levelSquares[row * maxCols + col].ItemType = itemType;
-        levelSquares[row * maxCols + col].ObstacleType = obstacleType;
-        levelSquares[row * maxCols + col].Colour = colour;
+        levelSquares[coloumn * maxCols + row].ItemType = itemType;
+        levelSquares[coloumn * maxCols + row].ObstacleType = obstacleType;
+        levelSquares[coloumn * maxCols + row].Colour = colour;
     }
 }

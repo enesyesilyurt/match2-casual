@@ -253,7 +253,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentLevelIndex: 0
   levels:
-  - {fileID: 11400000, guid: c7379f42e20ab294b932f02ed8ffa0ae, type: 2}
+  - {fileID: 11400000, guid: 109e7881142fdf247a87fd6e98984698, type: 2}
   - {fileID: 11400000, guid: 02aebe5a653e99f48870aff0582a7855, type: 2}
   - {fileID: 11400000, guid: 9207110db460c0c488f0acdf5d28c08e, type: 2}
   - {fileID: 11400000, guid: bd611d6e7da059c4f8a6e862752692f3, type: 2}
@@ -967,6 +967,7 @@ MonoBehaviour:
   spriteMaskTransform: {fileID: 486480239}
   borderSprite: {fileID: 117192043}
   borderSprite2: {fileID: 396107321}
+  Cells: []
 --- !u!4 &1885619621
 Transform:
   m_ObjectHideFlags: 0

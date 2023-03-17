@@ -14,10 +14,10 @@ namespace Casual.Managers
         
         private void PrepareCamera()
         {
-            cam.orthographicSize = (LevelManager.Instance.CurrentLevel.Size.x / cam.aspect) / 2 + GameManager.Instance.OffsetX;
+            cam.orthographicSize = (LevelManager.Instance.CurrentLevel.RowCount / cam.aspect) / 2 + GameManager.Instance.OffsetX;
 
-            cam.transform.position -= Vector3.left * (LevelManager.Instance.CurrentLevel.Size.x * GameManager.Instance.OffsetX / 2f - .5f) +
-                                  Vector3.down * LevelManager.Instance.CurrentLevel.Size.y * GameManager.Instance.OffsetY / 2f;
+            cam.transform.position -= Vector3.left * (LevelManager.Instance.CurrentLevel.RowCount * GameManager.Instance.OffsetX / 2f - .5f) +
+                                  Vector3.down * LevelManager.Instance.CurrentLevel.ColoumnCount * GameManager.Instance.OffsetY / 2f;
         }
     }
 }

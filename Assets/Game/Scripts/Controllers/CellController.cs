@@ -43,13 +43,13 @@ namespace Casual.Controllers
             }
         }
         
-        public void Prepare(int x, int y, BoardController boardController)
+        public void Prepare(int row, int coloumn, BoardController boardController)
         {
-            this.x = x;
-            this.y = y;
-            transform.localPosition = new Vector3(x * GameManager.Instance.OffsetX, y * GameManager.Instance.OffsetY);
+            this.x = row;
+            this.y = coloumn;
+            transform.localPosition = new Vector3(row * GameManager.Instance.OffsetX, coloumn * GameManager.Instance.OffsetY);
             GetComponent<BoxCollider2D>().size = new Vector2(GameManager.Instance.OffsetX, GameManager.Instance.OffsetY);
-            isFillingCell = Y == LevelManager.Instance.CurrentLevel.Size.y - 1;
+            isFillingCell = Y == LevelManager.Instance.CurrentLevel.ColoumnCount - 1;
             
             UpdateLabel();
             UpdateNeighbours(boardController);

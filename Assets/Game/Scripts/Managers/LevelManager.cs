@@ -34,28 +34,22 @@ namespace Casual.Managers
 
 	    private void PrepareLevel()
 	    {
-    		for (var y = 0; y < CurrentLevel.Size.y; y++)
-    		{
-    			for (var x = 0; x < CurrentLevel.Size.x; x++)
-    			{
-    				var cell = boardController.Cells[x, y];
-
-                    Colour colour = Colour.None;
-                    if (CurrentLevel.Rows.Length > y && CurrentLevel.Rows[y].Colours.Length > x)
-                    {
-	                    colour = CurrentLevel.Rows[y].Colours[x];
-                    }
-
-                    var item = colour == Colour.None
-	                    ? ItemFactory.Instance.CreateRandomItem(boardController.ItemsParent)
-	                    : ItemFactory.Instance.CreateItem(colour, boardController.ItemsParent);
+		    for (var coloumn = 0; coloumn < CurrentLevel.ColoumnCount; coloumn++)
+		    {
+			    for (var row = 0; row < CurrentLevel.RowCount; row++)
+			    {
+				    var cell = boardController.Cells[coloumn * CurrentLevel.ColoumnCount + row];
+				    var colour = CurrentLevel.Blocks[CurrentLevel.RowCount * coloumn + row].Colour;
+				    var item = colour == Colour.None
+					    ? ItemFactory.Instance.CreateRandomItem(boardController.ItemsParent)
+					    : ItemFactory.Instance.CreateItem(colour, boardController.ItemsParent);
                     
-    				if (item == null) continue;
+				    if (item == null) continue;
     				 						
-    				cell.Item = item;
-    				item.transform.position = cell.transform.position;
-    			}
-    		}
+				    cell.Item = item;
+				    item.transform.position = cell.transform.position;
+			    }
+		    }
 	    }
 	}
 }

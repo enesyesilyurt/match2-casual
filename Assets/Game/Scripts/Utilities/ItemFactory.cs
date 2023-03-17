@@ -80,6 +80,7 @@ namespace Casual.Utilities
 
         private void PrepareRatios()
         {
+            if(LevelManager.Instance.CurrentLevel.ColourRatios == null) return;
             for (var i = 0; i < LevelManager.Instance.CurrentLevel.ColourRatios.Length; i++)
             {
                 var colourRatio = LevelManager.Instance.CurrentLevel.ColourRatios[i];

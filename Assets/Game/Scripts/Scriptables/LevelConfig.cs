@@ -1,15 +1,14 @@
+using System.Collections.Generic;
 using Casual.Entities;
+using Unity.Collections;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "NewLevelConfig", fileName = "LevelConfig")]
 public class LevelConfig : ScriptableObject
 {
-    [SerializeField] private Vector2Int size;
-    [SerializeField] private ColourRatio[] colourRatios;
-    [SerializeField] private Row[] rows;
-
-    public Vector2Int Size => size;
-    public ColourRatio[] ColourRatios => colourRatios;
-    public Row[] Rows => rows;
+    public int ColoumnCount;
+    public int RowCount;
+    public ColourRatio[] ColourRatios;
+    public SquareBlock[] Blocks;
 }
 
