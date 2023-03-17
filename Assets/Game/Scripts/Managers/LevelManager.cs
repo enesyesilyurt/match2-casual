@@ -1,3 +1,5 @@
+using System;
+using Casual.Abstracts;
 using Casual.Controllers;
 using Casual.Enums;
 using Casual.Utilities;
@@ -15,10 +17,14 @@ namespace Casual.Managers
 
 	    public LevelConfig CurrentLevel => levels[currentLevelIndex];
 
+	    public event Action<Item> ItemExecuted; 
+
 	    public void Setup()
 	    {
 		    PrepareBoard();
 		    PrepareLevel();
+		    TargetManager.Instance.Setup();
+		    UIManager.Instance.Setup(CurrentLevel.Targets);
 		    StartFalls();
 	    }
 
@@ -26,6 +32,12 @@ namespace Casual.Managers
 	    public void GetNextLevel()
 	    {
 		    currentLevelIndex = currentLevelIndex + 1 >= levels.Length ? 0 : currentLevelIndex + 1;
+		    ResetManager();
+		    Setup();
+	    }
+
+	    public void RestartLevel()
+	    {
 		    ResetManager();
 		    Setup();
 	    }
@@ -43,8 +55,14 @@ namespace Casual.Managers
 	    
 	    public void ResetManager()
 	    {
+		    UIManager.Instance.ResetManager();
 		    fallAndFillManager.StopFalls();
 		    boardController.ResetBoard();
+	    }
+
+	    public void ItemExecute(Item item)
+	    {
+		    ItemExecuted?.Invoke(item);
 	    }
 
 	    private void PrepareLevel()

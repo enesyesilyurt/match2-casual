@@ -100,14 +100,21 @@ namespace Casual.Controllers
             var cells = matchFinder.FindMatches(cellController, cellController.Item.Colour);
             if (cellController.Item.ItemType == ItemType.BombItem)
             {
+                TargetManager.Instance.DecreaseMoveCount();
                 cellController.Item.TryExecute();
             }
             else if (cells.Count < MinimumMatchCount) 
                 FailMatchSequence(cellController.Item.transform);
-            else if (cellController.Item.ItemType == ItemType.Cube) 
+            else if (cellController.Item.ItemType == ItemType.Cube)
+            {
                 ExplodeMatchingCells(cells);
-            else 
+                TargetManager.Instance.DecreaseMoveCount();
+            }
+            else
+            {
                 StartCoroutine(TappedSpecialItemRoutine(cellController, cells));
+                TargetManager.Instance.DecreaseMoveCount();
+            }
         }
 
         private void FailMatchSequence(Transform target)

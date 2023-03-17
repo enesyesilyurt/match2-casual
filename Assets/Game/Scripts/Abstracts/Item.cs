@@ -119,6 +119,7 @@ namespace Casual.Abstracts
 
         public virtual void TryExecute()
         {
+            LevelManager.Instance.ItemExecute(this);
             RemoveItem();
         }
 

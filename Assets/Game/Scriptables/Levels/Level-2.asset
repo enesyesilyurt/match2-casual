@@ -12,9 +12,261 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f943bee3d8669fc4997bb1c300478fbe, type: 3}
   m_Name: Level-2
   m_EditorClassIdentifier: 
-  ColumnCount: 0
-  RowCount: 0
-  maxMove: 0
+  ColumnCount: 9
+  RowCount: 9
+  maxMove: 70
   ColourRatios: []
-  Blocks: []
-  Targets: []
+  Blocks:
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 5
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 1
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 1
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 5
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 4
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 4
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 1
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 6
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 5
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 1
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 1
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 1
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 6
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 1
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 2
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 2
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 1
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 6
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 1
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 2
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 3
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 3
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 1
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 6
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 1
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 3
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 3
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 1
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 6
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 4
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 1
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 1
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 1
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 6
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 4
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 5
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 5
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 5
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 1
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 1
+  - ItemType: 1
+    ObstacleType: 0
+    Colour: 1
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  Targets:
+  - Colour: 4
+    ItemType: 0
+    Count: 10
+  - Colour: 5
+    ItemType: 0
+    Count: 10
+  - Colour: 1
+    ItemType: 0
+    Count: 10
