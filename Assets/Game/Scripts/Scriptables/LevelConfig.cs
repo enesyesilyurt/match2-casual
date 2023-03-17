@@ -8,7 +8,9 @@ public class LevelConfig : ScriptableObject
 {
     public int ColoumnCount;
     public int RowCount;
+    public int maxMove;
     public ColourRatio[] ColourRatios;
     public SquareBlock[] Blocks;
+    public Target[] Targets;
 }
 

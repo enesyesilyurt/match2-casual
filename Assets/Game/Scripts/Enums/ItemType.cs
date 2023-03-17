@@ -10,6 +10,7 @@ namespace Casual.Enums
         Propeller,
         BombItem,
         RocketItem,
-        PropellerItem
+        PropellerItem,
+        Empty
     }
 }

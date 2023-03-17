@@ -11,7 +11,7 @@ public class LevelEditor : EditorWindow
 {
     private static LevelEditor window;
     public static SquareBlock[] levelSquares = new SquareBlock[81];
-    public static SquareBlock[] targetSquares = new SquareBlock[4];
+    public static Target[] targetSquares = new Target[4];
     public static ColourRatio[] colourRatios = new ColourRatio[6];
 
     private static Colour[] colours = new[]
@@ -20,10 +20,6 @@ public class LevelEditor : EditorWindow
     static int maxRows = 9;
     static int maxCols = 9;
     private int maxMove;
-    private int target1;
-    private int target2;
-    private int target3;
-    private int target4;
     private string levelName;
     private bool isBlockSelected;
     private Texture itemTexture;
@@ -49,9 +45,9 @@ public class LevelEditor : EditorWindow
 
         for (int i = 0; i < 4; i++)
         {
-            SquareBlock sqBlocks = new SquareBlock();
-            sqBlocks.Colour = Colour.None;
-            targetSquares[i] = sqBlocks;
+            Target target = new Target();
+            target.Colour = Colour.None;
+            targetSquares[i] = target;
         }
         
         window.Show();
@@ -123,7 +119,7 @@ public class LevelEditor : EditorWindow
         GUILayout.BeginHorizontal();
         for (int i = 0; i < 6; i++)
         {
-            var colourRatio = new ColourRatio();
+            var colourRatio = colourRatios[i] == null ? new ColourRatio() : colourRatios[i];
             colourRatio.Colour = colours[i];
             colourRatio.Ratio = EditorGUILayout.IntField("", colourRatio.Ratio, new GUILayoutOption[] {
                 GUILayout.Width (51)
@@ -191,6 +187,7 @@ public class LevelEditor : EditorWindow
             GUILayout.Height(50)
         });
         AddSelectedItemTypeButton(null, ItemType.Cube, Colour.None);
+        AddSelectedItemTypeButton(new Texture2D(40,40), ItemType.Empty, Colour.Empty);
         AddSelectedItemTypeButton(ImageLibrary.Instance.BlueCube, ItemType.Cube, Colour.Blue);
         AddSelectedItemTypeButton(ImageLibrary.Instance.PinkCube, ItemType.Cube, Colour.Pink);
         AddSelectedItemTypeButton(ImageLibrary.Instance.GreenCube, ItemType.Cube, Colour.Green);
@@ -217,6 +214,10 @@ public class LevelEditor : EditorWindow
                     if (sqr.ItemType == ItemType.None)
                     {
                         imageButton = null;
+                    }
+                    else if (sqr.ItemType == ItemType.Empty)
+                    {
+                        imageButton = new Texture2D(40,40);
                     }
                     else if (sqr.ItemType == ItemType.Cube)
                     {
@@ -315,6 +316,24 @@ public class LevelEditor : EditorWindow
             if(temp.Count > 0)
                 scriptable.ColourRatios = temp.ToArray();
 
+            List<Target> tempTarget = new ();
+
+            for (int i = 0; i < 4; i++)
+            {
+                if ((targetSquares[i].Colour != Colour.None || targetSquares[i].ItemType != ItemType.None) && targetSquares[i].Count > 0)
+                {
+                    Target target = new Target();
+                    target.ItemType = targetSquares[i].ItemType;
+                    target.Colour = targetSquares[i].Colour;
+                    target.Count = targetSquares[i].Count;
+                    tempTarget.Add(target);
+                }
+            }
+            
+            if(tempTarget.Count > 0)
+                scriptable.Targets = tempTarget.ToArray();
+
+            scriptable.maxMove = maxMove;
             scriptable.Blocks = new SquareBlock[maxRows * maxCols];
 
             for (int coloumn = maxCols - 1; coloumn >= 0; coloumn--)
@@ -403,20 +422,14 @@ public class LevelEditor : EditorWindow
             
         }
         GUILayout.EndHorizontal();
-        
+
         GUILayout.BeginHorizontal();
-        target1 = EditorGUILayout.IntField(target1, new GUILayoutOption[] {
-            GUILayout.Width (50)
-        });
-        target2 = EditorGUILayout.IntField(target2, new GUILayoutOption[] {
-            GUILayout.Width (50)
-        });
-        target3 = EditorGUILayout.IntField(target3, new GUILayoutOption[] {
-            GUILayout.Width (50)
-        });
-        target4 = EditorGUILayout.IntField(target4, new GUILayoutOption[] {
-            GUILayout.Width (50)
-        });
+        for (int i = 0; i < 4; i++)
+        {
+            targetSquares[i].Count = EditorGUILayout.IntField(targetSquares[i].Count, new GUILayoutOption[] {
+                GUILayout.Width (50)
+            });
+        }
         GUILayout.EndHorizontal();
     }
     
