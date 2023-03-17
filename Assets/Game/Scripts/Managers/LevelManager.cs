@@ -1,6 +1,7 @@
 using Casual.Controllers;
 using Casual.Enums;
 using Casual.Utilities;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace Casual.Managers
@@ -21,6 +22,14 @@ namespace Casual.Managers
 		    StartFalls();
 	    }
 
+	    [Button]
+	    public void GetNextLevel()
+	    {
+		    currentLevelIndex = currentLevelIndex + 1 >= levels.Length ? 0 : currentLevelIndex + 1;
+		    ResetManager();
+		    Setup();
+	    }
+
 	    private void PrepareBoard()
 	    {
 		    boardController.Prepare();
@@ -30,6 +39,12 @@ namespace Casual.Managers
 	    {
 		    fallAndFillManager.Init(boardController);
 		    fallAndFillManager.StartFalls();
+	    }
+	    
+	    public void ResetManager()
+	    {
+		    fallAndFillManager.StopFalls();
+		    boardController.ResetBoard();
 	    }
 
 	    private void PrepareLevel()

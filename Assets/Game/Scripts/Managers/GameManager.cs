@@ -1,6 +1,7 @@
 using UnityEngine;
 using Casual.Utilities;
 using DG.Tweening;
+using NaughtyAttributes;
 using UnityEngine.Serialization;
 
 namespace Casual.Managers

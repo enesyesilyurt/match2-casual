@@ -26,9 +26,6 @@ namespace Casual.Controllers
         [SerializeField] private CellController cellControllerPrefab;
         [SerializeField] private Transform cellParent;
         [SerializeField] private Transform itemsParent;
-        [SerializeField] private Transform spriteMaskTransform;
-        [SerializeField] private SpriteRenderer borderSprite;
-        [SerializeField] private SpriteRenderer borderSprite2;
 
         public CellController[] Cells;
 
@@ -46,28 +43,25 @@ namespace Casual.Controllers
             Cells = new CellController[ColumnCount * rowCount];
             matchFinder.Setup();
             
-            SetBoardElements();
             CreateCells();
             PrepareCells();
         }
 
-        private void SetBoardElements()
+        public void ResetBoard()
         {
-            var boardSize = new Vector2(
-                ColumnCount * GameManager.Instance.OffsetX + .15f, 
-                rowCount * GameManager.Instance.OffsetY + .15f);
-            var boardPosition =
-                Vector3.left * (ColumnCount * GameManager.Instance.OffsetX / 2f - GameManager.Instance.OffsetX / 2f) +
-                Vector3.down * (rowCount * GameManager.Instance.OffsetY / 2f - GameManager.Instance.OffsetY / 2f);
-            
-            borderSprite.size = boardSize;
-            borderSprite.transform.position -= boardPosition;
-            
-            borderSprite2.size = boardSize;
-            borderSprite2.transform.position -= boardPosition;
-            
-            spriteMaskTransform.localScale = boardSize;
-            spriteMaskTransform.transform.position -= boardPosition;
+            var tempItems = itemsParent.parent;
+            Destroy(itemsParent.gameObject);
+            var newItems = new GameObject();
+            newItems.transform.SetParent(tempItems);
+            newItems.name = "Items";
+            itemsParent = newItems.transform;
+
+            var temp = cellParent.parent;
+            Destroy(cellParent.gameObject);
+            var newParent = new GameObject();
+            newParent.transform.SetParent(temp);
+            newParent.name = "Cells";
+            cellParent = newParent.transform;
         }
         
         private void CreateCells()

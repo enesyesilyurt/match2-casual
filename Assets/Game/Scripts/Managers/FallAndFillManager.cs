@@ -22,6 +22,11 @@ namespace Casual.Managers
             CreateFillingCells();
         }
 
+        public void ResetManager()
+        {
+            fillingCells = null;
+        }
+
         private void CreateFillingCells()
         {
             var cellList = new List<CellController>();
