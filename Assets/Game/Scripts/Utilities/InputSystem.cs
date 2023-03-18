@@ -21,6 +21,7 @@ namespace Casual.Utilities
         
         private void GetTouchEditor()
         {
+            if(Helpers.IsPointerOverUIObject(Input.mousePosition)) return;
             if (Input.GetMouseButtonUp(0))
             {
                 ExecuteTouch(Input.mousePosition);
@@ -30,6 +31,7 @@ namespace Casual.Utilities
         private void GetTouchMobile()
         {
             var touch = Input.GetTouch(0);
+            if(Helpers.IsPointerOverUIObject(touch.position)) return;
             switch (touch.phase)
             {
                 case TouchPhase.Ended:

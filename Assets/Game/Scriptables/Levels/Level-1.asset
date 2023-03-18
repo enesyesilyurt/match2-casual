@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ColumnCount: 9
   RowCount: 9
-  maxMove: 20
+  maxMove: 10
   ColourRatios: []
   Blocks:
   - ItemType: 1
@@ -261,9 +261,9 @@ MonoBehaviour:
     ObstacleType: 0
     Colour: 1
   Targets:
-  - Colour: 1
-    ItemType: 0
-    Count: 10
   - Colour: 3
     ItemType: 0
-    Count: 10
+    Count: 1
+  - Colour: 1
+    ItemType: 0
+    Count: 1

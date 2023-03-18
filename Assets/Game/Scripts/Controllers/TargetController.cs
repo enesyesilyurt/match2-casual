@@ -25,6 +25,14 @@ public class TargetController : MonoBehaviour
         image.texture = ImageLibrary.Instance.GetSprite(colour, itemType).texture;
 
         LevelManager.Instance.ItemExecuted += OnItemExecuted;
+        GameManager.Instance.GameStateChanged += OnGameStateChanged;
+    }
+
+    private void OnGameStateChanged(GameState newState)
+    {
+        LevelManager.Instance.ItemExecuted -= OnItemExecuted;
+        GameManager.Instance.GameStateChanged -= OnGameStateChanged;
+        Destroy(gameObject);
     }
 
     private void OnItemExecuted(Item item)
@@ -35,6 +43,7 @@ public class TargetController : MonoBehaviour
             if (count <= 0)
             {
                 LevelManager.Instance.ItemExecuted -= OnItemExecuted;
+                GameManager.Instance.GameStateChanged -= OnGameStateChanged;
                 TargetManager.Instance.DecreaseTarget();
                 Destroy(gameObject);
             }

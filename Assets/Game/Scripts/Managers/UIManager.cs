@@ -17,6 +17,11 @@ public class UIManager : MonoSingleton<UIManager>
     [SerializeField] private TextMeshProUGUI moveCountText;
     [SerializeField] private GameObject inGamePanel;
     [SerializeField] private GameObject homePanel;
+    [SerializeField] private GameObject failPanel;
+    [SerializeField] private GameObject tryAgainPanel;
+    [SerializeField] private GameObject winPanel;
+    [SerializeField] private GameObject inGameShadow;
+    [SerializeField] private GameObject continuePanel;
     [SerializeField] private Button playButton;
 
     private List<TargetController> targetList = new ();
@@ -53,6 +58,13 @@ public class UIManager : MonoSingleton<UIManager>
     {
         homePanel.SetActive(false);
         inGamePanel.SetActive(true);
+        
+        inGameShadow.SetActive(false);
+        failPanel.SetActive(false);
+        winPanel.SetActive(false);
+
+        targetList.Clear();
+        
         var targets = LevelManager.Instance.CurrentLevel.Targets;
         for (int i = 0; i < targets.Length; i++)
         {
@@ -62,6 +74,25 @@ public class UIManager : MonoSingleton<UIManager>
         }
         
         moveCountText.text = LevelManager.Instance.CurrentLevel.maxMove.ToString();
+    }
+
+    public void OpenWinPanel()
+    {
+        winPanel.SetActive(true);
+    }
+
+    public void OpenFailPanel()
+    {
+        tryAgainPanel.SetActive(false);
+        inGameShadow.SetActive(true);
+        failPanel.SetActive(true);
+        continuePanel.SetActive(true);
+    }
+
+    public void OpenTryAgainPanel()
+    {
+        continuePanel.SetActive(false);
+        tryAgainPanel.SetActive(true);
     }
 
     public void DecreaseMoveCount(int count)
@@ -95,6 +126,16 @@ public class UIManager : MonoSingleton<UIManager>
     {
         panel.SetActive(true);
         activePanel = panel;
+    }
+
+    public void ResetLevel()
+    {
+        LevelManager.Instance.RestartLevel();
+    }
+
+    public void GetMainMenu()
+    {
+        GameManager.Instance.ChangeGameState(GameState.Home);
     }
 
     public void CloseActivePanel()

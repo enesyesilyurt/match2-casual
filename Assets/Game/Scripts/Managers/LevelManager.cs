@@ -63,7 +63,7 @@ namespace Casual.Managers
 	    public void RestartLevel()
 	    {
 		    ResetManager();
-		    Setup();
+		    GameManager.Instance.ChangeGameState(GameState.InGame);
 	    }
 
 	    private void PrepareBoard()
