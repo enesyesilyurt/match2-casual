@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoSingleton<UIManager>
 {
-    [SerializeField] private HorizontalLayoutGroup layout;
+    [SerializeField] private BottomSelectorController bottomSelectorController;
     [SerializeField] private Transform targetParent;
     [SerializeField] private TargetController targetPrefab;
     [SerializeField] private TextMeshProUGUI moveCountText;
@@ -47,11 +47,10 @@ public class UIManager : MonoSingleton<UIManager>
 
     private void SetupHomePanel()
     {
+        bottomSelectorController.Setup();
         homePanel.SetActive(true);
         inGamePanel.SetActive(false);
         CloseActivePanel();
-        layout.padding.left = -1600;
-        layout.SetLayoutHorizontal();
     }
 
     public void SetupInGamePanel()
@@ -107,17 +106,6 @@ public class UIManager : MonoSingleton<UIManager>
             if(target != null)
                 Destroy(target.gameObject);
         }
-    }
-
-    public void SetLayout(int value)
-    {
-        if(layout.padding.left == value) return;
-        
-        DOVirtual.Int(layout.padding.left, value, .3f, v =>
-        {
-            layout.padding.left = v;
-            layout.SetLayoutHorizontal();
-        }).SetEase(Ease.InSine);
     }
 
     #region Buttons
