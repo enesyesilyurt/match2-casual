@@ -3,7 +3,6 @@ using Casual.Abstracts;
 using Casual.Controllers;
 using Casual.Enums;
 using Casual.Utilities;
-using NaughtyAttributes;
 using UnityEngine;
 
 namespace Casual.Managers
@@ -15,25 +14,50 @@ namespace Casual.Managers
 	    [SerializeField] private BoardController boardController;
 	    [SerializeField] private FallAndFillManager fallAndFillManager;
 
+	    private const string currentLevelName = "CurrentLevel";
+
 	    public LevelConfig CurrentLevel => levels[currentLevelIndex];
 
-	    public event Action<Item> ItemExecuted; 
-
+	    public event Action<Item> ItemExecuted;
+	    
 	    public void Setup()
 	    {
+		    GameManager.Instance.GameStateChanged += OnGameStateChanged;
+	    }
+
+	    private void OnGameStateChanged(GameState newState)
+	    {
+		    switch (newState)
+		    {
+			    case GameState.Home:
+				    CloseLevel();
+				    break;
+			    case GameState.InGame:
+				    SetupLevel();
+				    break;
+		    }
+	    }
+
+	    private void CloseLevel()
+	    {
+		    ResetManager();
+	    }
+
+	    private void SetupLevel()
+	    {
+		    currentLevelIndex = PlayerPrefs.GetInt(currentLevelName);
+		    ItemFactory.Instance.Setup();
 		    PrepareBoard();
 		    PrepareLevel();
 		    TargetManager.Instance.Setup();
-		    UIManager.Instance.Setup(CurrentLevel.Targets);
+		    UIManager.Instance.SetupInGamePanel();
 		    StartFalls();
 	    }
 
-	    [Button]
-	    public void GetNextLevel()
+	    public void LevelComplete()
 	    {
 		    currentLevelIndex = currentLevelIndex + 1 >= levels.Length ? 0 : currentLevelIndex + 1;
-		    ResetManager();
-		    Setup();
+		    PlayerPrefs.SetInt(currentLevelName, currentLevelIndex);
 	    }
 
 	    public void RestartLevel()
@@ -52,8 +76,8 @@ namespace Casual.Managers
 		    fallAndFillManager.Init(boardController);
 		    fallAndFillManager.StartFalls();
 	    }
-	    
-	    public void ResetManager()
+
+	    private void ResetManager()
 	    {
 		    UIManager.Instance.ResetManager();
 		    fallAndFillManager.StopFalls();

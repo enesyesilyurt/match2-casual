@@ -40,11 +40,16 @@ namespace Casual.Controllers
             
         public void Prepare()
         {
+            onAnim = true;
+            
             Cells = new CellController[ColumnCount * rowCount];
             matchFinder.Setup();
             
             CreateCells();
             PrepareCells();
+
+            transform.position = Vector3.right * 10;
+            transform.DOMoveX(0, .5f).SetEase(Ease.OutBack).OnComplete(()=> onAnim = false).SetDelay(.1f);
         }
 
         public void ResetBoard()

@@ -80,8 +80,9 @@ namespace Casual.Utilities
             return Colour.None;
         }
 
-        private void PrepareRatios()
+        public void PrepareRatios()
         {
+            colourRatioDict.Clear();
             if(LevelManager.Instance.CurrentLevel.ColourRatios == null) return;
             for (var i = 0; i < LevelManager.Instance.CurrentLevel.ColourRatios.Length; i++)
             {

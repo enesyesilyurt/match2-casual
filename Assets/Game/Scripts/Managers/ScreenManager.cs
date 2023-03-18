@@ -9,15 +9,21 @@ namespace Casual.Managers
         
         public void Setup()
         {
-            PrepareCamera();
+            GameManager.Instance.GameStateChanged += OnGameStateChanged;
         }
-        
+
+        private void OnGameStateChanged(GameState newState)
+        {
+            if(newState == GameState.InGame)
+                PrepareCamera();
+        }
+
         private void PrepareCamera()
         {
-            cam.orthographicSize = (LevelManager.Instance.CurrentLevel.RowCount / cam.aspect) / 2 + GameManager.Instance.OffsetX;
+            cam.orthographicSize = (9 / cam.aspect) / 2 + GameManager.Instance.OffsetX;
 
-            cam.transform.position -= Vector3.left * (LevelManager.Instance.CurrentLevel.RowCount * GameManager.Instance.OffsetX / 2f - .5f) +
-                                  Vector3.down * LevelManager.Instance.CurrentLevel.ColumnCount * GameManager.Instance.OffsetY / 2f;
+            cam.transform.position -= Vector3.left * (9 * GameManager.Instance.OffsetX / 2f - .5f) +
+                                  Vector3.down * 9 * GameManager.Instance.OffsetY / 2f;
         }
     }
 }

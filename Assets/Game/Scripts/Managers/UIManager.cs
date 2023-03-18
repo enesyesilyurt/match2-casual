@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Casual.Managers;
@@ -14,11 +15,45 @@ public class UIManager : MonoSingleton<UIManager>
     [SerializeField] private Transform targetParent;
     [SerializeField] private TargetController targetPrefab;
     [SerializeField] private TextMeshProUGUI moveCountText;
+    [SerializeField] private GameObject inGamePanel;
+    [SerializeField] private GameObject homePanel;
+    [SerializeField] private Button playButton;
 
     private List<TargetController> targetList = new ();
+    private GameObject activePanel;
 
-    public void Setup(Target[] targets)
+    public void Setup()
     {
+        playButton.onClick.AddListener(()=> GameManager.Instance.ChangeGameState(GameState.InGame));
+        GameManager.Instance.GameStateChanged += OnGameStateChanged;
+    }
+
+    private void OnGameStateChanged(GameState newState)
+    {
+        switch (newState)
+        {
+            case GameState.Home:
+                SetupHomePanel();
+                break;
+            case GameState.InGame:
+                break;
+        }
+    }
+
+    private void SetupHomePanel()
+    {
+        homePanel.SetActive(true);
+        inGamePanel.SetActive(false);
+        CloseActivePanel();
+        layout.padding.left = -1600;
+        layout.SetLayoutHorizontal();
+    }
+
+    public void SetupInGamePanel()
+    {
+        homePanel.SetActive(false);
+        inGamePanel.SetActive(true);
+        var targets = LevelManager.Instance.CurrentLevel.Targets;
         for (int i = 0; i < targets.Length; i++)
         {
             var targetObject = Instantiate(targetPrefab, targetParent);
@@ -27,10 +62,6 @@ public class UIManager : MonoSingleton<UIManager>
         }
         
         moveCountText.text = LevelManager.Instance.CurrentLevel.maxMove.ToString();
-        
-        
-        layout.padding.left = -1600;
-        layout.SetLayoutHorizontal();
     }
 
     public void DecreaseMoveCount(int count)
@@ -57,4 +88,22 @@ public class UIManager : MonoSingleton<UIManager>
             layout.SetLayoutHorizontal();
         }).SetEase(Ease.InSine);
     }
+
+    #region Buttons
+
+    public void OpenPanel(GameObject panel)
+    {
+        panel.SetActive(true);
+        activePanel = panel;
+    }
+
+    public void CloseActivePanel()
+    {
+        if(activePanel == null) return;
+        
+        activePanel.SetActive(false);
+        activePanel = null;
+    }
+
+    #endregion
 }

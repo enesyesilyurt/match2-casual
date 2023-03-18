@@ -24,7 +24,7 @@ public class TargetManager : MonoSingleton<TargetManager>
         UIManager.Instance.DecreaseMoveCount(moveCount);
         if (moveCount <= 0)
         {
-            LevelManager.Instance.RestartLevel();
+            Debug.Log("fail");
         }
     }
 
@@ -33,7 +33,7 @@ public class TargetManager : MonoSingleton<TargetManager>
         targetCount--;
         if (targetCount <= 0)
         {
-            LevelManager.Instance.GetNextLevel();
+            LevelManager.Instance.LevelComplete();
         }
     }
 }

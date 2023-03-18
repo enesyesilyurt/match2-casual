@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Casual.Utilities;
 using DG.Tweening;
@@ -18,8 +19,7 @@ namespace Casual.Managers
         [SerializeField, Header("Match Counts")] private int bombMatchCount = 5;
         [SerializeField] private int rocketMatchCount = 8;
         [SerializeField] private int propellerMatchCount = 10;
-
-        [SerializeField] private GameObject border;
+        [SerializeField, Header("Objects")] private GameObject border;
 
         public GameObject Border => border;
         public int BombMatchCount => bombMatchCount;
@@ -32,6 +32,10 @@ namespace Casual.Managers
         public float CubeAcceleration => cubeAcceleration;
         public float OffsetX => offsetX;
         public float OffsetY => offsetY;
+
+        private GameState currentGameState;
+
+        public event Action<GameState> GameStateChanged;
         
         private void Awake()
         {
@@ -40,9 +44,17 @@ namespace Casual.Managers
             
             ImageLibrary.Instance.Setup();
             ParticleLibrary.Instance.Setup();
-            ItemFactory.Instance.Setup();
             LevelManager.Instance.Setup();
             ScreenManager.Instance.Setup();
+            UIManager.Instance.Setup();
+            ChangeGameState(GameState.Home);
+        }
+
+        public void ChangeGameState(GameState newState)
+        {
+            currentGameState = newState;
+            
+            GameStateChanged?.Invoke(newState);
         }
     }
 }
