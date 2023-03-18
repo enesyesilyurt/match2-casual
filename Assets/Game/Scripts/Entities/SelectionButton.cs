@@ -11,4 +11,5 @@ public class SelectionButton
     public Button Button;
     public RectTransform Rect;
     public TextMeshProUGUI Text;
+    public RectTransform IconRect;
 }
