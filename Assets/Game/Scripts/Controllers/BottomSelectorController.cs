@@ -3,15 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class BottomSelectorController : MonoBehaviour
 {
-    [SerializeField] private Button[] buttons;
     [SerializeField] private HorizontalLayoutGroup layout;
     [SerializeField] private RectTransform layoutBG;
-    
-    private RectTransform[] buttonRects;
+    [SerializeField] private SelectionButton[] selectionButtons;
 
     private int currentIndex;
     
@@ -21,15 +20,15 @@ public class BottomSelectorController : MonoBehaviour
 
         layout.padding.left = -1600;
         layout.SetLayoutHorizontal();
-
-        buttonRects = new RectTransform[buttons.Length];
-        for (int i = 0; i < buttons.Length; i++)
+        
+        for (int i = 0; i < selectionButtons.Length; i++)
         {
-             buttonRects[i] = buttons[i].transform as RectTransform;
              var temp = i;
-             buttons[i].onClick.AddListener(()=> SetLayout(temp));
+             selectionButtons[i].Text.gameObject.SetActive(false);
+             selectionButtons[i].Button.onClick.AddListener(()=> SetLayout(temp));
         }
         currentIndex = 2;
+        selectionButtons[currentIndex].Text.gameObject.SetActive(true);
     }
 
     private void SetLayout(int index)
@@ -37,17 +36,17 @@ public class BottomSelectorController : MonoBehaviour
         if(layout.padding.left == index * -800) return;
         var temp = currentIndex;
         currentIndex = index;
+
+        selectionButtons[temp].Text.gameObject.SetActive(false);
+        selectionButtons[index].Text.gameObject.SetActive(true);
         
         DOVirtual.Float(220, 145, .3f,
-            v => buttonRects[temp].sizeDelta = new Vector2(v, buttonRects[temp].sizeDelta.y));
-        
+            v => selectionButtons[temp].Rect.sizeDelta = new Vector2(v, selectionButtons[temp].Rect.sizeDelta.y));
         DOVirtual.Float(145, 220, .3f,
-            v => buttonRects[index].sizeDelta = new Vector2(v, buttonRects[index].sizeDelta.y));
-
+            v => selectionButtons[index].Rect.sizeDelta = new Vector2(v, selectionButtons[index].Rect.sizeDelta.y));
         
         DOVirtual.Float(layoutBG.anchoredPosition.x, index * 145 + 110, .3f,
             v => layoutBG.anchoredPosition = new Vector2(v, layoutBG.anchoredPosition.y));
-        
         DOVirtual.Int(layout.padding.left, index * -800, .3f, v =>
         {
             layout.padding.left = v;

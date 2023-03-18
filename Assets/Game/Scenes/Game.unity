@@ -336,8 +336,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -624.99994, y: -49.999954}
-  m_SizeDelta: {x: 50, y: 100}
+  m_AnchoredPosition: {x: -607.49994, y: -49.999954}
+  m_SizeDelta: {x: 14.999939, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &20674145
 MonoBehaviour:
@@ -422,7 +422,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: -24.21798, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1819,8 +1819,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -774.99994, y: -49.999954}
-  m_SizeDelta: {x: 50, y: 100}
+  m_AnchoredPosition: {x: -737.49994, y: -49.999954}
+  m_SizeDelta: {x: -25.000061, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &160634422
 MonoBehaviour:
@@ -1905,7 +1905,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: -5.068882, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -14650,14 +14650,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95892505742c77b418a4b47d94cfa33c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttons:
-  - {fileID: 1931401492}
-  - {fileID: 470082639}
-  - {fileID: 1754247596}
-  - {fileID: 98149304}
-  - {fileID: 1245305855}
   layout: {fileID: 948982356}
   layoutBG: {fileID: 1668691056}
+  selectionButtons:
+  - Button: {fileID: 1931401492}
+    Rect: {fileID: 1931401491}
+    Text: {fileID: 160634422}
+  - Button: {fileID: 470082639}
+    Rect: {fileID: 470082638}
+    Text: {fileID: 20674145}
+  - Button: {fileID: 1754247596}
+    Rect: {fileID: 1754247595}
+    Text: {fileID: 1843143500}
+  - Button: {fileID: 98149304}
+    Rect: {fileID: 98149303}
+    Text: {fileID: 1571200869}
+  - Button: {fileID: 1245305855}
+    Rect: {fileID: 1245305854}
+    Text: {fileID: 1721252693}
 --- !u!1 &1187389226
 GameObject:
   m_ObjectHideFlags: 0
@@ -19057,8 +19067,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -274.99997, y: -49.999954}
-  m_SizeDelta: {x: 50, y: 100}
+  m_AnchoredPosition: {x: -293.75, y: -49.999954}
+  m_SizeDelta: {x: 87.50003, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1571200869
 MonoBehaviour:
@@ -20631,8 +20641,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -124.99999, y: -49.999954}
-  m_SizeDelta: {x: 50, y: 100}
+  m_AnchoredPosition: {x: -162.5, y: -49.999954}
+  m_SizeDelta: {x: 125.00001, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1721252693
 MonoBehaviour:
