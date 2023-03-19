@@ -5,17 +5,19 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIMovableAnimationController : MonoBehaviour, IMovableUIElement
+public class UIMovableAnimationController : MonoBehaviour
 {
     [SerializeField] private bool isHorizontal;
     [SerializeField] private float activePoint;
     [SerializeField] private float deactivePoint;
-    [SerializeField] private bool isActive;
+    
+    private bool isActive;
     private RectTransform rectTransform;
 
-    private void Start()
+    public void Setup(bool isActive)
     {
         rectTransform = GetComponent<RectTransform>();
+        this.isActive = isActive;
 
         var x = isHorizontal ? (isActive ? activePoint : deactivePoint) : rectTransform.anchoredPosition.x;
         var y = !isHorizontal ? (isActive ? activePoint : deactivePoint) : rectTransform.anchoredPosition.y;
@@ -23,35 +25,17 @@ public class UIMovableAnimationController : MonoBehaviour, IMovableUIElement
         rectTransform.anchoredPosition = new Vector2(x, y);
     }
 
-    public void Activate()
+    public void ChangeSituation(bool newSituation)
     {
-        if(isActive) return;
-        isActive = true;
-        if (isHorizontal)
-        {
-            DOVirtual.Float(deactivePoint, activePoint, .3f, v =>
-                rectTransform.anchoredPosition = new Vector2(v, rectTransform.anchoredPosition.y)).SetEase(Ease.OutBack);
-        }
-        else
-        {
-            DOVirtual.Float(deactivePoint, activePoint, .3f, v =>
-                rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, v)).SetEase(Ease.OutBack);
-        }
-    }
+        if(isActive == newSituation) return;
+        isActive = newSituation;
+        var from = isActive ? deactivePoint : activePoint;
+        var to = isActive ? activePoint : deactivePoint;
 
-    public void Deactivate()
-    {
-        if(!isActive) return;
-        isActive = false;
-        if (isHorizontal)
-        {
-            DOVirtual.Float(activePoint, deactivePoint, .3f, v =>
-                rectTransform.anchoredPosition = new Vector2(v, rectTransform.anchoredPosition.y)).SetEase(Ease.InBack);
-        }
-        else
-        {
-            DOVirtual.Float(activePoint, deactivePoint, .3f, v =>
-                rectTransform.anchoredPosition = new Vector2(rectTransform.anchoredPosition.x, v)).SetEase(Ease.InBack);
-        }
+        DOVirtual.Float(from, to, .3f, v => rectTransform.anchoredPosition = new Vector2
+        (
+            isHorizontal ? v : rectTransform.anchoredPosition.x,
+            isHorizontal ? rectTransform.anchoredPosition.y : v)
+        ).SetEase(isActive ? Ease.OutBack : Ease.InBack);
     }
 }
