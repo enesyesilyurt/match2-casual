@@ -40,6 +40,7 @@ namespace Casual.Managers
             
             ImageLibrary.Instance.Setup();
             ParticleLibrary.Instance.Setup();
+            CollectibleManager.Instance.Setup();
             LevelManager.Instance.Setup();
             ScreenManager.Instance.Setup();
             UIManager.Instance.Setup();

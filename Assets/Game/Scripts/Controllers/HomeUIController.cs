@@ -1,45 +1,87 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HomeUIController : MonoBehaviour
 {
-    [Serializable]
-    private class HomeElementsActivate
-    {
-        public Button Button;
-        [SerializeField] private ActivableUIElement[] activeElements;
-        [SerializeField] private ActivableUIElement[] deactiveElements;
-        
-        private bool isActive;
-        public bool IsActive => isActive;
-
-        public void ChangeSituation(bool newSituation)
-        {
-            if(isActive == newSituation) return;
-            isActive = newSituation;
-            if(!isActive) return;
-            
-            for (int i = 0; i < activeElements.Length; i++) 
-                activeElements[i].ChangeSituation(isActive);
-            
-            for (int i = 0; i < deactiveElements.Length; i++) 
-                deactiveElements[i].ChangeSituation(!isActive);
-        }
-
-        public void SetupElements()
-        {
-            isActive = true;
-            foreach (var element in activeElements) element.Setup(true);
-        }
-    }
-
-    [SerializeField] private HomeElementsActivate[] homeElements;
+    [SerializeField] private TextMeshProUGUI currencyText;
+    [SerializeField] private TextMeshProUGUI healthText;
+    [SerializeField] private TextMeshProUGUI starText;
+    [SerializeField] private TextMeshProUGUI areaUpgradeText;
+    [SerializeField] private TextMeshProUGUI timedRewardText;
+    
+    [SerializeField] private HomeElementActivatorBase[] homeElements;
     [SerializeField] private ActivableUIElement[] movables;
 
     private int activeIndex;
+    
+    private Currency currency;
+    private Health health;
+    private Star star;
+    private AreaUpgrade areaUpgrade;
+    private TimedReward timedReward;
 
     private void Start()
+    {
+        SetupActivableElements();
+        ReferanceAttachments();
+        AddListenerCollectibles();
+        SetupTexts();
+    }
+
+    private void AddListenerCollectibles()
+    {
+        currency.ValueChanged += OnCurrencyChanged;
+        health.ValueChanged += OnHealthChanged;
+        star.ValueChanged += OnStarChanged;
+        areaUpgrade.ValueChanged += OnAreaUpgradeChanged;
+        timedReward.ValueChanged += OnTimedRewardChanged;
+    }
+
+    private void ReferanceAttachments()
+    {
+        currency = CollectibleManager.Instance.GetCollectible(CollectibleType.Currency) as Currency;
+        health = CollectibleManager.Instance.GetCollectible(CollectibleType.Health) as Health;
+        star = CollectibleManager.Instance.GetCollectible(CollectibleType.Star) as Star;
+        areaUpgrade = CollectibleManager.Instance.GetCollectible(CollectibleType.Upgrade) as AreaUpgrade;
+        timedReward = CollectibleManager.Instance.GetCollectible(CollectibleType.TimedReward) as TimedReward;
+    }
+
+    private void SetupTexts()
+    {
+        timedRewardText.text = timedReward.IsMaxed ? "FULL" : timedReward.Value + "/" + timedReward.MaxCount;
+        healthText.text = health.IsMaxed ? "FULL" : health.Value.ToString();
+        areaUpgradeText.text = areaUpgrade.IsMaxed ? "FULL" : areaUpgrade.Value + "/" + areaUpgrade.MaxCount;
+        starText.text = star.IsMaxed ? "FULL" : star.Value.ToString();
+        currencyText.text = currency.Value.ToString();
+    }
+    
+    // private void Update()
+    // {
+    //     if (Input.GetKeyDown(KeyCode.A))
+    //     {
+    //         currency.ChangeValue(10);
+    //     }
+    //     if (Input.GetKeyDown(KeyCode.B))
+    //     {
+    //         health.ChangeValue(1);
+    //     }
+    //     if (Input.GetKeyDown(KeyCode.C))
+    //     {
+    //         star.ChangeValue(1);
+    //     }
+    //     if (Input.GetKeyDown(KeyCode.D))
+    //     {
+    //         areaUpgrade.ChangeValue(1);
+    //     }
+    //     if (Input.GetKeyDown(KeyCode.E))
+    //     {
+    //         timedReward.ChangeValue(1);
+    //     }
+    // }
+
+    private void SetupActivableElements()
     {
         for (int i = 0; i < homeElements.Length; i++)
         {
@@ -69,7 +111,32 @@ public class HomeUIController : MonoBehaviour
         }
     }
 
-    #region Button Methods
+    #region CallBacks
+    
+    private void OnCurrencyChanged(int newValue)
+    {
+        currencyText.text = newValue.ToString();
+    }
+    
+    private void OnTimedRewardChanged(int newValue)
+    {
+        timedRewardText.text = timedReward.IsMaxed ? "FULL" : timedReward.Value + "/" + timedReward.MaxCount;
+    }
 
+    private void OnAreaUpgradeChanged(int newValue)
+    {
+        areaUpgradeText.text = areaUpgrade.IsMaxed ? "FULL" : areaUpgrade.Value + "/" + areaUpgrade.MaxCount;
+    }
+
+    private void OnStarChanged(int newValue)
+    {
+        starText.text = star.IsMaxed ? "FULL" : star.Value.ToString();
+    }
+
+    private void OnHealthChanged(int newValue)
+    {
+        healthText.text = health.IsMaxed ? "FULL" : health.Value.ToString();
+    }
+    
     #endregion
 }
