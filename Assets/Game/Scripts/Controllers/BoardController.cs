@@ -103,7 +103,7 @@ namespace Casual.Controllers
             if (!cellController.HasItem()) return;
             if(cellController.Item.FallAnimation.IsFalling) return;
             var cells = matchFinder.FindMatches(cellController, cellController.Item.Colour);
-            if (cellController.Item.ItemType == ItemType.BombItem)
+            if (cellController.Item.ItemType == ItemType.PropellerItem)
             {
                 TargetManager.Instance.DecreaseMoveCount();
                 cellController.Item.TryExecute();
@@ -152,36 +152,12 @@ namespace Casual.Controllers
             }
 
             yield return new WaitForSeconds(GameManager.Instance.SpecialMergeTime + .1f);
-
-            if (itemType == ItemType.Bomb)
-            {
-                CreateBomb(cell);
-            }
-            else if(itemType == ItemType.Rocket)
-            {
-                CreateRocket(cell);
-            }
-            else if(itemType == ItemType.Propeller)
+            
+            if(itemType == ItemType.Propeller)
             {
                 CreatePropeller(cell);
             }
             FallAndFillManager.Instance.StartFalls();
-        }
-
-        private void CreateBomb(CellController cell)
-        {
-            cell.Item = ItemFactory.Instance.CreateItem(
-                Colour.None, this.ItemsParent, ItemType.BombItem);
-            cell.Item.transform.position = cell.transform.position;
-            cell.Item.Fall();
-        }
-
-        private void CreateRocket(CellController cell)
-        {
-            cell.Item = ItemFactory.Instance.CreateItem(
-                Colour.None, this.ItemsParent, ItemType.RocketItem);
-            cell.Item.transform.position = cell.transform.position;
-            cell.Item.Fall();
         }
 
         private void CreatePropeller(CellController cell)

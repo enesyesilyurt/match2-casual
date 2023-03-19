@@ -90,20 +90,10 @@ namespace Casual.Abstracts
 
         private void SetSprite(int matchCount)
         {
-            if (matchCount < GameManager.Instance.BombMatchCount)
+            if (matchCount < GameManager.Instance.PropellerMatchCount)
             {
                 spriteRenderer.sprite = ImageLibrary.Instance.GetSprite(colour);
                 ItemType = ItemType.Cube;
-            }
-            else if (matchCount < GameManager.Instance.RocketMatchCount)
-            {
-                spriteRenderer.sprite = ImageLibrary.Instance.GetSprite(colour, ItemType.Bomb);
-                ItemType = ItemType.Bomb;
-            }
-            else if (matchCount < GameManager.Instance.PropellerMatchCount)
-            {
-                spriteRenderer.sprite = ImageLibrary.Instance.GetSprite(colour, ItemType.Rocket);
-                ItemType = ItemType.Rocket;
             }
             else
             {

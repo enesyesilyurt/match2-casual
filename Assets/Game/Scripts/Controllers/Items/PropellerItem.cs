@@ -14,4 +14,22 @@ public class PropellerItem : Item
         var bombSprite = ImageLibrary.Instance.GetSpecialSprite(ItemType.PropellerItem);
         Prepare(itemBase, bombSprite);
     }
+    
+    public override void TryExecute()
+    {
+        var neighbors = new List<CellController>();
+        neighbors.Add(BoardController.Instance.GetNeighbourWithDirection(CellController, Direction.Down));
+        neighbors.Add(BoardController.Instance.GetNeighbourWithDirection(CellController, Direction.Up));
+        neighbors.Add(BoardController.Instance.GetNeighbourWithDirection(CellController, Direction.Right));
+        neighbors.Add(BoardController.Instance.GetNeighbourWithDirection(CellController, Direction.Left));
+        
+        base.TryExecute();
+
+        foreach (var neighbor in neighbors)
+        {
+            if(neighbor != null && neighbor.HasItem())
+                neighbor.Item.TryExecute();
+        }
+        neighbors.Clear();
+    }
 }

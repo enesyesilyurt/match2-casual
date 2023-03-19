@@ -16,14 +16,10 @@ namespace Casual.Managers
         [SerializeField] private float shuffleSpeed = .6f;
         [SerializeField, Header("Board Settings")] private float offsetX;
         [SerializeField] private float offsetY;
-        [SerializeField, Header("Match Counts")] private int bombMatchCount = 5;
-        [SerializeField] private int rocketMatchCount = 8;
-        [SerializeField] private int propellerMatchCount = 10;
+        [SerializeField, Header("Match Counts")] private int propellerMatchCount = 6;
         [SerializeField, Header("Objects")] private GameObject border;
 
         public GameObject Border => border;
-        public int BombMatchCount => bombMatchCount;
-        public int RocketMatchCount => rocketMatchCount;
         public int PropellerMatchCount => propellerMatchCount;
         public float CubeMaxSpeed => cubeMaxSpeed;
         public float ShuffleSpeed => shuffleSpeed;

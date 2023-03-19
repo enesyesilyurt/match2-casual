@@ -1,6 +1,7 @@
 using System;
 using Casual.Enums;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Casual.Entities
 {
@@ -9,14 +10,10 @@ namespace Casual.Entities
     {
         [SerializeField] private Colour colour;
         [SerializeField] private Sprite defaultSprite;
-        [SerializeField] private Sprite bombSprite;
-        [SerializeField] private Sprite rocketSprite;
-        [SerializeField] private Sprite specialSprite;
+        [SerializeField] private Sprite propellerSprite;
         
         public Colour Colour => colour;
         public Sprite DefaultSprite => defaultSprite;
-        public Sprite BombSprite => bombSprite;
-        public Sprite RocketSprite => rocketSprite;
-        public Sprite SpecialSprite => specialSprite;
+        public Sprite PropellerSprite => propellerSprite;
     }
 }
