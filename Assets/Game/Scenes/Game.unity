@@ -8364,6 +8364,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5626173bcbf4953449627f3e76b2b3c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inDelay: 0.1
+  outDelay: 0.1
   isHorizontal: 1
   activePoint: 115
   deactivePoint: -100
@@ -11950,6 +11952,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5626173bcbf4953449627f3e76b2b3c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inDelay: 0.3
+  outDelay: 0
   isHorizontal: 0
   activePoint: -140
   deactivePoint: 55
@@ -14123,6 +14127,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5626173bcbf4953449627f3e76b2b3c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inDelay: 0.3
+  outDelay: 0
   isHorizontal: 1
   activePoint: 280
   deactivePoint: -240
@@ -14377,6 +14383,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5626173bcbf4953449627f3e76b2b3c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inDelay: 0
+  outDelay: 0
   isHorizontal: 1
   activePoint: 0
   deactivePoint: -770
@@ -17157,6 +17165,7 @@ GameObject:
   - component: {fileID: 1328245527}
   - component: {fileID: 1328245526}
   - component: {fileID: 1328245525}
+  - component: {fileID: 1328245529}
   - component: {fileID: 1328245528}
   m_Layer: 5
   m_Name: UpgradeButton
@@ -17278,12 +17287,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 1328245523}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5626173bcbf4953449627f3e76b2b3c7, type: 3}
+  m_Script: {fileID: 11500000, guid: bdac00316e447544b82c859efcb45a82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isHorizontal: 1
-  activePoint: 0
-  deactivePoint: 570
+  inDelay: 0.2
+  outDelay: 0.1
+--- !u!225 &1328245529
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1328245523}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1334221633
 GameObject:
   m_ObjectHideFlags: 0
@@ -23699,6 +23719,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5626173bcbf4953449627f3e76b2b3c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inDelay: 0.3
+  outDelay: 0
   isHorizontal: 0
   activePoint: -140
   deactivePoint: 55

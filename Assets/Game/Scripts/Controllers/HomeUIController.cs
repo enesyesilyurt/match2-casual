@@ -1,19 +1,15 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HomeUIController : MonoBehaviour
 {
     [Serializable]
-    private class HomeElementsActivite
+    private class HomeElementsActivate
     {
         public Button Button;
-        
-        [SerializeField] private UIMovableAnimationController[] activeElements;
-        [SerializeField] private UIMovableAnimationController[] deactiveElements;
+        [SerializeField] private ActivableUIElement[] activeElements;
+        [SerializeField] private ActivableUIElement[] deactiveElements;
         
         private bool isActive;
         public bool IsActive => isActive;
@@ -23,8 +19,12 @@ public class HomeUIController : MonoBehaviour
             if(isActive == newSituation) return;
             isActive = newSituation;
             if(!isActive) return;
-            foreach (var element in activeElements) element.ChangeSituation(isActive);
-            foreach (var element in deactiveElements) element.ChangeSituation(!isActive);
+            
+            for (int i = 0; i < activeElements.Length; i++) 
+                activeElements[i].ChangeSituation(isActive);
+            
+            for (int i = 0; i < deactiveElements.Length; i++) 
+                deactiveElements[i].ChangeSituation(!isActive);
         }
 
         public void SetupElements()
@@ -34,8 +34,8 @@ public class HomeUIController : MonoBehaviour
         }
     }
 
-    [SerializeField] private HomeElementsActivite[] homeElements;
-    [SerializeField] private UIMovableAnimationController[] movables;
+    [SerializeField] private HomeElementsActivate[] homeElements;
+    [SerializeField] private ActivableUIElement[] movables;
 
     private int activeIndex;
 
