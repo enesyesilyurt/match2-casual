@@ -42,7 +42,7 @@ namespace Casual.Utilities
                 case ItemType.Cube:
                     item = CreateCubeItem(itemBase, colour);
                     break;
-                case ItemType.PropellerItem:
+                case ItemType.Propeller:
                     item = CreatePropellerItem(itemBase);
                     break;
             }
@@ -74,7 +74,7 @@ namespace Casual.Utilities
             return Colour.None;
         }
 
-        public void PrepareRatios()
+        private void PrepareRatios()
         {
             colourRatioDict.Clear();
             if(LevelManager.Instance.CurrentLevel.ColourRatios == null) return;

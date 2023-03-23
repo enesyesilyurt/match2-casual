@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Casual.Entities;
 using Casual.Enums;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Casual.Utilities
 {
@@ -11,6 +12,7 @@ namespace Casual.Utilities
 
         [Header("Specials")]
         [SerializeField] private Sprite propellerSprite;
+        [SerializeField] private Sprite balloonSprite;
 
         [Header("EditorTextures")] 
         public Texture BlueCube;
@@ -19,9 +21,8 @@ namespace Casual.Utilities
         public Texture PurpleCube;
         public Texture RedCube;
         public Texture YellowCube;
-        public Texture Bomb;
+        public Texture Balloon;
         public Texture Propeller;
-        public Texture Rocket;
         
         private Dictionary<Colour, SpriteSet> colourSetsDict = new();
 
@@ -37,7 +38,7 @@ namespace Casual.Utilities
         {
             switch (itemType)
             {
-                case ItemType.Propeller:
+                case ItemType.MultipleCube:
                     return colourSetsDict[colour].PropellerSprite;
                 default:
                     return colourSetsDict[colour].DefaultSprite;
@@ -48,8 +49,10 @@ namespace Casual.Utilities
         {
             switch (itemType)
             {
-                case ItemType.PropellerItem:
+                case ItemType.Propeller:
                     return propellerSprite;
+                case ItemType.Balloon:
+                    return balloonSprite;
                 default:
                     return propellerSprite;
             }

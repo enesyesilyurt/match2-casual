@@ -154,7 +154,7 @@ public class LevelEditor : EditorWindow
             GUILayout.Height(50)
         });
         AddSelectedObstacleTypeButton(null, ObstacleType.None);
-        AddSelectedObstacleTypeButton(ImageLibrary.Instance.Bomb, ObstacleType.Box);
+        AddSelectedObstacleTypeButton(ImageLibrary.Instance.Balloon, ObstacleType.Box);
         GUILayout.EndHorizontal();
     }
 
@@ -239,11 +239,11 @@ public class LevelEditor : EditorWindow
                     }
                     if (sqr.ObstacleType == ObstacleType.Bush)
                     {
-                        imageButton = ImageLibrary.Instance.Bomb;
+                        imageButton = ImageLibrary.Instance.Balloon;
                     }
                     if (sqr.ObstacleType == ObstacleType.Box)
                     {
-                        imageButton = ImageLibrary.Instance.Bomb;
+                        imageButton = ImageLibrary.Instance.Balloon;
                     }
                 }
                 

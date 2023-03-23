@@ -18,9 +18,9 @@ public class BottomSelectorController : MonoBehaviour
     
     public void Setup()
     {
-        layoutBG.anchoredPosition = new Vector2(400, layoutBG.anchoredPosition.y);
+        layoutBG.anchoredPosition = new Vector2(1280, layoutBG.anchoredPosition.y);
 
-        layout.padding.left = -1600;
+        layout.padding.left = -5120;
         layout.SetLayoutHorizontal();
         
         for (int i = 0; i < selectionButtons.Length; i++)
@@ -34,11 +34,11 @@ public class BottomSelectorController : MonoBehaviour
         
         var selected = selectionButtons[currentIndex];
         buttonFirstY = selectionButtons[0].IconRect.anchoredPosition.y;
-        buttonMaxY = selectionButtons[0].IconRect.anchoredPosition.y + 50;
+        buttonMaxY = selectionButtons[0].IconRect.anchoredPosition.y + 150;
         selected.Text.gameObject.SetActive(true);
-        selected.IconRect.anchoredPosition = new Vector2(selected.IconRect.anchoredPosition.x, selected.IconRect.anchoredPosition.x + 50);
+        selected.IconRect.anchoredPosition = new Vector2(selected.IconRect.anchoredPosition.x, selected.IconRect.anchoredPosition.x + 150);
         selected.IconRect.localScale = Vector3.one;
-        selected.Rect.sizeDelta = new Vector2(220, selected.Rect.sizeDelta.y);
+        selected.Rect.sizeDelta = new Vector2(712, selected.Rect.sizeDelta.y);
     }
 
     private void SetLayout(int index)
@@ -53,10 +53,10 @@ public class BottomSelectorController : MonoBehaviour
 
     private void SetLayer(int index)
     {
-        DOVirtual.Float(layoutBG.anchoredPosition.x, index * 145 + 110, .3f,
+        DOVirtual.Float(layoutBG.anchoredPosition.x, index * 462 + 356, .3f,
             v => layoutBG.anchoredPosition = new Vector2(v, layoutBG.anchoredPosition.y));
         
-        DOVirtual.Int(layout.padding.left, index * -800, .3f, v =>
+        DOVirtual.Int(layout.padding.left, index * -2560, .3f, v =>
         {
             layout.padding.left = v;
             layout.SetLayoutHorizontal();
@@ -74,7 +74,7 @@ public class BottomSelectorController : MonoBehaviour
         DOVirtual.Float(selected.IconRect.anchoredPosition.x, buttonMaxY, .3f,
             v => selected.IconRect.anchoredPosition = new Vector2(selected.IconRect.anchoredPosition.x, v)).SetEase(Ease.OutBack);
         
-        DOVirtual.Float(145, 220, .3f,
+        DOVirtual.Float(462, 712, .3f,
             v => selected.Rect.sizeDelta = new Vector2(v, selected.Rect.sizeDelta.y)).SetEase(Ease.OutBack);
     }
 
@@ -88,7 +88,7 @@ public class BottomSelectorController : MonoBehaviour
         DOVirtual.Float(selected.IconRect.anchoredPosition.x, buttonFirstY, .3f,
             v => selected.IconRect.anchoredPosition = new Vector2(selected.IconRect.anchoredPosition.x, v)).SetEase(Ease.OutBack);
         
-        DOVirtual.Float(220, 145, .3f,
+        DOVirtual.Float(712, 462, .3f,
             v => selected.Rect.sizeDelta = new Vector2(v, selected.Rect.sizeDelta.y)).SetEase(Ease.OutBack);
     }
 }

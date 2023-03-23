@@ -71,20 +71,6 @@ namespace Casual.Controllers
                 child.DOKill();
                 SimplePool.Despawn(child.gameObject);
             }
-            
-            // var tempItems = itemsParent.parent;
-            // Destroy(itemsParent.gameObject);
-            // var newItems = new GameObject();
-            // newItems.transform.SetParent(tempItems);
-            // newItems.name = "Items";
-            // itemsParent = newItems.transform;
-            //
-            // var temp = cellParent.parent;
-            // Destroy(cellParent.gameObject);
-            // var newParent = new GameObject();
-            // newParent.transform.SetParent(temp);
-            // newParent.name = "Cells";
-            // cellParent = newParent.transform;
         }
         
         private void CreateCells()
@@ -118,14 +104,13 @@ namespace Casual.Controllers
         public void CellTapped(CellController cellController)
         {
             if(onAnim) return;
-            if (cellController == null) return;
             if (!cellController.HasItem()) return;
             if(cellController.Item.FallAnimation.IsFalling) return;
             var cells = matchFinder.FindMatches(cellController, cellController.Item.Colour);
-            if (cellController.Item.ItemType == ItemType.PropellerItem)
+            if (cellController.Item.ItemType == ItemType.Propeller)
             {
                 TargetManager.Instance.DecreaseMoveCount();
-                cellController.Item.TryExecute();
+                cellController.Item.ExecuteWithTapp();
                 
                 FallAndFillManager.Instance.DoFalls();
                 FallAndFillManager.Instance.DoFills();
@@ -169,14 +154,14 @@ namespace Casual.Controllers
                     .SetEase(Ease.InBack, GameManager.Instance.SpecialMergeOverShoot)
                     .OnComplete(() =>
                     {
-                        item.TryExecute();
+                        item.ExecuteWithTapp();
                         onAnim = false;
                     });
             }
 
             yield return new WaitForSeconds(GameManager.Instance.SpecialMergeTime + .1f);
             
-            if(itemType == ItemType.Propeller)
+            if(itemType == ItemType.MultipleCube)
             {
                 CreatePropeller(cell);
             }
@@ -187,7 +172,7 @@ namespace Casual.Controllers
         private void CreatePropeller(CellController cell)
         {
             cell.Item = ItemFactory.Instance.CreateItem(
-                Colour.None, this.ItemsParent, ItemType.PropellerItem);
+                Colour.None, this.ItemsParent, ItemType.Propeller);
             cell.Item.transform.position = cell.transform.position;
             cell.Item.Fall();
         }
@@ -196,7 +181,7 @@ namespace Casual.Controllers
         {
             for (var i = 0; i < cells.Count; i++)
             {
-                cells[i].Item.TryExecute();
+                cells[i].Item.ExecuteWithNeighbour();
             }
         }
 

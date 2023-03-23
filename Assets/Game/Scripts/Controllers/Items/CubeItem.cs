@@ -1,5 +1,6 @@
 using Casual.Abstracts;
 using Casual.Enums;
+using Casual.Managers;
 using Casual.Utilities;
 using UnityEngine;
 
@@ -14,10 +15,30 @@ namespace Casual.Controllers.Items
             Prepare(itemBase, ImageLibrary.Instance.GetSprite(colour));
         }
 
-        public override void TryExecute()
+        public override void ExecuteWithNeighbour()
         {
             CreateParticle();
-            base.TryExecute();
+            base.ExecuteWithNeighbour();
+        }
+        
+        public override void ExecuteWithTapp()
+        {
+            CreateParticle();
+            base.ExecuteWithTapp();
+        }
+
+        protected override void OnMatchCountChanged(int matchCount)
+        {
+            if (matchCount < GameManager.Instance.PropellerMatchCount)
+            {
+                spriteRenderer.sprite = ImageLibrary.Instance.GetSprite(colour);
+                ItemType = ItemType.Cube;
+            }
+            else
+            {
+                spriteRenderer.sprite = ImageLibrary.Instance.GetSprite(colour, ItemType.MultipleCube);
+                ItemType = ItemType.MultipleCube;
+            }
         }
 
         private void CreateParticle()

@@ -4,13 +4,9 @@ namespace Casual.Enums
     {
         None,
         Cube,
-        Egg,
-        Bomb,
-        Rocket,
+        MultipleCube,
         Propeller,
-        BombItem,
-        RocketItem,
-        PropellerItem,
+        Balloon,
         Empty
     }
 }

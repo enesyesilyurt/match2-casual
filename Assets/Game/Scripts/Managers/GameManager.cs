@@ -33,7 +33,7 @@ namespace Casual.Managers
 
         public event Action<GameState> GameStateChanged;
         
-        private void Awake()
+        public void Awake()
         {
             DOTween.Init();
             DOTween.SetTweensCapacity(300,100);

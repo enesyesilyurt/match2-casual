@@ -2,8 +2,6 @@ using Casual.Controllers;
 using Casual.Enums;
 using Casual.Managers;
 using Casual.Utilities;
-using Unity.Mathematics;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 namespace Casual.Abstracts
@@ -15,7 +13,7 @@ namespace Casual.Abstracts
         public FallAnimation FallAnimation;
         
         private CellController cellController;
-        private SpriteRenderer spriteRenderer;
+        protected SpriteRenderer spriteRenderer;
         protected Colour colour;
 
         public Colour Colour => colour;
@@ -24,7 +22,7 @@ namespace Casual.Abstracts
         
         public CellController CellController
         {
-            get { return cellController; }
+            get => cellController;
             set
             {
                 if (cellController == value) return;
@@ -64,17 +62,12 @@ namespace Casual.Abstracts
 
         private void AddSprite(Sprite sprite)
         {
-            var tempRenderer = GetComponentInChildren<SpriteRenderer>();
-            if (tempRenderer == null)
-            {
-                spriteRenderer = new GameObject("Sprite_").AddComponent<SpriteRenderer>();
-                spriteRenderer.transform.SetParent(transform);
-            }
-            else
-            {
-                spriteRenderer = tempRenderer;
-            }
-            
+            var tempRenderer = GetComponent<SpriteRenderer>();
+
+            spriteRenderer = tempRenderer == null
+                ? gameObject.AddComponent<SpriteRenderer>()
+                : spriteRenderer = tempRenderer;
+
             spriteRenderer.sprite = sprite;
             spriteRenderer.sortingOrder = BaseSortingOrder;
             spriteRenderer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
@@ -82,39 +75,29 @@ namespace Casual.Abstracts
 
         public int CheckMatches()
         {
-            if (ItemType == ItemType.BombItem || ItemType == ItemType.RocketItem || ItemType == ItemType.PropellerItem) return 0;
+            if (ItemType == ItemType.Balloon || ItemType == ItemType.Propeller) return 0;
             var matchCount = BoardController.Instance.MatchFinder.FindMatches(cellController, colour).Count;
-            SetSprite(matchCount);
+            OnMatchCountChanged(matchCount);
             return matchCount - 1;
         }
-
-        private void SetSprite(int matchCount)
-        {
-            if (matchCount < GameManager.Instance.PropellerMatchCount)
-            {
-                spriteRenderer.sprite = ImageLibrary.Instance.GetSprite(colour);
-                ItemType = ItemType.Cube;
-            }
-            else
-            {
-                spriteRenderer.sprite = ImageLibrary.Instance.GetSprite(colour, ItemType.Propeller);
-                ItemType = ItemType.Propeller;
-            }
-        }
         
-        public void Fall()
-        {
-            FallAnimation.FallToTarget(CellController.GetFallTarget());
-        }
+        protected virtual void OnMatchCountChanged(int matchCount) { }
+        
+        public void Fall() => FallAnimation.FallToTarget(CellController.GetFallTarget());
 
-        public virtual void TryExecute()
+
+        public virtual void ExecuteWithNeighbour() => Execute();
+        
+        public virtual void ExecuteWithTapp() => Execute();
+
+        private void Execute()
         {
             FallAnimation.PrepareRemove();
             LevelManager.Instance.ItemExecute(this);
             RemoveItem();
         }
 
-        private void RemoveItem()
+        private void RemoveItem() // TODO
         {
             CellController.Item = null;
             CellController = null;
