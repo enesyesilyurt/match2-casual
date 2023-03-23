@@ -2,6 +2,8 @@ using Casual.Abstracts;
 using Casual.Controllers;
 using Casual.Managers;
 using DG.Tweening;
+using DG.Tweening.Core;
+using DG.Tweening.Plugins.Options;
 using UnityEngine;
 using Sequence = DG.Tweening.Sequence;
 
@@ -19,18 +21,23 @@ namespace Casual.Utilities
         private bool isFalling;
 
         public bool IsFalling => isFalling;
-        private float maxSpeed => GameManager.Instance.CubeMaxSpeed;
+        private float maxSpeed;
         
-        public void Prepare(Item item) => this.item = item;
+        public void Prepare(Item item)
+        {
+            this.item = item;
+            maxSpeed = GameManager.Instance.CubeMaxSpeed;
+        }
 
         public void Update()
         {
+            if(!isFalling) return;
             FallMovementHandler();
         }
 
         public void FallToTarget(CellController targetCellController)
         {
-            if (this.targetCellController != null && targetCellController.Column >= this.targetCellController.Column) return;
+            if (this.targetCellController != null && targetCellController.GridPosition.y >= this.targetCellController.GridPosition.y) return;
             
             if(jumpSequence != null)
                 jumpSequence.Kill();
@@ -46,16 +53,13 @@ namespace Casual.Utilities
             if(jumpSequence != null)
                 jumpSequence.Kill();
         }
-
+        
         private void FallMovementHandler()
         {
-            if (!isFalling) return;
-            
             velocity += GameManager.Instance.CubeAcceleration;
             velocity = velocity >= maxSpeed ? maxSpeed : velocity;
             var tempPosition = item.transform.position;
             tempPosition.y -= velocity * Time.deltaTime;
-            
             if (tempPosition.y <= targetPosition.y)
             {
                 targetCellController = null;
@@ -68,10 +72,23 @@ namespace Casual.Utilities
                 {
                     if (!jumpSequence.IsActive()) JumpSequence();
                 }
-                
             }
-
+            
             item.transform.position = tempPosition;
+            
+            // item.transform.DOKill();
+            //
+            // item.transform.DOMoveY(targetCellController.transform.position.y, 10)
+            //     .SetSpeedBased().SetEase(Ease.InSine).OnComplete(() =>
+            //     {
+            //         if (jumpSequence == null) JumpSequence();
+            //         else
+            //         {
+            //             if (!jumpSequence.IsActive()) JumpSequence();
+            //         }
+            //         isFalling = false;
+            //         targetCellController = null;
+            //     });
         }
 
         private void JumpSequence()

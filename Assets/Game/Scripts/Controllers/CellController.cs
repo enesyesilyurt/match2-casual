@@ -11,20 +11,15 @@ namespace Casual.Controllers
     {
         [SerializeField] private Transform mask;
         [SerializeField] private Transform backGround;
-        
-        private int row;
-        private int column;
-        private CellController firstCellBelow;
+        [SerializeField] private GameObject[] borders;
+
+        private Vector2Int gridPosition;
         private bool isFillingCell;
         private Item item;
 
-        public int Row => row;
-        public int Column => column;
-        public CellController FirstCellBelow => firstCellBelow;
+        public Vector2Int GridPosition => gridPosition;
         public bool IsFillingCell => isFillingCell;
-        
-        public List<CellController> Neighbours { get; private set; }
-        
+
         public Item Item
         {
             get => item;
@@ -42,70 +37,43 @@ namespace Casual.Controllers
                 if (value != null)
                 {
                     value.CellController = this;
-                    value.SetSortingOrder(column);
+                    value.SetSortingOrder(gridPosition.y);
                 }
             }
         }
         
-        public void Prepare(int row, int column, BoardController boardController)
+        public void Prepare(int row, int column)
         {
-            this.row = row;
-            this.column = column;
+            gridPosition = new Vector2Int(row, column);
             transform.localPosition = new Vector3(row * GameManager.Instance.OffsetX, column * GameManager.Instance.OffsetY);
             GetComponent<BoxCollider2D>().size = new Vector2(GameManager.Instance.OffsetX, GameManager.Instance.OffsetY);
 
             mask.localScale = new Vector3(GameManager.Instance.OffsetX, GameManager.Instance.OffsetY, 1);
             backGround.localScale = new Vector3(GameManager.Instance.OffsetX, GameManager.Instance.OffsetY, 1);
             
-            UpdateLabel();
-            UpdateNeighbours(boardController);
-        }
-        
-        private void UpdateNeighbours(BoardController boardController)
-        {
-            Neighbours = new List<CellController>();
-            var up = boardController.GetNeighbourWithDirection(this, Direction.Up);
-            var down = boardController.GetNeighbourWithDirection(this, Direction.Down);
-            var left = boardController.GetNeighbourWithDirection(this, Direction.Left);
-            var right = boardController.GetNeighbourWithDirection(this, Direction.Right);
-
-            if (up == null)
-            {
-                var border = SimplePool.Spawn(GameManager.Instance.Border, transform.position, Quaternion.identity);
-                border.SetActive(true);
-                border.transform.parent = transform;
+            if (BoardController.Instance.GetCell(GridPosition + Vector2Int.up) == null)
                 isFillingCell = true;
-            }
-            if (down == null)
-            {
-                var border = SimplePool.Spawn(GameManager.Instance.Border, transform.position, Quaternion.Euler(0,0,180));
-                border.SetActive(true);
-                border.transform.parent = transform;
-            }
-            if (left == null)
-            {
-                var border = SimplePool.Spawn(GameManager.Instance.Border, transform.position, Quaternion.Euler(0,0,90));
-                border.SetActive(true);
-                border.transform.parent = transform;
-            }
-            if (right == null)
-            {
-                var border = SimplePool.Spawn(GameManager.Instance.Border, transform.position, Quaternion.Euler(0,0,270));
-                border.SetActive(true);
-                border.transform.parent = transform;
-            }
-			    
-            if(up!=null) Neighbours.Add(up);
-            if(down!=null) Neighbours.Add(down);
-            if(left!=null) Neighbours.Add(left);
-            if(right!=null) Neighbours.Add(right);
+            
+            UpdateLabel();
+            CreateBorder();
+        }
 
-            if (down != null) firstCellBelow = down;
+        private void CreateBorder()
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                borders[i].SetActive(false);
+                if (BoardController.Instance.GetCell(gridPosition + BoardController.directions[i]) == null)
+                {
+                    borders[i].SetActive(true);
+                    borders[i].transform.rotation = Quaternion.Euler(0, 0, i * -90);
+                }
+            }
         }
         
         private void UpdateLabel()
         {
-            var cellName = Row + ":" + Column;
+            var cellName = gridPosition.x + ":" + gridPosition.y;
             gameObject.name = "Cell " + cellName;
         }
 
@@ -117,11 +85,28 @@ namespace Casual.Controllers
         public CellController GetFallTarget() // todo
         {
             var targetCell = this;
-            while (targetCell.firstCellBelow != null && targetCell.firstCellBelow.Item == null)
+            
+            while (targetCell.GetFirstCellBelow() != null && !targetCell.GetFirstCellBelow().HasItem())
             {
-                targetCell = targetCell.firstCellBelow;
+                targetCell = targetCell.GetFirstCellBelow();
             }
             return targetCell;
+        }
+
+        public CellController[] GetNeighbours()
+        {
+            var neighbors = new CellController[4];
+            for (int i = 0; i < 4; i++)
+            {
+                neighbors[i] = BoardController.Instance.GetCell(GridPosition + BoardController.directions[i]);
+            }
+
+            return neighbors;
+        }
+
+        public CellController GetFirstCellBelow()
+        {
+            return BoardController.Instance.GetCell(GridPosition + Vector2Int.down);
         }
     }
 }

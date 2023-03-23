@@ -7,11 +7,11 @@ namespace Casual.Utilities
 {
     public class MatchFinder
     {
-        private bool[,] visitedCells;
+        private bool[] visitedCells;
 
         public void Setup()
         {
-            visitedCells = new bool[LevelManager.Instance.CurrentLevel.RowCount, LevelManager.Instance.CurrentLevel.ColumnCount];
+            visitedCells = new bool[LevelManager.Instance.CurrentLevel.GridWidth * LevelManager.Instance.CurrentLevel.GridHeight];
         }
         
         public List<CellController> FindMatches(CellController cellController, Colour colour)
@@ -27,21 +27,21 @@ namespace Casual.Utilities
         {
             if (cellController == null) return;
 			    
-            var row = cellController.Row;
-            var column = cellController.Column;
-            if (visitedCells[row, column]) return;
+            var row = cellController.GridPosition.x;
+            var column = cellController.GridPosition.y;
+            if (visitedCells[LevelManager.Instance.CurrentLevel.GridWidth * column + row]) return;
 
             if (cellController.HasItem()
                 && cellController.Item.Colour == colour
                 && cellController.Item.Colour != Colour.None)
             {
-                visitedCells[row, column] = true;
+                visitedCells[LevelManager.Instance.CurrentLevel.GridWidth * column + row] = true;
                 resultCells.Add(cellController);
 			    
-                var neighbours = cellController.Neighbours;
-                if (neighbours.Count == 0) return;
+                var neighbours = cellController.GetNeighbours();
+                if (neighbours.Length == 0) return;
 	    
-                for (var i = 0; i < neighbours.Count; i++)
+                for (var i = 0; i < neighbours.Length; i++)
                 {	
                     FindMatches(neighbours[i], colour, resultCells);
                 }
@@ -50,12 +50,9 @@ namespace Casual.Utilities
 
         private void ClearVisitedCells()
         {
-            for (var x = 0; x < visitedCells.GetLength(0); x++)
+            for (var i = 0; i < visitedCells.GetLength(0); i++)
             {
-                for (var y = 0; y < visitedCells.GetLength(1); y++)
-                {
-                    visitedCells[x, y] = false;
-                }
+                visitedCells[i] = false;
             }
         }
     }

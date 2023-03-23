@@ -80,7 +80,6 @@ namespace Casual.Managers
 	    private void ResetManager()
 	    {
 		    UIManager.Instance.ResetManager();
-		    fallAndFillManager.StopFalls();
 		    boardController.ResetBoard();
 	    }
 
@@ -91,13 +90,13 @@ namespace Casual.Managers
 
 	    private void PrepareLevel()
 	    {
-		    for (var column = 0; column < CurrentLevel.ColumnCount; column++)
+		    for (var x = 0; x < CurrentLevel.GridWidth; x++)
 		    {
-			    for (var row = 0; row < CurrentLevel.RowCount; row++)
+			    for (var y = 0; y < CurrentLevel.GridHeight; y++)
 			    {
-				    if (CurrentLevel.Blocks[column * CurrentLevel.ColumnCount + row].ItemType == ItemType.None) continue;
-				    var cell = boardController.Cells[column * CurrentLevel.ColumnCount + row];
-				    var colour = CurrentLevel.Blocks[CurrentLevel.RowCount * column + row].Colour;
+				    if (CurrentLevel.Blocks[y * CurrentLevel.GridWidth + x].ItemType == ItemType.None) continue;
+				    var cell = boardController.Cells[y * CurrentLevel.GridWidth + x];
+				    var colour = CurrentLevel.Blocks[y * CurrentLevel.GridWidth + x].Colour;
 				    var item = colour == Colour.None
 					    ? ItemFactory.Instance.CreateRandomItem(boardController.ItemsParent)
 					    : ItemFactory.Instance.CreateItem(colour, boardController.ItemsParent);

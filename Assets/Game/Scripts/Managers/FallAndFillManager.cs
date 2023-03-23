@@ -10,15 +10,12 @@ namespace Casual.Managers
     {
         private BoardController boardController;
         private CellController[] fillingCells;
-        private bool isActive;
-        
-        private int rowCount => LevelManager.Instance.CurrentLevel.RowCount;
-        private int ColumnCount => LevelManager.Instance.CurrentLevel.ColumnCount;
+        private int gridSize;
 
         public void Init(BoardController boardController)
         {
             this.boardController = boardController;
-
+            gridSize = LevelManager.Instance.CurrentLevel.GridWidth * LevelManager.Instance.CurrentLevel.GridHeight;
             CreateFillingCells();
         }
 
@@ -30,15 +27,12 @@ namespace Casual.Managers
         private void CreateFillingCells()
         {
             var cellList = new List<CellController>();
-            for (var column = 0; column < ColumnCount; column++)
+            for (var i = 0; i < gridSize; i++)
             {
-                for (var row = 0; row < rowCount; row++)
+                var cell = boardController.Cells[i];
+                if (cell != null && cell.IsFillingCell)
                 {
-                    var cell = boardController.Cells[column * ColumnCount + row];
-                    if (cell != null && cell.IsFillingCell)
-                    {
-                        cellList.Add(cell);
-                    }
+                    cellList.Add(cell);
                 }
             }
 
@@ -47,43 +41,34 @@ namespace Casual.Managers
 
         public void StartFalls()
         {
-            isActive = true;
             boardController.CheckMatches();
         }
 
-        public void StopFalls()
+        public void DoFalls()
         {
-            isActive = false;
-        }
-
-        private void DoFalls()
-        {
-            for (var column = 0; column < ColumnCount; column++)
+            for (var i = 0; i < gridSize; i++)
             {
-                for (var row = 0; row < rowCount; row++)
+                var cell = boardController.Cells[i];
+                if(cell == null) continue;
+                if (cell.HasItem() && cell.GetFirstCellBelow() != null && !cell.GetFirstCellBelow().HasItem())
                 {
-                    var cell = boardController.Cells[ColumnCount * column + row];
-                    if(cell == null) continue;
-                    if (cell.Item != null && cell.FirstCellBelow != null && cell.FirstCellBelow.Item == null)
-                    {
-                        cell.Item.Fall();
-                    }
+                    cell.Item.Fall();
                 }
             }
         }
 
-        private void DoFills()
+        public void DoFills()
         {
             for (var i = 0; i < fillingCells.Length; i++)
             {
                 var cell = fillingCells[i];
-                if (cell.Item == null)
+                while (cell.Item == null)
                 {
                     cell.Item = ItemFactory.Instance.CreateRandomItem(boardController.ItemsParent);
                     boardController.CheckMatches();
 
                     var offsetY = 0.0F;
-                    var targetCellBelow = cell.GetFallTarget().FirstCellBelow;
+                    var targetCellBelow = cell.GetFallTarget().GetFirstCellBelow();
                     if (targetCellBelow != null)
                     {
                         if (targetCellBelow.Item != null)
@@ -101,14 +86,6 @@ namespace Casual.Managers
                     cell.Item.Fall();
                 }
             }
-        }
-
-        public void Update()
-        {
-            if (!isActive) return;
-
-            DoFalls();
-            DoFills();
         }
     }
 }

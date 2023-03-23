@@ -12,10 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f943bee3d8669fc4997bb1c300478fbe, type: 3}
   m_Name: Level-2
   m_EditorClassIdentifier: 
-  ColumnCount: 9
-  RowCount: 9
+  GridHeight: 9
+  GridWidth: 9
   maxMove: 20
-  ColourRatios: []
+  ColourRatios:
+  - Colour: 3
+    Ratio: 1
+  - Colour: 6
+    Ratio: 1
+  - Colour: 2
+    Ratio: 1
+  - Colour: 1
+    Ratio: 1
   Blocks:
   - ItemType: 0
     ObstacleType: 0
@@ -261,12 +269,12 @@ MonoBehaviour:
     ObstacleType: 0
     Colour: 0
   Targets:
-  - Colour: 5
-    ItemType: 0
-    Count: 5
-  - Colour: 4
-    ItemType: 0
-    Count: 5
   - Colour: 1
+    ItemType: 0
+    Count: 5
+  - Colour: 6
+    ItemType: 0
+    Count: 5
+  - Colour: 2
     ItemType: 0
     Count: 5

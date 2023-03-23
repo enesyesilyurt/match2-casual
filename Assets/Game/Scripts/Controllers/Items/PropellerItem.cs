@@ -17,19 +17,11 @@ public class PropellerItem : Item
     
     public override void TryExecute()
     {
-        var neighbors = new List<CellController>();
-        neighbors.Add(BoardController.Instance.GetNeighbourWithDirection(CellController, Direction.Down));
-        neighbors.Add(BoardController.Instance.GetNeighbourWithDirection(CellController, Direction.Up));
-        neighbors.Add(BoardController.Instance.GetNeighbourWithDirection(CellController, Direction.Right));
-        neighbors.Add(BoardController.Instance.GetNeighbourWithDirection(CellController, Direction.Left));
-        
-        base.TryExecute();
-
-        foreach (var neighbor in neighbors)
+        foreach (var neighbor in CellController.GetNeighbours())
         {
             if(neighbor != null && neighbor.HasItem())
                 neighbor.Item.TryExecute();
         }
-        neighbors.Clear();
+        base.TryExecute();
     }
 }

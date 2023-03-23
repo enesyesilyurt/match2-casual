@@ -109,6 +109,7 @@ namespace Casual.Abstracts
 
         public virtual void TryExecute()
         {
+            FallAnimation.PrepareRemove();
             LevelManager.Instance.ItemExecute(this);
             RemoveItem();
         }

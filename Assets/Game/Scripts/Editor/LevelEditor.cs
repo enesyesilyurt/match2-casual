@@ -10,15 +10,15 @@ using UnityEngine;
 public class LevelEditor : EditorWindow
 {
     private static LevelEditor window;
-    public static SquareBlock[] levelSquares = new SquareBlock[81];
+    public static SquareBlock[] levelSquares;
     public static Target[] targetSquares = new Target[4];
     public static ColourRatio[] colourRatios = new ColourRatio[6];
 
     private static Colour[] colours = new[]
         { Colour.Blue, Colour.Red, Colour.Green, Colour.Yellow, Colour.Pink, Colour.Purple };
     
-    static int maxRowCount = 9;
-    static int maxColumnCount = 9;
+    static int gridWidth = 9;
+    static int gridHeight = 9;
     private int maxMove;
     private string levelName;
     private bool isBlockSelected;
@@ -32,15 +32,17 @@ public class LevelEditor : EditorWindow
     {
         window = (LevelEditor)EditorWindow.GetWindow(typeof(LevelEditor));
         
-        levelSquares = new SquareBlock[maxColumnCount * maxRowCount];
-        for (int i = 0; i < levelSquares.Length; i++)
+        levelSquares = new SquareBlock[gridHeight * gridWidth];
+        for (int x = 0; x < gridWidth; x++)
         {
+            for (int y = 0; y < gridHeight; y++)
+            {
+                SquareBlock sqBlocks = new SquareBlock();
+                sqBlocks.ItemType = ItemType.None;
+                sqBlocks.ObstacleType = ObstacleType.None;
 
-            SquareBlock sqBlocks = new SquareBlock();
-            sqBlocks.ItemType = ItemType.None;
-            sqBlocks.ObstacleType = ObstacleType.None;
-
-            levelSquares[i] = sqBlocks;
+                levelSquares[gridWidth * y + x] = sqBlocks;
+            }
         }
 
         for (int i = 0; i < 4; i++)
@@ -181,12 +183,12 @@ public class LevelEditor : EditorWindow
         
         GUILayout.BeginVertical();
 
-        for (int column = 0; column < maxColumnCount; column++)
+        for (int x = 0; x < gridWidth; x++)
         {
             GUILayout.BeginHorizontal();
-            for (int row = 0; row < maxRowCount; row++)
+            for (int y = 0; y < gridHeight; y++)
             {
-                var sqr = levelSquares[column * maxColumnCount + row];
+                var sqr = levelSquares[gridWidth * y + x];
                 if (isBlockSelected)
                 {
                     if (sqr.ItemType == ItemType.None)
@@ -253,11 +255,11 @@ public class LevelEditor : EditorWindow
                 {
                     if (isBlockSelected)
                     {
-                        SetType(column, row, selectedItemType, sqr.ObstacleType, selectedColour);
+                        SetType(x, y, selectedItemType, sqr.ObstacleType, selectedColour);
                     }
                     else
                     {
-                        SetType(column, row, sqr.ItemType, selectedObstacleType, sqr.Colour);
+                        SetType(x, y, sqr.ItemType, selectedObstacleType, sqr.Colour);
                     }
                 }
             }
@@ -289,8 +291,8 @@ public class LevelEditor : EditorWindow
             var scriptable = ScriptableObject.CreateInstance<LevelConfig>();
             AssetDatabase.CreateAsset(scriptable, "Assets/Game/Scriptables/Levels/" + levelName + ".asset");
 
-            scriptable.RowCount = maxRowCount;
-            scriptable.ColumnCount = maxColumnCount;
+            scriptable.GridWidth = gridWidth;
+            scriptable.GridHeight = gridHeight;
             List<ColourRatio> temp = new ();
             for (int i = 0; i < colourRatios.Length; i++)
             {
@@ -318,17 +320,17 @@ public class LevelEditor : EditorWindow
                 scriptable.Targets = tempTarget.ToArray();
 
             scriptable.maxMove = maxMove;
-            scriptable.Blocks = new SquareBlock[maxRowCount * maxColumnCount];
+            scriptable.Blocks = new SquareBlock[gridWidth * gridHeight];
 
-            for (int column = maxColumnCount - 1; column >= 0; column--)
+            for (int x = 0; x < gridWidth; x++)
             {
-                for (int row = 0; row < maxRowCount; row++)
+                for (int y = gridHeight - 1; y >= 0; y--)
                 {
                     var block = new SquareBlock();
-                    block.Colour = levelSquares[column * maxColumnCount + row].Colour;
-                    block.ItemType = levelSquares[column * maxColumnCount + row].ItemType;
-                    block.ObstacleType = levelSquares[column * maxColumnCount + row].ObstacleType;
-                    scriptable.Blocks[(maxColumnCount - 1 - column) * maxColumnCount + row] = block;
+                    block.Colour = levelSquares[gridWidth * y + x].Colour;
+                    block.ItemType = levelSquares[gridWidth * y + x].ItemType;
+                    block.ObstacleType = levelSquares[gridWidth * y + x].ObstacleType;
+                    scriptable.Blocks[(gridHeight - 1 - y) * gridWidth + x] = block;
                 }
             }
 
@@ -431,10 +433,10 @@ public class LevelEditor : EditorWindow
         }
     }
 
-    void SetType(int column, int row, ItemType itemType, ObstacleType obstacleType, Colour colour)
+    void SetType(int x, int y, ItemType itemType, ObstacleType obstacleType, Colour colour)
     {
-        levelSquares[column * maxColumnCount + row].ItemType = itemType;
-        levelSquares[column * maxColumnCount + row].ObstacleType = obstacleType;
-        levelSquares[column * maxColumnCount + row].Colour = colour;
+        levelSquares[gridWidth * y + x].ItemType = itemType;
+        levelSquares[gridWidth * y + x].ObstacleType = obstacleType;
+        levelSquares[gridWidth * y + x].Colour = colour;
     }
 }

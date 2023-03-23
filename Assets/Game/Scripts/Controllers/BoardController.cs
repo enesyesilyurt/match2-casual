@@ -15,12 +15,16 @@ namespace Casual.Controllers
     public class BoardController : MonoSingleton<BoardController>
     {
         public const int MinimumMatchCount = 2;
-        private Vector2Int[] directions = new[]
+        public static Vector2Int[] directions = new[]
         {
-            Vector2Int.up, new Vector2Int(1,1),
-            Vector2Int.right, new Vector2Int(1,-1),
-            Vector2Int.down, new Vector2Int(-1,-1),
-            Vector2Int.left, new Vector2Int(-1,1)
+            Vector2Int.up,
+            Vector2Int.right,
+            Vector2Int.down,
+            Vector2Int.left, 
+            new Vector2Int(1,1),
+            new Vector2Int(1,-1),
+            new Vector2Int(-1,-1),
+            new Vector2Int(-1,0)
         };
 
         [SerializeField] private CellController cellControllerPrefab;
@@ -32,17 +36,17 @@ namespace Casual.Controllers
         private MatchFinder matchFinder = new();
         private bool onAnim = false;
         private int cellCount;
+        private int gridSize;
 
         public Transform ItemsParent => itemsParent;
         public MatchFinder MatchFinder => matchFinder;
-        private int rowCount => LevelManager.Instance.CurrentLevel.RowCount;
-        private int ColumnCount => LevelManager.Instance.CurrentLevel.ColumnCount;
             
         public void Prepare()
         {
             onAnim = true;
+            gridSize = LevelManager.Instance.CurrentLevel.GridWidth * LevelManager.Instance.CurrentLevel.GridHeight;
             
-            Cells = new CellController[ColumnCount * rowCount];
+            Cells = new CellController[gridSize];
             matchFinder.Setup();
             
             CreateCells();
@@ -54,44 +58,57 @@ namespace Casual.Controllers
 
         public void ResetBoard()
         {
-            var tempItems = itemsParent.parent;
-            Destroy(itemsParent.gameObject);
-            var newItems = new GameObject();
-            newItems.transform.SetParent(tempItems);
-            newItems.name = "Items";
-            itemsParent = newItems.transform;
-
-            var temp = cellParent.parent;
-            Destroy(cellParent.gameObject);
-            var newParent = new GameObject();
-            newParent.transform.SetParent(temp);
-            newParent.name = "Cells";
-            cellParent = newParent.transform;
+            foreach (Transform child in itemsParent)
+            {
+                child.DOKill();
+                SimplePool.Despawn(child.gameObject);
+            }
+            
+            foreach (Transform child in cellParent)
+            {
+                child.DOKill();
+                SimplePool.Despawn(child.gameObject);
+            }
+            
+            // var tempItems = itemsParent.parent;
+            // Destroy(itemsParent.gameObject);
+            // var newItems = new GameObject();
+            // newItems.transform.SetParent(tempItems);
+            // newItems.name = "Items";
+            // itemsParent = newItems.transform;
+            //
+            // var temp = cellParent.parent;
+            // Destroy(cellParent.gameObject);
+            // var newParent = new GameObject();
+            // newParent.transform.SetParent(temp);
+            // newParent.name = "Cells";
+            // cellParent = newParent.transform;
         }
         
         private void CreateCells()
         {
-            for (var column = 0; column < ColumnCount; column++)
+            for (var i = 0; i < gridSize; i++)
             {
-                for (var row = 0; row < rowCount; row++)
-                {
-                    if (LevelManager.Instance.CurrentLevel.Blocks[column * ColumnCount + row].ItemType == ItemType.None) continue;
-                    cellCount++;
-                    var cell = SimplePool.Spawn(cellControllerPrefab.gameObject, Vector3.zero, Quaternion.identity).GetComponent<CellController>();
-                    cell.transform.SetParent(cellParent);
-                    Cells[column * ColumnCount + row] = cell;
-                }
+                if (LevelManager.Instance.CurrentLevel.Blocks[i].ItemType == ItemType.None) continue;
+                cellCount++;
+                var cell = SimplePool.Spawn(cellControllerPrefab.gameObject, Vector3.zero, Quaternion.identity).GetComponent<CellController>();
+                cell.gameObject.SetActive(true);
+                cell.transform.SetParent(cellParent);
+                Cells[i] = cell;
+                
             }
         }
         
         private void PrepareCells()
         {
-            for (var column = 0; column < ColumnCount; column++)
+            var gridWidth = LevelManager.Instance.CurrentLevel.GridWidth;
+            
+            for (var x = 0; x < gridWidth; x++)
             {
-                for (var row = 0; row < ColumnCount; row++)
+                for (var y = 0; y < LevelManager.Instance.CurrentLevel.GridHeight; y++)
                 {
-                    if (LevelManager.Instance.CurrentLevel.Blocks[column * ColumnCount + row].ItemType == ItemType.None) continue;
-                    Cells[column * ColumnCount + row].Prepare(row, column, this);
+                    if (LevelManager.Instance.CurrentLevel.Blocks[y * gridWidth + x].ItemType == ItemType.None) continue;
+                    Cells[y * gridWidth + x].Prepare(x, y);
                 }
             }
         }
@@ -107,12 +124,17 @@ namespace Casual.Controllers
             {
                 TargetManager.Instance.DecreaseMoveCount();
                 cellController.Item.TryExecute();
+                
+                FallAndFillManager.Instance.DoFalls();
+                FallAndFillManager.Instance.DoFills();
             }
             else if (cells.Count < MinimumMatchCount) 
                 FailMatchSequence(cellController.Item.transform);
             else if (cellController.Item.ItemType == ItemType.Cube)
             {
                 ExplodeMatchingCells(cells);
+                FallAndFillManager.Instance.DoFalls();
+                FallAndFillManager.Instance.DoFills();
                 TargetManager.Instance.DecreaseMoveCount();
             }
             else
@@ -134,13 +156,12 @@ namespace Casual.Controllers
         private IEnumerator TappedSpecialItemRoutine(CellController cell, List<CellController> cells)
         {
             onAnim = true;
-            FallAndFillManager.Instance.StopFalls();
             var itemType = cell.Item.ItemType;
             for (var i = 0; i < cells.Count; i++)
             {
                 var explodedCell = cells[i];
                 var item = explodedCell.Item;
-                item.IncreaseSortingOrder(rowCount);
+                item.IncreaseSortingOrder(LevelManager.Instance.CurrentLevel.GridHeight);
                 item.FallAnimation.PrepareRemove();
                 item.transform.DOMove(cell.transform.position, GameManager.Instance.SpecialMergeTime)
                     .SetEase(Ease.InBack, GameManager.Instance.SpecialMergeOverShoot)
@@ -157,7 +178,8 @@ namespace Casual.Controllers
             {
                 CreatePropeller(cell);
             }
-            FallAndFillManager.Instance.StartFalls();
+            FallAndFillManager.Instance.DoFalls();
+            FallAndFillManager.Instance.DoFills();
         }
 
         private void CreatePropeller(CellController cell)
@@ -172,10 +194,7 @@ namespace Casual.Controllers
         {
             for (var i = 0; i < cells.Count; i++)
             {
-                var explodedCell = cells[i];
-                var item = explodedCell.Item;
-                item.FallAnimation.PrepareRemove();
-                item.TryExecute();
+                cells[i].Item.TryExecute();
             }
         }
 
@@ -183,15 +202,13 @@ namespace Casual.Controllers
         {
             int totalMatchCount = 0;
             int counter = 0;
-            for (var column = 0; column < ColumnCount; column++)
+            for (var i = 0; i < gridSize; i++)
             {
-                for (var row = 0; row < rowCount; row++)
-                {
-                    if (Cells[column * ColumnCount + row] == null) continue;
-                    if(Cells[column * ColumnCount + row].Item == null) continue;
-                    totalMatchCount += Cells[column * ColumnCount + row].Item.CheckMatches();
-                    counter++;
-                }
+                if (Cells[i] == null) continue;
+                if(Cells[i].Item == null) continue;
+                totalMatchCount += Cells[i].Item.CheckMatches();
+                counter++;
+                
             }
 
             if (totalMatchCount <= 0 && counter == cellCount)
@@ -204,47 +221,36 @@ namespace Casual.Controllers
         private IEnumerator ShuffleRoutine()
         {
             yield return new WaitForSeconds(.7f);
-            FallAndFillManager.Instance.StopFalls();
 
             List<Item> items = new();
             
-            for (var coloumn = 0; coloumn < ColumnCount; coloumn++)
+            for (var i = 0; i < gridSize; i++)
             {
-                for (var row = 0; row < rowCount; row++)
-                {
-                    if(Cells[coloumn * ColumnCount + row] == null) continue;
-                    items.Add(Cells[coloumn * ColumnCount + row].Item);
-                    Cells[coloumn * ColumnCount + row].Item = null;
-                }
+                if(Cells[i] == null) continue;
+                items.Add(Cells[i].Item);
+                Cells[i].Item = null;
             }
-            
-            for (var column = 0; column < ColumnCount; column++)
+
+            for (var i = 0; i < gridSize; i++)
             {
-                for (var row = 0; row < rowCount; row++)
-                {
-                    if(Cells[column * ColumnCount + row] == null) continue;
-                    var index = Random.Range(0, items.Count);
-                    Cells[column * ColumnCount + row].Item = items[index];
-                    items.RemoveAt(index);
-                    Cells[column * ColumnCount + row].Item.transform.DOMove(Cells[column * ColumnCount + row].transform.position, GameManager.Instance.ShuffleSpeed)
-                        .SetEase(Ease.InBack);
-                }
+                if(Cells[i] == null) continue;
+                var index = Random.Range(0, items.Count);
+                Cells[i].Item = items[index];
+                items.RemoveAt(index);
+                Cells[i].Item.transform.DOMove(Cells[i].transform.position, GameManager.Instance.ShuffleSpeed)
+                    .SetEase(Ease.InBack);
+                
             }
             
             yield return new WaitForSeconds(GameManager.Instance.ShuffleSpeed);
-            FallAndFillManager.Instance.StartFalls();
             onAnim = false;
             CheckMatches();
         }
-        
-        public CellController GetNeighbourWithDirection(CellController cellController, Direction direction)
-        {
-            var row = cellController.Row + directions[(int)direction].x;
-            var column = cellController.Column + directions[(int)direction].y;
 
-            if (row >= ColumnCount || row < 0 || column >= rowCount || column < 0) return null;
-            if (LevelManager.Instance.CurrentLevel.Blocks[column * ColumnCount + row].ItemType == ItemType.None) return null;
-            return Cells[column * ColumnCount + row];
+        public CellController GetCell(Vector2Int position)
+        {
+            if (position.y < 0 || position.x < 0 || position.y > 8 || position.x > 8) return null;
+            return Cells[position.y * LevelManager.Instance.CurrentLevel.GridWidth + position.x];
         }
     }
 }
