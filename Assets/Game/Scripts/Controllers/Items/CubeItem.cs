@@ -22,8 +22,10 @@ namespace Casual.Controllers.Items
 
         private void CreateParticle()
         {
-            SimplePool.Spawn(ParticleLibrary.Instance.GetParticle(colour).gameObject, transform.position,
+            var particle = SimplePool.Spawn(ParticleLibrary.Instance.GetParticle(colour).gameObject, transform.position,
                 Quaternion.identity);
+            particle.SetActive(true);
+            particle.transform.SetParent(BoardController.Instance.ParticleParent);
         }
     }
 }

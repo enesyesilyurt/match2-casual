@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -7,9 +8,15 @@ namespace Casual.Utilities
     {
         [SerializeField] private float time;
         
-        private void Start()
+        private IEnumerator DestroyRoutine()
         {
-            Destroy(gameObject, time);
+            yield return new WaitForSeconds(time);
+            SimplePool.Despawn(gameObject);
+        }
+
+        private void OnEnable()
+        {
+            StartCoroutine(DestroyRoutine());
         }
     }
 }

@@ -30,6 +30,7 @@ namespace Casual.Controllers
         [SerializeField] private CellController cellControllerPrefab;
         [SerializeField] private Transform cellParent;
         [SerializeField] private Transform itemsParent;
+        [SerializeField] private Transform particleParent;
 
         public CellController[] Cells;
 
@@ -39,6 +40,7 @@ namespace Casual.Controllers
         private int gridSize;
 
         public Transform ItemsParent => itemsParent;
+        public Transform ParticleParent => particleParent;
         public MatchFinder MatchFinder => matchFinder;
             
         public void Prepare()
