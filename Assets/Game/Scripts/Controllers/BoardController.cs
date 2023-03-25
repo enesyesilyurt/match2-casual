@@ -102,8 +102,7 @@ namespace Casual.Controllers
         public void CellTapped(CellController cellController)
         {
             if(onAnim) return;
-            if (!cellController.HasItem()) return;
-            if(cellController.Item.FallAnimation.IsFalling) return;
+            if (!cellController.CanTapp()) return;
             var cells = matchFinder.FindMatches(cellController, cellController.Item.Colour);
             if (cellController.Item.ItemType == ItemType.Propeller)
             {
@@ -234,9 +233,11 @@ namespace Casual.Controllers
 
         public CellController GetCell(Vector2Int position)
         {
-            if (position.y * LevelManager.Instance.CurrentLevel.GridWidth + position.x >
-                LevelManager.Instance.CurrentLevel.GridWidth * LevelManager.Instance.CurrentLevel.GridHeight)
+            if (position.y * LevelManager.Instance.CurrentLevel.GridWidth + position.x >=
+                LevelManager.Instance.CurrentLevel.GridWidth * LevelManager.Instance.CurrentLevel.GridHeight
+                || position.x < 0 || position.y < 0)
                 return null;
+
             return Cells[position.y * LevelManager.Instance.CurrentLevel.GridWidth + position.x];
         }
     }

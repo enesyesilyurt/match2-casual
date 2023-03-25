@@ -53,6 +53,11 @@ namespace Casual.Utilities
             if(jumpSequence != null)
                 jumpSequence.Kill();
         }
+
+        public void StopFalling()
+        {
+            isFalling = false;
+        }
         
         private void FallMovementHandler()
         {

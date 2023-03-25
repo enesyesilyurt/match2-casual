@@ -15,7 +15,7 @@ namespace Casual.Controllers.Items
             Prepare(itemBase, ImageLibrary.Instance.GetSprite(colour));
         }
 
-        public override void ExecuteWithNeighbour()
+        public override void OnNeighbourExecute()
         {
             
         }
@@ -27,7 +27,20 @@ namespace Casual.Controllers.Items
             foreach (var neighbor in CellController.GetNeighbours())
             {
                 if(neighbor != null && neighbor.HasItem())
-                    neighbor.Item.ExecuteWithNeighbour();
+                    neighbor.Item.OnNeighbourExecute();
+            }
+            
+            RemoveItem();
+        }
+
+        public override void ExecuteWithSpecial()
+        {
+            base.ExecuteWithSpecial();
+            CreateParticle();
+            foreach (var neighbor in CellController.GetNeighbours())
+            {
+                if(neighbor != null && neighbor.HasItem())
+                    neighbor.Item.OnNeighbourExecute();
             }
             
             RemoveItem();

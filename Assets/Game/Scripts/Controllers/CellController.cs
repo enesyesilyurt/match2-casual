@@ -26,14 +26,9 @@ namespace Casual.Controllers
             set
             {
                 if (item == value) return;
-				    
-                var oldItem = item;
+                
                 item = value;
-				    
-                // if (oldItem != null && Equals(oldItem.CellController, this))
-                // {
-                //     oldItem.CellController = null;
-                // }
+                
                 if (value != null)
                 {
                     value.CellController = this;
@@ -49,6 +44,12 @@ namespace Casual.Controllers
             gameObject.SetActive(true);
             transform.SetParent(parent);
         }
+
+        public bool CanTapp()
+        {
+            var fallCheck = item.FallAnimation != null && !item.FallAnimation.IsFalling;
+            return HasItem() && fallCheck;
+        }
         
         public void Prepare()
         {
@@ -56,7 +57,6 @@ namespace Casual.Controllers
 
             mask.localScale = new Vector3(GameManager.Instance.OffsetX, GameManager.Instance.OffsetY, 1);
             backGround.localScale = new Vector3(GameManager.Instance.OffsetX, GameManager.Instance.OffsetY, 1);
-            
             if (BoardController.Instance.GetCell(GridPosition + Vector2Int.up) == null)
                 isFillingCell = true;
             

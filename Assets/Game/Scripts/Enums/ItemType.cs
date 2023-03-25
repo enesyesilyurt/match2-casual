@@ -7,6 +7,7 @@ namespace Casual.Enums
         MultipleCube,
         Propeller,
         Balloon,
+        Box,
         Empty
     }
 }

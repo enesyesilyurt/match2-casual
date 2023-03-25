@@ -48,6 +48,9 @@ namespace Casual.Utilities
                 case ItemType.Balloon:
                     item = CreateBalloonItem(itemBase);
                     break;
+                case ItemType.Box:
+                    item = CreateBoxItem(itemBase);
+                    break;
             }
 
             return item;
@@ -111,6 +114,14 @@ namespace Casual.Utilities
         {
             var item = itemBase.gameObject.AddComponent<BalloonItem>();
             item.PrepareBalloonItem(itemBase);
+
+            return item;
+        }
+        
+        private Item CreateBoxItem(ItemBase itemBase)
+        {
+            var item = itemBase.gameObject.AddComponent<BoxItem>();
+            item.PrepareBoxItem(itemBase);
 
             return item;
         }

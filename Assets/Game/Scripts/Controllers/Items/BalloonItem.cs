@@ -22,9 +22,15 @@ namespace Casual
             
         }
 
-        public override void ExecuteWithNeighbour()
+        public override void ExecuteWithSpecial()
         {
-            base.ExecuteWithNeighbour();
+            base.ExecuteWithSpecial();
+            RemoveItem();
+        }
+
+        public override void OnNeighbourExecute()
+        {
+            base.OnNeighbourExecute();
             RemoveItem();
         }
     }

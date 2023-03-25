@@ -74,6 +74,8 @@ namespace Casual.Managers
 	    private void StartFalls()
 	    {
 		    fallAndFillManager.Init(boardController);
+		    FallAndFillManager.Instance.DoFills();
+		    FallAndFillManager.Instance.DoFalls();
 		    fallAndFillManager.StartFalls();
 	    }
 
@@ -88,7 +90,7 @@ namespace Casual.Managers
 		    ItemExecuted?.Invoke(item);
 	    }
 
-	    private void PrepareLevel()
+	    private void PrepareLevel() // TODO
 	    {
 		    for (var x = 0; x < CurrentLevel.GridWidth; x++)
 		    {
@@ -108,6 +110,11 @@ namespace Casual.Managers
 				    {
 					    item = ItemFactory.Instance.CreateItem(Colour.Empty, boardController.ItemsParent,
 						    ItemType.Balloon);
+				    }
+				    else if (itemData.ItemType == ItemType.Box)
+				    {
+					    item = ItemFactory.Instance.CreateItem(Colour.Empty, boardController.ItemsParent,
+						    ItemType.Box);
 				    }
 				    if (item == null) continue;
     				 						

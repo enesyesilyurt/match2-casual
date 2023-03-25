@@ -43,7 +43,7 @@ namespace Casual.Abstracts
             }
         }
 
-        protected void Prepare(ItemBase itemBase, Sprite sprite)
+        protected virtual void Prepare(ItemBase itemBase, Sprite sprite)
         {
             AddSprite(sprite);
             FallAnimation = itemBase.FallAnimation;
@@ -60,7 +60,7 @@ namespace Casual.Abstracts
             spriteRenderer.sortingOrder += value;
         }
 
-        private void AddSprite(Sprite sprite)
+        protected void AddSprite(Sprite sprite)
         {
             var tempRenderer = GetComponent<SpriteRenderer>();
 
@@ -83,14 +83,15 @@ namespace Casual.Abstracts
         
         protected virtual void OnMatchCountChanged(int matchCount) { }
         
-        public void Fall() => FallAnimation.FallToTarget(CellController.GetFallTarget());
+        public virtual void Fall() => FallAnimation.FallToTarget(CellController.GetFallTarget());
 
 
-        public virtual void ExecuteWithNeighbour() => Execute();
+        public virtual void OnNeighbourExecute() => Execute();
         
         public virtual void ExecuteWithTapp() => Execute();
+        public virtual void ExecuteWithSpecial() => Execute();
 
-        private void Execute()
+        protected virtual void Execute()
         {
             FallAnimation.PrepareRemove();
             CellController.Item = null;
