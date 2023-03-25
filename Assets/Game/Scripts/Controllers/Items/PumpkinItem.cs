@@ -12,11 +12,12 @@ namespace Casual
     {
         private int health = 2;
         
-        public void PreparePumpkinItem(ItemBase itemBase)
+        public override void Prepare(ItemBase itemBase, Colour colour)
         {
             ItemType = ItemType.Pumpkin;
             var pumpkinSprite = ImageLibrary.Instance.GetSprite(Colour.Empty, ItemType.Pumpkin);
-            Prepare(itemBase, pumpkinSprite);
+            AddSprite(pumpkinSprite);
+            base.Prepare(itemBase, colour);
         }
 
         public override void OnNeighbourExecute()

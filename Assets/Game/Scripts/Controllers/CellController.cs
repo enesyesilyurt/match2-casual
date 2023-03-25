@@ -45,7 +45,7 @@ namespace Casual.Controllers
             transform.SetParent(parent);
         }
 
-        public bool CanTapp()
+        public bool CanTap()
         {
             return HasItem() && item.FallAnimation != null && !item.FallAnimation.IsFalling;
         }

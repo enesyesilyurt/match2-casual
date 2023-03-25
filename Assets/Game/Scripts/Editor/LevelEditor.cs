@@ -12,10 +12,23 @@ public class LevelEditor : EditorWindow
     private static LevelEditor window;
     public static SquareBlock[] levelSquares;
     public static Target[] targetSquares = new Target[4];
-    public static ColourRatio[] colourRatios = new ColourRatio[6];
+    public static ColourRatio[] itemSpawnRatios = new ColourRatio[9];
 
     private static Colour[] colours = new[]
         { Colour.Blue, Colour.Red, Colour.Green, Colour.Yellow, Colour.Pink, Colour.Purple };
+
+    private static Texture[] itemTextures = new[]
+    {
+        ImageLibrary.Instance.BlueCube,
+        ImageLibrary.Instance.RedCube,
+        ImageLibrary.Instance.YellowCube,
+        ImageLibrary.Instance.PinkCube,
+        ImageLibrary.Instance.PurpleCube,
+        ImageLibrary.Instance.GreenCube,
+        ImageLibrary.Instance.Balloon,
+        ImageLibrary.Instance.Box,
+        ImageLibrary.Instance.Pumpkin
+    };
     
     static int gridWidth = 9;
     static int gridHeight = 11;
@@ -81,52 +94,31 @@ public class LevelEditor : EditorWindow
 
     void SetColourRatios()
     {
-        GUILayout.Label("Colour Ratios:", EditorStyles.boldLabel, new GUILayoutOption[]
+        GUILayout.Label("Item Spawn Ratios:", EditorStyles.boldLabel, new GUILayoutOption[]
         {
-            GUILayout.Width(100),
+            GUILayout.Width(150),
             GUILayout.Height(15)
         });
         GUILayout.BeginHorizontal();
-        GUILayout.Box(ImageLibrary.Instance.BlueCube, new GUILayoutOption[]
+
+        for (int i = 0; i < itemTextures.Length; i++)
         {
-            GUILayout.Width(50),
-            GUILayout.Height(50)
-        });
-        GUILayout.Box(ImageLibrary.Instance.RedCube, new GUILayoutOption[]
-        {
-            GUILayout.Width(50),
-            GUILayout.Height(50)
-        });
-        GUILayout.Box(ImageLibrary.Instance.GreenCube, new GUILayoutOption[]
-        {
-            GUILayout.Width(50),
-            GUILayout.Height(50)
-        });
-        GUILayout.Box(ImageLibrary.Instance.YellowCube, new GUILayoutOption[]
-        {
-            GUILayout.Width(50),
-            GUILayout.Height(50)
-        });
-        GUILayout.Box(ImageLibrary.Instance.PinkCube, new GUILayoutOption[]
-        {
-            GUILayout.Width(50),
-            GUILayout.Height(50)
-        });
-        GUILayout.Box(ImageLibrary.Instance.PurpleCube, new GUILayoutOption[]
-        {
-            GUILayout.Width(50),
-            GUILayout.Height(50)
-        });
+            GUILayout.Box(itemTextures[i], new GUILayoutOption[]
+            {
+                GUILayout.Width(50),
+                GUILayout.Height(50)
+            });
+        }
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 9; i++)
         {
-            var colourRatio = colourRatios[i] == null ? new ColourRatio() : colourRatios[i];
-            colourRatio.Colour = colours[i];
+            var colourRatio = itemSpawnRatios[i] == null ? new ColourRatio() : itemSpawnRatios[i];
+            //colourRatio.Colour = colours[i]; TODO
             colourRatio.Ratio = EditorGUILayout.IntField("", colourRatio.Ratio, new GUILayoutOption[] {
                 GUILayout.Width (51)
             });
-            colourRatios[i] = colourRatio;
+            itemSpawnRatios[i] = colourRatio;
         }
         GUILayout.EndHorizontal();
     }
@@ -166,7 +158,7 @@ public class LevelEditor : EditorWindow
             GUILayout.Width(100),
             GUILayout.Height(50)
         });
-        AddSelectedItemTypeButton(null, ItemType.Cube, Colour.None);
+        AddSelectedItemTypeButton(null, ItemType.None, Colour.None);
         AddSelectedItemTypeButton(new Texture2D(40,40), ItemType.Empty, Colour.Empty);
         AddSelectedItemTypeButton(ImageLibrary.Instance.BlueCube, ItemType.Cube, Colour.Blue);
         AddSelectedItemTypeButton(ImageLibrary.Instance.PinkCube, ItemType.Cube, Colour.Pink);
@@ -174,7 +166,9 @@ public class LevelEditor : EditorWindow
         AddSelectedItemTypeButton(ImageLibrary.Instance.PurpleCube, ItemType.Cube, Colour.Purple);
         AddSelectedItemTypeButton(ImageLibrary.Instance.RedCube, ItemType.Cube, Colour.Red);
         AddSelectedItemTypeButton(ImageLibrary.Instance.YellowCube, ItemType.Cube, Colour.Yellow);
-        AddSelectedItemTypeButton(ImageLibrary.Instance.Balloon, ItemType.Balloon, Colour.Empty);
+        AddSelectedItemTypeButton(ImageLibrary.Instance.Balloon, ItemType.Balloon, Colour.None);
+        AddSelectedItemTypeButton(ImageLibrary.Instance.Pumpkin, ItemType.Pumpkin, Colour.None);
+        AddSelectedItemTypeButton(ImageLibrary.Instance.Box, ItemType.Box, Colour.None);
         GUILayout.EndHorizontal();
     }
 
@@ -204,13 +198,17 @@ public class LevelEditor : EditorWindow
                     {
                         imageButton = ImageLibrary.Instance.Balloon;
                     }
+                    else if (sqr.ItemType == ItemType.Pumpkin)
+                    {
+                        imageButton = ImageLibrary.Instance.Pumpkin;
+                    }
+                    else if (sqr.ItemType == ItemType.Box)
+                    {
+                        imageButton = ImageLibrary.Instance.Box;
+                    }
                     else if (sqr.ItemType == ItemType.Cube)
                     {
-                        if (sqr.Colour == Colour.None)
-                        {
-                            imageButton = null;
-                        }
-                        else if (sqr.Colour == Colour.Blue)
+                        if (sqr.Colour == Colour.Blue)
                         {
                             imageButton = ImageLibrary.Instance.BlueCube;
                         }
@@ -299,10 +297,10 @@ public class LevelEditor : EditorWindow
             scriptable.GridWidth = gridWidth;
             scriptable.GridHeight = gridHeight;
             List<ColourRatio> temp = new ();
-            for (int i = 0; i < colourRatios.Length; i++)
+            for (int i = 0; i < itemSpawnRatios.Length; i++)
             {
-                if(colourRatios[i].Ratio == 0) continue;
-                temp.Add(colourRatios[i]);
+                if(itemSpawnRatios[i].Ratio == 0) continue;
+                temp.Add(itemSpawnRatios[i]);
             }
             if(temp.Count > 0)
                 scriptable.ColourRatios = temp.ToArray();

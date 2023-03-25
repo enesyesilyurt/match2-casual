@@ -12,11 +12,11 @@ namespace Casual
     {
         private int health = 2;
         
-        public void PrepareBoxItem(ItemBase itemBase)
+        public override void Prepare(ItemBase itemBase, Colour colour)
         {
             ItemType = ItemType.Box;
             var boxSprite = ImageLibrary.Instance.GetSprite(Colour.Empty, ItemType.Box);
-            Prepare(itemBase, boxSprite);
+            AddSprite(boxSprite);
         }
 
         public override void Fall()
@@ -27,11 +27,6 @@ namespace Casual
         protected override void Execute()
         {
             CellController.Item = null;
-        }
-
-        protected override void Prepare(ItemBase itemBase, Sprite sprite)
-        {
-            AddSprite(sprite);
         }
 
         public override void OnNeighbourExecute()

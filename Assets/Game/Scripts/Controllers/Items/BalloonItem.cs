@@ -10,11 +10,12 @@ namespace Casual
 {
     public class BalloonItem : Item
     {
-        public void PrepareBalloonItem(ItemBase itemBase)
+        public override void Prepare(ItemBase itemBase, Colour colour)
         {
             ItemType = ItemType.Balloon;
             var sprite = ImageLibrary.Instance.GetSprite(Colour.Empty, ItemType.Balloon);
-            Prepare(itemBase, sprite);
+            AddSprite(sprite);
+            base.Prepare(itemBase, colour);
         }
     
         public override void ExecuteWithTapp()

@@ -31,9 +31,7 @@ namespace Casual.Utilities
             var column = cellController.GridPosition.y;
             if (visitedCells[LevelManager.Instance.CurrentLevel.GridWidth * column + row]) return;
 
-            if (cellController.HasItem()
-                && cellController.Item.Colour == colour
-                && cellController.Item.Colour != Colour.None)
+            if (cellController.HasItem() && cellController.Item.Colour == colour)
             {
                 visitedCells[LevelManager.Instance.CurrentLevel.GridWidth * column + row] = true;
                 resultCells.Add(cellController);

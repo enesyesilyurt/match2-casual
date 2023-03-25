@@ -24,7 +24,8 @@ namespace Casual.Utilities
         public Texture RedCube;
         public Texture YellowCube;
         public Texture Balloon;
-        public Texture Propeller;
+        public Texture Pumpkin;
+        public Texture Box;
         
         private Dictionary<Colour, SpriteSet> colourSetsDict = new();
 

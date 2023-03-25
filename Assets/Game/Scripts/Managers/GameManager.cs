@@ -38,6 +38,7 @@ namespace Casual.Managers
             DOTween.Init();
             DOTween.SetTweensCapacity(300,100);
             
+            ItemFactory.Instance.Initialize();
             ImageLibrary.Instance.Setup();
             ParticleLibrary.Instance.Setup();
             CollectibleManager.Instance.Setup();

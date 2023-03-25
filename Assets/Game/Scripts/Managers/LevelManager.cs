@@ -92,40 +92,17 @@ namespace Casual.Managers
 
 	    private void PrepareLevel() // TODO
 	    {
-		    for (var x = 0; x < CurrentLevel.GridWidth; x++)
+		    for (var i = 0; i < boardController.Cells.Length; i++)
 		    {
-			    for (var y = 0; y < CurrentLevel.GridHeight; y++)
-			    {
-				    var itemData = CurrentLevel.Blocks[y * CurrentLevel.GridWidth + x];
-				    if (itemData.ItemType == ItemType.None) continue;
-				    var cell = boardController.Cells[y * CurrentLevel.GridWidth + x];
-				    Item item = null;
-				    if (itemData.ItemType == ItemType.Cube)
-				    {
-					    item = itemData.Colour == Colour.None
-						    ? ItemFactory.Instance.CreateRandomItem(boardController.ItemsParent)
-						    : ItemFactory.Instance.CreateItem(itemData.Colour, boardController.ItemsParent);
-				    }
-				    else if(itemData.ItemType == ItemType.Balloon)
-				    {
-					    item = ItemFactory.Instance.CreateItem(Colour.Empty, boardController.ItemsParent,
-						    ItemType.Balloon);
-				    }
-				    else if (itemData.ItemType == ItemType.Box)
-				    {
-					    item = ItemFactory.Instance.CreateItem(Colour.Empty, boardController.ItemsParent,
-						    ItemType.Box);
-				    }
-				    else if (itemData.ItemType == ItemType.Pumpkin)
-				    {
-					    item = ItemFactory.Instance.CreateItem(Colour.Empty, boardController.ItemsParent,
-						    ItemType.Pumpkin);
-				    }
-				    if (item == null) continue;
-    				 						
-				    cell.Item = item;
-				    item.transform.position = cell.transform.position;
-			    }
+			     if (CurrentLevel.Blocks[i].ItemType == ItemType.None) continue;
+				 var itemData = CurrentLevel.Blocks[i];
+				 var cell = boardController.Cells[i];
+				 Item item = (itemData.Colour == Colour.Empty || itemData.Colour == Colour.None) && itemData.ItemType == ItemType.Cube
+					 ? ItemFactory.Instance.CreateRandomItem(boardController.ItemsParent)
+					 : ItemFactory.Instance.CreateItem(itemData.Colour, boardController.ItemsParent, itemData.ItemType);
+    			 						
+				 cell.Item = item;
+				 item.transform.position = cell.transform.position;
 		    }
 	    }
 	}

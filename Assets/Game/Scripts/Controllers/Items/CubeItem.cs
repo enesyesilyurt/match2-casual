@@ -8,11 +8,12 @@ namespace Casual.Controllers.Items
 {
     public class CubeItem : Item
     {
-        public void PrepareCubeItem(ItemBase itemBase, Colour colour)
+        public override void Prepare(ItemBase itemBase, Colour asd)
         {
-            base.colour = colour;
+            base.colour = asd;
             base.ItemType = ItemType.Cube;
-            Prepare(itemBase, ImageLibrary.Instance.GetSprite(colour));
+            base.Prepare(itemBase, colour);
+            AddSprite(ImageLibrary.Instance.GetSprite(asd));
         }
 
         public override void OnNeighbourExecute()

@@ -8,11 +8,12 @@ using UnityEngine;
 
 public class PropellerItem : Item // TODO
 {
-    public void PreparePropellerItem(ItemBase itemBase)
+    public override void Prepare(ItemBase itemBase, Colour colour)
     {
         ItemType = ItemType.Propeller;
-        var bombSprite = ImageLibrary.Instance.GetSprite(Colour.Empty, ItemType.Propeller);
-        Prepare(itemBase, bombSprite);
+        var propellerSprite = ImageLibrary.Instance.GetSprite(Colour.Empty, ItemType.Propeller);
+        AddSprite(propellerSprite);
+        base.Prepare(itemBase, colour);
     }
     
     public override void OnNeighbourExecute()

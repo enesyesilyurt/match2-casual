@@ -12,15 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f943bee3d8669fc4997bb1c300478fbe, type: 3}
   m_Name: Level-2
   m_EditorClassIdentifier: 
-  GridHeight: 9
+  GridHeight: 11
   GridWidth: 9
   maxMove: 20
   ColourRatios:
-  - Colour: 3
-    Ratio: 1
   - Colour: 6
-    Ratio: 1
-  - Colour: 2
     Ratio: 1
   - Colour: 1
     Ratio: 1
@@ -31,16 +27,127 @@ MonoBehaviour:
   - ItemType: 0
     ObstacleType: 0
     Colour: 0
-  - ItemType: 1
+  - ItemType: 0
     ObstacleType: 0
-    Colour: 5
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 4
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 4
+    ObstacleType: 0
+    Colour: 0
   - ItemType: 1
     ObstacleType: 0
     Colour: 1
   - ItemType: 1
     ObstacleType: 0
     Colour: 1
-  - ItemType: 0
+  - ItemType: 4
     ObstacleType: 0
     Colour: 0
   - ItemType: 0
@@ -55,46 +162,46 @@ MonoBehaviour:
   - ItemType: 0
     ObstacleType: 0
     Colour: 0
-  - ItemType: 0
+  - ItemType: 4
     ObstacleType: 0
     Colour: 0
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 5
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 4
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 4
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 1
   - ItemType: 1
     ObstacleType: 0
     Colour: 6
   - ItemType: 1
     ObstacleType: 0
-    Colour: 5
+    Colour: 6
+  - ItemType: 4
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 4
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 4
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 4
+    ObstacleType: 0
+    Colour: 0
   - ItemType: 1
     ObstacleType: 0
     Colour: 1
   - ItemType: 1
     ObstacleType: 0
     Colour: 1
-  - ItemType: 0
+  - ItemType: 4
     ObstacleType: 0
     Colour: 0
   - ItemType: 0
@@ -106,61 +213,76 @@ MonoBehaviour:
   - ItemType: 0
     ObstacleType: 0
     Colour: 0
-  - ItemType: 1
+  - ItemType: 0
     ObstacleType: 0
-    Colour: 1
+    Colour: 0
+  - ItemType: 4
+    ObstacleType: 0
+    Colour: 0
   - ItemType: 1
     ObstacleType: 0
     Colour: 6
   - ItemType: 1
     ObstacleType: 0
+    Colour: 6
+  - ItemType: 4
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 4
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 4
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 4
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 1
+    ObstacleType: 0
     Colour: 1
   - ItemType: 1
     ObstacleType: 0
-    Colour: 2
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 2
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 1
-    ObstacleType: 0
     Colour: 1
+  - ItemType: 4
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 4
+    ObstacleType: 0
+    Colour: 0
   - ItemType: 1
     ObstacleType: 0
     Colour: 6
   - ItemType: 1
     ObstacleType: 0
-    Colour: 1
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 2
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 3
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 3
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 1
-  - ItemType: 1
-    ObstacleType: 0
     Colour: 6
-  - ItemType: 1
+  - ItemType: 4
     ObstacleType: 0
-    Colour: 1
-  - ItemType: 0
+    Colour: 0
+  - ItemType: 4
     ObstacleType: 0
     Colour: 0
   - ItemType: 0
@@ -172,31 +294,13 @@ MonoBehaviour:
   - ItemType: 0
     ObstacleType: 0
     Colour: 0
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 3
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 3
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 1
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 6
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 4
   - ItemType: 0
     ObstacleType: 0
     Colour: 0
-  - ItemType: 0
+  - ItemType: 4
     ObstacleType: 0
     Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
+  - ItemType: 4
     ObstacleType: 0
     Colour: 0
   - ItemType: 1
@@ -205,63 +309,9 @@ MonoBehaviour:
   - ItemType: 1
     ObstacleType: 0
     Colour: 1
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 1
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 6
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 4
-  - ItemType: 0
+  - ItemType: 4
     ObstacleType: 0
     Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 5
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 5
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 5
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 1
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 1
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 1
   - ItemType: 0
     ObstacleType: 0
     Colour: 0
@@ -269,12 +319,6 @@ MonoBehaviour:
     ObstacleType: 0
     Colour: 0
   Targets:
-  - Colour: 1
-    ItemType: 0
-    Count: 5
   - Colour: 6
     ItemType: 0
-    Count: 5
-  - Colour: 2
-    ItemType: 0
-    Count: 5
+    Count: 21

@@ -23,38 +23,35 @@ namespace Casual.Utilities
 
         private int totalColourRatio = 0;
 
+        private Dictionary<ItemType, Type> itemDict = new ();
         private Dictionary<Vector2, Colour> colourRatioDict = new();
 
         public void Setup()
         {
             PrepareRatios();
         }
+
+        public void Initialize()
+        {
+            PrepareItemTypeDict();
+        }
+
+        private void PrepareItemTypeDict()
+        {
+            itemDict.Add(ItemType.Cube, typeof(CubeItem));
+            itemDict.Add(ItemType.Propeller, typeof(PropellerItem));
+            itemDict.Add(ItemType.Balloon, typeof(BalloonItem));
+            itemDict.Add(ItemType.Box, typeof(BoxItem));
+            itemDict.Add(ItemType.Pumpkin, typeof(PumpkinItem));
+        }
         
         public Item CreateItem(Colour colour, Transform parent, ItemType itemType = ItemType.Cube) // TODO
         {
+            if (itemType == ItemType.Cube && (colour == Colour.Empty || colour == Colour.None)) return null;
             var itemBase = SimplePool.Spawn(itemBasePrefab.gameObject, Vector3.zero, Quaternion.Euler(Vector3.zero)).GetComponent<ItemBase>();
             itemBase.gameObject.SetActive(true);
             itemBase.transform.parent = parent;
-
-            Item item = null;
-            switch (itemType)
-            {
-                case ItemType.Cube:
-                    item = CreateCubeItem(itemBase, colour);
-                    break;
-                case ItemType.Propeller:
-                    item = CreatePropellerItem(itemBase);
-                    break;
-                case ItemType.Balloon:
-                    item = CreateBalloonItem(itemBase);
-                    break;
-                case ItemType.Box:
-                    item = CreateBoxItem(itemBase);
-                    break;
-                case ItemType.Pumpkin:
-                    item = CreatePumpkinItem(itemBase);
-                    break;
-            }
+            Item item = itemDict.ContainsKey(itemType) ? CreateItemWithType(itemBase, itemDict[itemType], colour) : null;
 
             return item;
         }
@@ -86,6 +83,7 @@ namespace Casual.Utilities
         private void PrepareRatios()
         {
             colourRatioDict.Clear();
+            totalColourRatio = 0;
             if(LevelManager.Instance.CurrentLevel.ColourRatios == null) return;
             for (var i = 0; i < LevelManager.Instance.CurrentLevel.ColourRatios.Length; i++)
             {
@@ -97,42 +95,10 @@ namespace Casual.Utilities
             }
         }
         
-        private Item CreateCubeItem(ItemBase itemBase, Colour colour)
+        private Item CreateItemWithType(ItemBase itemBase, Type type, Colour colour = Colour.None)
         {
-            var item = itemBase.gameObject.AddComponent<CubeItem>();
-            item.PrepareCubeItem(itemBase, colour);
-
-            return item;
-        }
-
-        private Item CreatePropellerItem(ItemBase itemBase)
-        {
-            var item = itemBase.gameObject.AddComponent<PropellerItem>();
-            item.PreparePropellerItem(itemBase);
-
-            return item;
-        }
-        
-        private Item CreateBalloonItem(ItemBase itemBase)
-        {
-            var item = itemBase.gameObject.AddComponent<BalloonItem>();
-            item.PrepareBalloonItem(itemBase);
-
-            return item;
-        }
-        
-        private Item CreateBoxItem(ItemBase itemBase)
-        {
-            var item = itemBase.gameObject.AddComponent<BoxItem>();
-            item.PrepareBoxItem(itemBase);
-
-            return item;
-        }
-        
-        private Item CreatePumpkinItem(ItemBase itemBase)
-        {
-            var item = itemBase.gameObject.AddComponent<PumpkinItem>();
-            item.PreparePumpkinItem(itemBase);
+            var item = (Item)itemBase.gameObject.AddComponent(type);
+            item.Prepare(itemBase, colour);
 
             return item;
         }

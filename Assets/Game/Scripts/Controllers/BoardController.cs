@@ -71,6 +71,12 @@ namespace Casual.Controllers
                 child.DOKill();
                 SimplePool.Despawn(child.gameObject);
             }
+            
+            foreach (Transform child in particleParent)
+            {
+                child.DOKill();
+                SimplePool.Despawn(child.gameObject);
+            }
         }
         
         private void CreateCells()
@@ -94,7 +100,7 @@ namespace Casual.Controllers
         {
             for (var i = 0; i < gridSize; i++)
             {
-                if (LevelManager.Instance.CurrentLevel.Blocks[i].ItemType == ItemType.None) continue;
+                if (Cells[i] == null) continue;
                 Cells[i].Prepare();
             }
         }
@@ -102,17 +108,19 @@ namespace Casual.Controllers
         public void CellTapped(CellController cellController)
         {
             if(onAnim) return;
-            if (!cellController.CanTapp()) return;
-            var cells = matchFinder.FindMatches(cellController, cellController.Item.Colour);
-            if (cellController.Item.ItemType == ItemType.Propeller)
+            if (!cellController.CanTap()) return;
+
+            if (cellController.Item.ItemType != ItemType.Cube && cellController.Item.ItemType != ItemType.MultipleCube)
             {
-                TargetManager.Instance.DecreaseMoveCount();
                 cellController.Item.ExecuteWithTapp();
-                
+                TargetManager.Instance.DecreaseMoveCount();
                 FallAndFillManager.Instance.DoFalls();
                 FallAndFillManager.Instance.DoFills();
+                return;
             }
-            else if (cells.Count < MinimumMatchCount) 
+            
+            var cells = matchFinder.FindMatches(cellController, cellController.Item.Colour);
+            if (cells.Count < MinimumMatchCount) 
                 FailMatchSequence(cellController.Item.transform);
             else if (cellController.Item.ItemType == ItemType.Cube)
             {
@@ -189,10 +197,9 @@ namespace Casual.Controllers
             for (var i = 0; i < gridSize; i++)
             {
                 if (Cells[i] == null) continue;
-                if(Cells[i].Item == null) continue;
+                if(!Cells[i].HasItem()) continue;
                 totalMatchCount += Cells[i].Item.CheckMatches();
                 counter++;
-                
             }
 
             if (totalMatchCount <= 0 && counter == cellCount)
@@ -233,11 +240,9 @@ namespace Casual.Controllers
 
         public CellController GetCell(Vector2Int position)
         {
-            if (position.y * LevelManager.Instance.CurrentLevel.GridWidth + position.x >=
-                LevelManager.Instance.CurrentLevel.GridWidth * LevelManager.Instance.CurrentLevel.GridHeight
-                || position.x < 0 || position.y < 0)
-                return null;
-
+            if (position.y < 0 || position.x < 0 || position.y >= LevelManager.Instance.CurrentLevel.GridHeight 
+                || position.x >= LevelManager.Instance.CurrentLevel.GridWidth) return null;
+            
             return Cells[position.y * LevelManager.Instance.CurrentLevel.GridWidth + position.x];
         }
     }

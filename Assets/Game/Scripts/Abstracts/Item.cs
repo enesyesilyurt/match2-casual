@@ -43,9 +43,8 @@ namespace Casual.Abstracts
             }
         }
 
-        protected virtual void Prepare(ItemBase itemBase, Sprite sprite)
+        public virtual void Prepare(ItemBase itemBase, Colour colour)
         {
-            AddSprite(sprite);
             FallAnimation = itemBase.FallAnimation;
             FallAnimation.Prepare(this);
         }
@@ -75,7 +74,7 @@ namespace Casual.Abstracts
 
         public int CheckMatches()
         {
-            if (ItemType == ItemType.Balloon || ItemType == ItemType.Propeller) return 0;
+            if (ItemType != ItemType.Cube && ItemType != ItemType.MultipleCube) return 0;
             var matchCount = BoardController.Instance.MatchFinder.FindMatches(cellController, colour).Count;
             OnMatchCountChanged(matchCount);
             return matchCount - 1;
