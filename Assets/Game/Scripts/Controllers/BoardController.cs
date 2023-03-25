@@ -24,7 +24,7 @@ namespace Casual.Controllers
             new Vector2Int(1,1),
             new Vector2Int(1,-1),
             new Vector2Int(-1,-1),
-            new Vector2Int(-1,0)
+            new Vector2Int(-1,1)
         };
 
         [SerializeField] private CellController cellControllerPrefab;
@@ -75,20 +75,6 @@ namespace Casual.Controllers
         
         private void CreateCells()
         {
-            for (var i = 0; i < gridSize; i++)
-            {
-                if (LevelManager.Instance.CurrentLevel.Blocks[i].ItemType == ItemType.None) continue;
-                cellCount++;
-                var cell = SimplePool.Spawn(cellControllerPrefab.gameObject, Vector3.zero, Quaternion.identity).GetComponent<CellController>();
-                cell.gameObject.SetActive(true);
-                cell.transform.SetParent(cellParent);
-                Cells[i] = cell;
-                
-            }
-        }
-        
-        private void PrepareCells()
-        {
             var gridWidth = LevelManager.Instance.CurrentLevel.GridWidth;
             
             for (var x = 0; x < gridWidth; x++)
@@ -96,8 +82,20 @@ namespace Casual.Controllers
                 for (var y = 0; y < LevelManager.Instance.CurrentLevel.GridHeight; y++)
                 {
                     if (LevelManager.Instance.CurrentLevel.Blocks[y * gridWidth + x].ItemType == ItemType.None) continue;
-                    Cells[y * gridWidth + x].Prepare(x, y);
+                    cellCount++;
+                    var cell = SimplePool.Spawn(cellControllerPrefab.gameObject, Vector3.zero, Quaternion.identity).GetComponent<CellController>();
+                    Cells[y * gridWidth + x] = cell;
+                    cell.Initialize(x,y, cellParent);
                 }
+            }
+        }
+        
+        private void PrepareCells()
+        {
+            for (var i = 0; i < gridSize; i++)
+            {
+                if (LevelManager.Instance.CurrentLevel.Blocks[i].ItemType == ItemType.None) continue;
+                Cells[i].Prepare();
             }
         }
         
@@ -181,7 +179,7 @@ namespace Casual.Controllers
         {
             for (var i = 0; i < cells.Count; i++)
             {
-                cells[i].Item.ExecuteWithNeighbour();
+                cells[i].Item.ExecuteWithTapp();
             }
         }
 
@@ -236,7 +234,9 @@ namespace Casual.Controllers
 
         public CellController GetCell(Vector2Int position)
         {
-            if (position.y < 0 || position.x < 0 || position.y > 8 || position.x > 8) return null;
+            if (position.y * LevelManager.Instance.CurrentLevel.GridWidth + position.x >
+                LevelManager.Instance.CurrentLevel.GridWidth * LevelManager.Instance.CurrentLevel.GridHeight)
+                return null;
             return Cells[position.y * LevelManager.Instance.CurrentLevel.GridWidth + position.x];
         }
     }

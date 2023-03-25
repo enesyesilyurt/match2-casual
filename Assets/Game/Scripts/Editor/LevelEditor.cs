@@ -18,7 +18,7 @@ public class LevelEditor : EditorWindow
         { Colour.Blue, Colour.Red, Colour.Green, Colour.Yellow, Colour.Pink, Colour.Purple };
     
     static int gridWidth = 9;
-    static int gridHeight = 9;
+    static int gridHeight = 11;
     private int maxMove;
     private string levelName;
     private bool isBlockSelected;
@@ -174,6 +174,7 @@ public class LevelEditor : EditorWindow
         AddSelectedItemTypeButton(ImageLibrary.Instance.PurpleCube, ItemType.Cube, Colour.Purple);
         AddSelectedItemTypeButton(ImageLibrary.Instance.RedCube, ItemType.Cube, Colour.Red);
         AddSelectedItemTypeButton(ImageLibrary.Instance.YellowCube, ItemType.Cube, Colour.Yellow);
+        AddSelectedItemTypeButton(ImageLibrary.Instance.Balloon, ItemType.Balloon, Colour.Empty);
         GUILayout.EndHorizontal();
     }
 
@@ -183,10 +184,10 @@ public class LevelEditor : EditorWindow
         
         GUILayout.BeginVertical();
 
-        for (int x = 0; x < gridWidth; x++)
+        for (int y = 0; y < gridHeight; y++)
         {
             GUILayout.BeginHorizontal();
-            for (int y = 0; y < gridHeight; y++)
+            for (int x = 0; x < gridWidth; x++)
             {
                 var sqr = levelSquares[gridWidth * y + x];
                 if (isBlockSelected)
@@ -198,6 +199,10 @@ public class LevelEditor : EditorWindow
                     else if (sqr.ItemType == ItemType.Empty)
                     {
                         imageButton = new Texture2D(40,40);
+                    }
+                    else if (sqr.ItemType == ItemType.Balloon)
+                    {
+                        imageButton = ImageLibrary.Instance.Balloon;
                     }
                     else if (sqr.ItemType == ItemType.Cube)
                     {
@@ -396,6 +401,10 @@ public class LevelEditor : EditorWindow
             else if (targetSquares[i].Colour == Colour.Purple)
             {
                 image = ImageLibrary.Instance.PurpleCube;
+            }
+            else if (targetSquares[i].ItemType == ItemType.Balloon)
+            {
+                image = ImageLibrary.Instance.Balloon;
             }
             
             if (GUILayout.Button(image as Texture, new GUILayoutOption[]

@@ -17,14 +17,20 @@ namespace Casual.Controllers.Items
 
         public override void ExecuteWithNeighbour()
         {
-            CreateParticle();
-            base.ExecuteWithNeighbour();
+            
         }
         
         public override void ExecuteWithTapp()
         {
-            CreateParticle();
             base.ExecuteWithTapp();
+            CreateParticle();
+            foreach (var neighbor in CellController.GetNeighbours())
+            {
+                if(neighbor != null && neighbor.HasItem())
+                    neighbor.Item.ExecuteWithNeighbour();
+            }
+            
+            RemoveItem();
         }
 
         protected override void OnMatchCountChanged(int matchCount)

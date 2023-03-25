@@ -30,10 +30,10 @@ namespace Casual.Controllers
                 var oldItem = item;
                 item = value;
 				    
-                if (oldItem != null && Equals(oldItem.CellController, this))
-                {
-                    oldItem.CellController = null;
-                }
+                // if (oldItem != null && Equals(oldItem.CellController, this))
+                // {
+                //     oldItem.CellController = null;
+                // }
                 if (value != null)
                 {
                     value.CellController = this;
@@ -41,11 +41,17 @@ namespace Casual.Controllers
                 }
             }
         }
-        
-        public void Prepare(int row, int column)
+
+        public void Initialize(int row, int column, Transform parent)
         {
             gridPosition = new Vector2Int(row, column);
             transform.localPosition = new Vector3(row * GameManager.Instance.OffsetX, column * GameManager.Instance.OffsetY);
+            gameObject.SetActive(true);
+            transform.SetParent(parent);
+        }
+        
+        public void Prepare()
+        {
             GetComponent<BoxCollider2D>().size = new Vector2(GameManager.Instance.OffsetX, GameManager.Instance.OffsetY);
 
             mask.localScale = new Vector3(GameManager.Instance.OffsetX, GameManager.Instance.OffsetY, 1);

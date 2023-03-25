@@ -93,15 +93,13 @@ namespace Casual.Abstracts
         private void Execute()
         {
             FallAnimation.PrepareRemove();
-            LevelManager.Instance.ItemExecute(this);
-            RemoveItem();
+            CellController.Item = null;
         }
 
-        private void RemoveItem() // TODO
+        protected void RemoveItem() // TODO
         {
-            CellController.Item = null;
             CellController = null;
-            
+            LevelManager.Instance.ItemExecute(this);
             Destroy(gameObject.GetComponent<Item>());
             SimplePool.Despawn(gameObject);
         }

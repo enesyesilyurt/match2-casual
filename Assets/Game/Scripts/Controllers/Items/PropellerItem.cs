@@ -11,27 +11,23 @@ public class PropellerItem : Item
     public void PreparePropellerItem(ItemBase itemBase)
     {
         ItemType = ItemType.Propeller;
-        var bombSprite = ImageLibrary.Instance.GetSpecialSprite(ItemType.Propeller);
+        var bombSprite = ImageLibrary.Instance.GetSprite(Colour.Empty, ItemType.Propeller);
         Prepare(itemBase, bombSprite);
     }
     
     public override void ExecuteWithNeighbour()
     {
-        foreach (var neighbor in CellController.GetNeighbours())
-        {
-            if(neighbor != null && neighbor.HasItem())
-                neighbor.Item.ExecuteWithNeighbour();
-        }
-        base.ExecuteWithNeighbour();
+        
     }
     
     public override void ExecuteWithTapp()
     {
+        base.ExecuteWithTapp();
         foreach (var neighbor in CellController.GetNeighbours())
         {
             if(neighbor != null && neighbor.HasItem())
-                neighbor.Item.ExecuteWithNeighbour();
+                neighbor.Item.ExecuteWithTapp();
         }
-        base.ExecuteWithTapp();
+        RemoveItem();
     }
 }

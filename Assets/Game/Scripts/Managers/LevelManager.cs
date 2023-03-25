@@ -94,13 +94,21 @@ namespace Casual.Managers
 		    {
 			    for (var y = 0; y < CurrentLevel.GridHeight; y++)
 			    {
-				    if (CurrentLevel.Blocks[y * CurrentLevel.GridWidth + x].ItemType == ItemType.None) continue;
+				    var itemData = CurrentLevel.Blocks[y * CurrentLevel.GridWidth + x];
+				    if (itemData.ItemType == ItemType.None) continue;
 				    var cell = boardController.Cells[y * CurrentLevel.GridWidth + x];
-				    var colour = CurrentLevel.Blocks[y * CurrentLevel.GridWidth + x].Colour;
-				    var item = colour == Colour.None
-					    ? ItemFactory.Instance.CreateRandomItem(boardController.ItemsParent)
-					    : ItemFactory.Instance.CreateItem(colour, boardController.ItemsParent);
-                    
+				    Item item = null;
+				    if (itemData.ItemType == ItemType.Cube)
+				    {
+					    item = itemData.Colour == Colour.None
+						    ? ItemFactory.Instance.CreateRandomItem(boardController.ItemsParent)
+						    : ItemFactory.Instance.CreateItem(itemData.Colour, boardController.ItemsParent);
+				    }
+				    else if(itemData.ItemType == ItemType.Balloon)
+				    {
+					    item = ItemFactory.Instance.CreateItem(Colour.Empty, boardController.ItemsParent,
+						    ItemType.Balloon);
+				    }
 				    if (item == null) continue;
     				 						
 				    cell.Item = item;

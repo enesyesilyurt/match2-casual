@@ -40,21 +40,14 @@ namespace Casual.Utilities
             {
                 case ItemType.MultipleCube:
                     return colourSetsDict[colour].PropellerSprite;
-                default:
+                case ItemType.Cube:
                     return colourSetsDict[colour].DefaultSprite;
-            }
-        }
-
-        public Sprite GetSpecialSprite(ItemType itemType)
-        {
-            switch (itemType)
-            {
-                case ItemType.Propeller:
-                    return propellerSprite;
                 case ItemType.Balloon:
                     return balloonSprite;
-                default:
+                case ItemType.Propeller:
                     return propellerSprite;
+                default:
+                    return colourSetsDict[colour].DefaultSprite;
             }
         }
     }

@@ -40,7 +40,7 @@ MonoBehaviour:
   - ItemType: 0
     ObstacleType: 0
     Colour: 0
-  - ItemType: 1
+  - ItemType: 4
     ObstacleType: 0
     Colour: 1
   - ItemType: 1

@@ -45,6 +45,9 @@ namespace Casual.Utilities
                 case ItemType.Propeller:
                     item = CreatePropellerItem(itemBase);
                     break;
+                case ItemType.Balloon:
+                    item = CreateBalloonItem(itemBase);
+                    break;
             }
 
             return item;
@@ -100,6 +103,14 @@ namespace Casual.Utilities
         {
             var item = itemBase.gameObject.AddComponent<PropellerItem>();
             item.PreparePropellerItem(itemBase);
+
+            return item;
+        }
+        
+        private Item CreateBalloonItem(ItemBase itemBase)
+        {
+            var item = itemBase.gameObject.AddComponent<BalloonItem>();
+            item.PrepareBalloonItem(itemBase);
 
             return item;
         }

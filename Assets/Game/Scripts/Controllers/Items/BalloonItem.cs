@@ -13,13 +13,19 @@ namespace Casual
         public void PrepareBalloonItem(ItemBase itemBase)
         {
             ItemType = ItemType.Balloon;
-            var sprite = ImageLibrary.Instance.GetSpecialSprite(ItemType.Balloon);
+            var sprite = ImageLibrary.Instance.GetSprite(Colour.Empty, ItemType.Balloon);
             Prepare(itemBase, sprite);
         }
     
         public override void ExecuteWithTapp()
         {
             
+        }
+
+        public override void ExecuteWithNeighbour()
+        {
+            base.ExecuteWithNeighbour();
+            RemoveItem();
         }
     }
 }
