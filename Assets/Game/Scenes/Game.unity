@@ -3682,7 +3682,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentLevelIndex: 1
   levels:
-  - {fileID: 11400000, guid: cd85868d91f90514ca2d9d3446b617d3, type: 2}
+  - {fileID: 11400000, guid: 2ab20b9f20b2d654c801db4d651b5f6d, type: 2}
   - {fileID: 11400000, guid: 3bf582ba35e1f254e9c62b4dea5248e1, type: 2}
   - {fileID: 11400000, guid: 74c637d18d0ec1b4b8287d0f1edbccf3, type: 2}
   boardController: {fileID: 1885619620}
@@ -11923,6 +11923,7 @@ MonoBehaviour:
   propellerSprite: {fileID: 21300000, guid: ff7ea5901ac930a45b46b04a5c7db274, type: 3}
   balloonSprite: {fileID: 21300000, guid: 178311532f2b20f459cce863cae6702c, type: 3}
   boxSprite: {fileID: 21300000, guid: 237add0575042964f96a884c33879e15, type: 3}
+  pumpkinSprite: {fileID: 21300000, guid: e51472cc7437fd94a859be832b24981f, type: 3}
   BlueCube: {fileID: 2800000, guid: 5e5d1b718aef8664ea2375d674caf446, type: 3}
   GreenCube: {fileID: 2800000, guid: caad5af19bf27fe418dd3b9f4d2f5b46, type: 3}
   PinkCube: {fileID: 2800000, guid: ea3d40ad91149224d8407dd758ee99cc, type: 3}

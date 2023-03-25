@@ -30,7 +30,7 @@ namespace Casual.Utilities
             PrepareRatios();
         }
         
-        public Item CreateItem(Colour colour, Transform parent, ItemType itemType = ItemType.Cube)
+        public Item CreateItem(Colour colour, Transform parent, ItemType itemType = ItemType.Cube) // TODO
         {
             var itemBase = SimplePool.Spawn(itemBasePrefab.gameObject, Vector3.zero, Quaternion.Euler(Vector3.zero)).GetComponent<ItemBase>();
             itemBase.gameObject.SetActive(true);
@@ -50,6 +50,9 @@ namespace Casual.Utilities
                     break;
                 case ItemType.Box:
                     item = CreateBoxItem(itemBase);
+                    break;
+                case ItemType.Pumpkin:
+                    item = CreatePumpkinItem(itemBase);
                     break;
             }
 
@@ -122,6 +125,14 @@ namespace Casual.Utilities
         {
             var item = itemBase.gameObject.AddComponent<BoxItem>();
             item.PrepareBoxItem(itemBase);
+
+            return item;
+        }
+        
+        private Item CreatePumpkinItem(ItemBase itemBase)
+        {
+            var item = itemBase.gameObject.AddComponent<PumpkinItem>();
+            item.PreparePumpkinItem(itemBase);
 
             return item;
         }

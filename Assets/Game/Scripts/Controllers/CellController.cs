@@ -47,8 +47,7 @@ namespace Casual.Controllers
 
         public bool CanTapp()
         {
-            var fallCheck = item.FallAnimation != null && !item.FallAnimation.IsFalling;
-            return HasItem() && fallCheck;
+            return HasItem() && item.FallAnimation != null && !item.FallAnimation.IsFalling;
         }
         
         public void Prepare()

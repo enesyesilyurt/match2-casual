@@ -10,12 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f943bee3d8669fc4997bb1c300478fbe, type: 3}
-  m_Name: empty
+  m_Name: 123
   m_EditorClassIdentifier: 
   GridHeight: 11
   GridWidth: 9
   maxMove: 20
-  ColourRatios: []
+  ColourRatios:
+  - Colour: 1
+    Ratio: 1
+  - Colour: 2
+    Ratio: 1
   Blocks:
   - ItemType: 0
     ObstacleType: 0
@@ -185,18 +189,6 @@ MonoBehaviour:
   - ItemType: 0
     ObstacleType: 0
     Colour: 0
-  - ItemType: 6
-    ObstacleType: 0
-    Colour: 7
-  - ItemType: 6
-    ObstacleType: 0
-    Colour: 7
-  - ItemType: 6
-    ObstacleType: 0
-    Colour: 7
-  - ItemType: 6
-    ObstacleType: 0
-    Colour: 7
   - ItemType: 0
     ObstacleType: 0
     Colour: 0
@@ -212,18 +204,6 @@ MonoBehaviour:
   - ItemType: 0
     ObstacleType: 0
     Colour: 0
-  - ItemType: 6
-    ObstacleType: 0
-    Colour: 7
-  - ItemType: 6
-    ObstacleType: 0
-    Colour: 7
-  - ItemType: 6
-    ObstacleType: 0
-    Colour: 7
-  - ItemType: 6
-    ObstacleType: 0
-    Colour: 7
   - ItemType: 0
     ObstacleType: 0
     Colour: 0
@@ -236,19 +216,16 @@ MonoBehaviour:
   - ItemType: 0
     ObstacleType: 0
     Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 6
+  - ItemType: 7
     ObstacleType: 0
     Colour: 7
-  - ItemType: 6
+  - ItemType: 7
     ObstacleType: 0
     Colour: 7
-  - ItemType: 6
+  - ItemType: 7
     ObstacleType: 0
     Colour: 7
-  - ItemType: 6
+  - ItemType: 7
     ObstacleType: 0
     Colour: 7
   - ItemType: 0
@@ -266,43 +243,70 @@ MonoBehaviour:
   - ItemType: 0
     ObstacleType: 0
     Colour: 0
-  - ItemType: 6
+  - ItemType: 7
+    ObstacleType: 0
+    Colour: 7
+  - ItemType: 7
+    ObstacleType: 0
+    Colour: 7
+  - ItemType: 7
+    ObstacleType: 0
+    Colour: 7
+  - ItemType: 7
+    ObstacleType: 0
+    Colour: 7
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 7
+    ObstacleType: 0
+    Colour: 7
+  - ItemType: 7
     ObstacleType: 0
     Colour: 7
   - ItemType: 6
-    ObstacleType: 0
-    Colour: 7
-  - ItemType: 6
-    ObstacleType: 0
-    Colour: 7
-  - ItemType: 6
-    ObstacleType: 0
-    Colour: 7
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 5
     ObstacleType: 0
     Colour: 7
   - ItemType: 5
     ObstacleType: 0
     Colour: 7
-  - ItemType: 6
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 0
+    ObstacleType: 0
+    Colour: 0
+  - ItemType: 7
     ObstacleType: 0
     Colour: 7
-  - ItemType: 6
+  - ItemType: 7
+    ObstacleType: 0
+    Colour: 7
+  - ItemType: 7
+    ObstacleType: 0
+    Colour: 7
+  - ItemType: 7
     ObstacleType: 0
     Colour: 7
   - ItemType: 0

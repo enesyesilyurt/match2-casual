@@ -14,6 +14,7 @@ namespace Casual.Utilities
         [SerializeField] private Sprite propellerSprite;
         [SerializeField] private Sprite balloonSprite;
         [SerializeField] private Sprite boxSprite;
+        [SerializeField] private Sprite pumpkinSprite;
 
         [Header("EditorTextures")] 
         public Texture BlueCube;
@@ -49,6 +50,8 @@ namespace Casual.Utilities
                     return propellerSprite;
                 case ItemType.Box:
                     return boxSprite;
+                case ItemType.Pumpkin:
+                    return pumpkinSprite;
                 default:
                     return colourSetsDict[colour].DefaultSprite;
             }

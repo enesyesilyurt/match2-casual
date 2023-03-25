@@ -74,8 +74,8 @@ namespace Casual.Managers
 	    private void StartFalls()
 	    {
 		    fallAndFillManager.Init(boardController);
-		    FallAndFillManager.Instance.DoFills();
 		    FallAndFillManager.Instance.DoFalls();
+		    FallAndFillManager.Instance.DoFills();
 		    fallAndFillManager.StartFalls();
 	    }
 
@@ -115,6 +115,11 @@ namespace Casual.Managers
 				    {
 					    item = ItemFactory.Instance.CreateItem(Colour.Empty, boardController.ItemsParent,
 						    ItemType.Box);
+				    }
+				    else if (itemData.ItemType == ItemType.Pumpkin)
+				    {
+					    item = ItemFactory.Instance.CreateItem(Colour.Empty, boardController.ItemsParent,
+						    ItemType.Pumpkin);
 				    }
 				    if (item == null) continue;
     				 						

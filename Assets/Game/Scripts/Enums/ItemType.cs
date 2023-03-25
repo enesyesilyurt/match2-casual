@@ -8,6 +8,7 @@ namespace Casual.Enums
         Propeller,
         Balloon,
         Box,
+        Pumpkin,
         Empty
     }
 }
