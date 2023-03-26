@@ -8,7 +8,6 @@ namespace Casual
 {
     public class InGameUIController : MonoBehaviour
     {
-        [SerializeField] private FailPanelController failPanelController;
         [SerializeField] private TargetController targetPrefab;
         [SerializeField] private TextMeshProUGUI moveCountText;
         [SerializeField] private Transform targetParent;
@@ -17,14 +16,13 @@ namespace Casual
 
         public void Initialize()
         {
-            failPanelController.Initialize();
+            TargetManager.Instance.MoveCountChanged += DecreaseMoveCount;
         }
-        
-        public void SetupPanel()
+
+        public void Prepare()
         {
-            failPanelController.Prepare();
             targetList.Clear();
-        
+            
             var targets = LevelManager.Instance.CurrentLevel.Targets;
             for (int i = 0; i < targets.Length; i++)
             {
@@ -34,11 +32,9 @@ namespace Casual
             }
         
             moveCountText.text = LevelManager.Instance.CurrentLevel.maxMove.ToString();
-
-            TargetManager.Instance.MoveCountChanged += DecreaseMoveCount;
         }
 
-        public void ResetManager()
+        public void ResetLevel()
         {
             foreach (var target in targetList)
             {

@@ -42,7 +42,7 @@ namespace Casual.Managers
             ImageLibrary.Instance.Setup();
             ParticleLibrary.Instance.Setup();
             CollectibleManager.Instance.Setup();
-            LevelManager.Instance.Setup();
+            LevelManager.Instance.Initialize();
             ScreenManager.Instance.Setup();
             UIManager.Instance.Initialize();
             ChangeGameState(GameState.Home);

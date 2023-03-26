@@ -1772,8 +1772,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 88882718}
+  - component: {fileID: 88882719}
   m_Layer: 5
-  m_Name: Game
+  m_Name: InGameUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1801,6 +1802,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &88882719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 88882717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 632ed512e8249254bb3fb01152d18824, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetPrefab: {fileID: 9087722520235727665, guid: 418894ea83d273549a9f303d93d8c988, type: 3}
+  moveCountText: {fileID: 507474802}
+  targetParent: {fileID: 652843802}
 --- !u!1 &98033074
 GameObject:
   m_ObjectHideFlags: 0
@@ -3817,8 +3833,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 229038760}
+  - component: {fileID: 229038761}
   m_Layer: 5
-  m_Name: Win
+  m_Name: WinPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3848,6 +3865,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &229038761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 229038759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdc775980638a564f89a109beb41e177, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &237747764
 GameObject:
   m_ObjectHideFlags: 0
@@ -6799,7 +6828,7 @@ GameObject:
   - component: {fileID: 507474803}
   - component: {fileID: 507474802}
   m_Layer: 5
-  m_Name: MoveCount
+  m_Name: MoveCountText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9898,7 +9927,7 @@ GameObject:
   - component: {fileID: 754165105}
   - component: {fileID: 754165106}
   m_Layer: 5
-  m_Name: Fail
+  m_Name: FailPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9944,7 +9973,6 @@ MonoBehaviour:
   TryAgainExitButton: {fileID: 1011502524}
   ContinueExitButton: {fileID: 1912655844}
   tryAgainPanel: {fileID: 1617037343}
-  winPanel: {fileID: 229038759}
   continuePanel: {fileID: 1088207423}
 --- !u!1 &771125054
 GameObject:
@@ -10243,8 +10271,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 784461205}
+  - component: {fileID: 784461206}
   m_Layer: 5
-  m_Name: HomeUI
+  m_Name: MainMenuUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10274,6 +10303,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &784461206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 784461204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db6324af18d7452429273a21988d7bdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bottomSelectorController: {fileID: 1180164127}
+  mainLayoutsUIController: {fileID: 948982357}
 --- !u!1 &823688061
 GameObject:
   m_ObjectHideFlags: 0
@@ -11671,6 +11714,7 @@ GameObject:
   m_Component:
   - component: {fileID: 948982354}
   - component: {fileID: 948982356}
+  - component: {fileID: 948982357}
   m_Layer: 5
   m_Name: MainLayouts
   m_TagString: Untagged
@@ -11729,6 +11773,19 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &948982357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 948982353}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e79d9a6c5dc19e48888079fd0e15edc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  homeUIController: {fileID: 2074665069}
 --- !u!1 &952661949
 GameObject:
   m_ObjectHideFlags: 0
@@ -17899,11 +17956,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51b16e7eeb1c5f0449babce011f83955, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bottomSelectorController: {fileID: 1180164127}
-  inGameUIController: {fileID: 1995589658}
-  inGamePanel: {fileID: 1995589656}
-  homePanel: {fileID: 784461204}
-  playButton: {fileID: 389793400}
+  gameplayUIController: {fileID: 1995589658}
+  mainMenuUIController: {fileID: 784461206}
 --- !u!1 &1507546476
 GameObject:
   m_ObjectHideFlags: 0
@@ -23331,7 +23385,7 @@ GameObject:
   - component: {fileID: 1995589657}
   - component: {fileID: 1995589658}
   m_Layer: 5
-  m_Name: InGameUI
+  m_Name: GamePlayUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23373,9 +23427,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   failPanelController: {fileID: 754165106}
-  targetPrefab: {fileID: 9087722520235727665, guid: 418894ea83d273549a9f303d93d8c988, type: 3}
-  moveCountText: {fileID: 734026583}
-  targetParent: {fileID: 652843802}
+  inGameUIController: {fileID: 88882719}
+  winPanelController: {fileID: 229038761}
 --- !u!1 &1999937383
 GameObject:
   m_ObjectHideFlags: 0
@@ -24595,6 +24648,7 @@ MonoBehaviour:
   starText: {fileID: 716523916}
   areaUpgradeText: {fileID: 1221642404}
   timedRewardText: {fileID: 626744201}
+  playButton: {fileID: 389793400}
   homeElements:
   - Button: {fileID: 0}
     activeElements:

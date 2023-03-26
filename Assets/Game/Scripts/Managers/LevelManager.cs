@@ -20,8 +20,10 @@ namespace Casual.Managers
 
 	    public event Action<Item> ItemExecuted;
 	    
-	    public void Setup()
+	    public void Initialize()
 	    {
+		    TargetManager.Instance.Initialize();
+		    
 		    GameManager.Instance.GameStateChanged += OnGameStateChanged;
 		    TargetManager.Instance.TargetsCompleted += LevelComplete;
 	    }
@@ -34,7 +36,7 @@ namespace Casual.Managers
 				    CloseLevel();
 				    break;
 			    case GameState.InGame:
-				    SetupLevel();
+				    Prepare();
 				    break;
 		    }
 	    }
@@ -44,18 +46,16 @@ namespace Casual.Managers
 		    ResetManager();
 	    }
 
-	    private void SetupLevel()
+	    private void Prepare()
 	    {
 		    currentLevelIndex = PlayerPrefs.GetInt(currentLevelName);
 		    ItemFactory.Instance.Setup();
 		    PrepareBoard();
 		    PrepareLevel();
-		    TargetManager.Instance.Setup();
-		    UIManager.Instance.SetupInGamePanel();
 		    StartFalls();
 	    }
 
-	    public void LevelComplete()
+	    private void LevelComplete()
 	    {
 		    CollectibleManager.Instance.GetCollectible(CollectibleType.Star).ChangeValue(CurrentLevel.StarCount);
 		    CollectibleManager.Instance.GetCollectible(CollectibleType.Currency).ChangeValue(CurrentLevel.CoinCount);

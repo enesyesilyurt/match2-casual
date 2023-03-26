@@ -14,12 +14,10 @@ namespace Casual
         [SerializeField] private Button ContinueExitButton;
         
         [SerializeField, Header("Panels")] private GameObject tryAgainPanel;
-        [SerializeField] private GameObject winPanel;
         [SerializeField] private GameObject continuePanel;
 
         public void Initialize()
         {
-            TargetManager.Instance.TargetsCompleted += OpenWinPanel;
             TargetManager.Instance.LevelFailed += OpenFailPanel;
             
             ContinueExitButton.onClick.AddListener(OpenTryAgainPanel);
@@ -31,15 +29,8 @@ namespace Casual
         public void Prepare()
         {
             gameObject.SetActive(false);
-            winPanel.SetActive(false);
             tryAgainPanel.SetActive(false);
             continuePanel.SetActive(false);
-        }
-        
-        private void OpenWinPanel()
-        {
-            winPanel.SetActive(true);
-            UIManager.Instance.OpenPanel(winPanel);
         }
 
         private void OpenFailPanel()

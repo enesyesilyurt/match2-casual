@@ -1,4 +1,5 @@
 using System;
+using Casual.Managers;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +11,7 @@ public class HomeUIController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI starText;
     [SerializeField] private TextMeshProUGUI areaUpgradeText;
     [SerializeField] private TextMeshProUGUI timedRewardText;
+    [SerializeField] private Button playButton;
     
     [SerializeField] private HomeElementActivatorBase[] homeElements;
     [SerializeField] private ActivableUIElement[] movables;
@@ -22,12 +24,14 @@ public class HomeUIController : MonoBehaviour
     private AreaUpgrade areaUpgrade;
     private TimedReward timedReward;
 
-    private void Start()
+    public void Initialize()
     {
         SetupActivableElements();
         ReferanceAttachments();
         AddListenerCollectibles();
         SetupTexts();
+            
+        playButton.onClick.AddListener(()=> GameManager.Instance.ChangeGameState(GameState.InGame));
     }
 
     private void AddListenerCollectibles()
@@ -56,30 +60,6 @@ public class HomeUIController : MonoBehaviour
         starText.text = star.IsMaxed ? "FULL" : star.Value.ToString();
         currencyText.text = currency.Value.ToString();
     }
-    
-    // private void Update()
-    // {
-    //     if (Input.GetKeyDown(KeyCode.A))
-    //     {
-    //         currency.ChangeValue(10);
-    //     }
-    //     if (Input.GetKeyDown(KeyCode.B))
-    //     {
-    //         health.ChangeValue(1);
-    //     }
-    //     if (Input.GetKeyDown(KeyCode.C))
-    //     {
-    //         star.ChangeValue(1);
-    //     }
-    //     if (Input.GetKeyDown(KeyCode.D))
-    //     {
-    //         areaUpgrade.ChangeValue(1);
-    //     }
-    //     if (Input.GetKeyDown(KeyCode.E))
-    //     {
-    //         timedReward.ChangeValue(1);
-    //     }
-    // }
 
     private void SetupActivableElements()
     {

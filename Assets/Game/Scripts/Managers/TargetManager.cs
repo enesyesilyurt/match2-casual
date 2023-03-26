@@ -1,12 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Casual.Abstracts;
-using Casual.Enums;
 using Casual.Managers;
 using Casual.Utilities;
-using UnityEngine;
 
 public class TargetManager : MonoSingleton<TargetManager>
 {
@@ -17,7 +11,12 @@ public class TargetManager : MonoSingleton<TargetManager>
     public event Action TargetsCompleted;
     public event Action LevelFailed;
 
-    public void Setup()
+    public void Initialize()
+    {
+        GameManager.Instance.GameStateChanged += OnGameStateChanged;
+    }
+
+    private void Prepare()
     {
         targetCount = LevelManager.Instance.CurrentLevel.Targets.Length;
         moveCount = LevelManager.Instance.CurrentLevel.maxMove;
@@ -39,6 +38,18 @@ public class TargetManager : MonoSingleton<TargetManager>
         if (targetCount <= 0)
         {
             TargetsCompleted?.Invoke();
+        }
+    }
+    
+    private void OnGameStateChanged(GameState newState)
+    {
+        switch (newState)
+        {
+            case GameState.Home:
+                break;
+            case GameState.InGame:
+                Prepare();
+                break;
         }
     }
 }
