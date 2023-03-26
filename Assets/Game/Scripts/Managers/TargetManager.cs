@@ -13,6 +13,10 @@ public class TargetManager : MonoSingleton<TargetManager>
     private int targetCount;
     private int moveCount;
 
+    public event Action<int> MoveCountChanged;
+    public event Action TargetsCompleted;
+    public event Action LevelFailed;
+
     public void Setup()
     {
         targetCount = LevelManager.Instance.CurrentLevel.Targets.Length;
@@ -22,10 +26,10 @@ public class TargetManager : MonoSingleton<TargetManager>
     public void DecreaseMoveCount()
     {
         moveCount--;
-        UIManager.Instance.DecreaseMoveCount(moveCount);
+        MoveCountChanged?.Invoke(moveCount);
         if (moveCount <= 0)
         {
-            UIManager.Instance.OpenFailPanel();
+            LevelFailed?.Invoke();
         }
     }
 
@@ -34,8 +38,7 @@ public class TargetManager : MonoSingleton<TargetManager>
         targetCount--;
         if (targetCount <= 0)
         {
-            LevelManager.Instance.LevelComplete();
-            UIManager.Instance.OpenWinPanel();
+            TargetsCompleted?.Invoke();
         }
     }
 }

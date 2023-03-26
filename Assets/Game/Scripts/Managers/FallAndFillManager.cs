@@ -65,7 +65,6 @@ namespace Casual.Managers
                 while (cell.Item == null)
                 {
                     cell.Item = ItemFactory.Instance.CreateRandomItem(boardController.ItemsParent);
-                    boardController.CheckMatches();
 
                     var offsetY = 0.0F;
                     var targetCellBelow = cell.GetFallTarget().GetFirstCellBelow();
@@ -86,6 +85,7 @@ namespace Casual.Managers
                     cell.Item.Fall();
                 }
             }
+            boardController.CheckMatches();
         }
     }
 }

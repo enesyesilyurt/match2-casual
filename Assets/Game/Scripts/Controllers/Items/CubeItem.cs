@@ -43,7 +43,7 @@ namespace Casual.Controllers.Items
             if(!CellController.IsItemCanExecute) return;
             base.ExecuteWithSpecial();
             CreateParticle();
-            foreach (var neighbor in CellController.GetNeighbours())
+            foreach (var neighbor in CellController.GetNeighbours()) //TODO
             {
                 if(neighbor != null && neighbor.HasItem())
                     neighbor.Item.OnNeighbourExecute();

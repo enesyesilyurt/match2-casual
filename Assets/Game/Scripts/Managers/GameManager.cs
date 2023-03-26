@@ -44,7 +44,7 @@ namespace Casual.Managers
             CollectibleManager.Instance.Setup();
             LevelManager.Instance.Setup();
             ScreenManager.Instance.Setup();
-            UIManager.Instance.Setup();
+            UIManager.Instance.Initialize();
             ChangeGameState(GameState.Home);
         }
 

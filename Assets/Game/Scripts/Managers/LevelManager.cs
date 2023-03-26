@@ -23,6 +23,7 @@ namespace Casual.Managers
 	    public void Setup()
 	    {
 		    GameManager.Instance.GameStateChanged += OnGameStateChanged;
+		    TargetManager.Instance.TargetsCompleted += LevelComplete;
 	    }
 
 	    private void OnGameStateChanged(GameState newState)
@@ -56,6 +57,8 @@ namespace Casual.Managers
 
 	    public void LevelComplete()
 	    {
+		    CollectibleManager.Instance.GetCollectible(CollectibleType.Star).ChangeValue(CurrentLevel.StarCount);
+		    CollectibleManager.Instance.GetCollectible(CollectibleType.Currency).ChangeValue(CurrentLevel.CoinCount);
 		    currentLevelIndex = currentLevelIndex + 1 >= levels.Length ? 0 : currentLevelIndex + 1;
 		    PlayerPrefs.SetInt(currentLevelName, currentLevelIndex);
 	    }

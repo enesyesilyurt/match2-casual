@@ -192,15 +192,17 @@ namespace Casual.Controllers
 
         public void CheckMatches()
         {
-            bool isAnyMatch = false;
+            int totalMatchCount = 0;
+            int counter = 0;
             for (var i = 0; i < gridSize; i++)
             {
                 if (Cells[i] == null) continue;
                 if(!Cells[i].HasItem()) continue;
-                isAnyMatch = Cells[i].Item.CheckMatches() || isAnyMatch;
+                totalMatchCount += Cells[i].Item.CheckMatches();
+                counter++;
             }
 
-            if (!isAnyMatch)
+            if (totalMatchCount <= 0 && counter == cellCount)
             {
                 onAnim = true;
                 StartCoroutine(ShuffleRoutine());

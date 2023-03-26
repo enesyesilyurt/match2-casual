@@ -72,12 +72,13 @@ namespace Casual.Abstracts
             spriteRenderer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
         }
 
-        public bool CheckMatches()
+        public int CheckMatches()
         {
-            if (ItemType != ItemType.Cube && ItemType != ItemType.MultipleCube) return false;
-            var matchCount = BoardController.Instance.MatchFinder.FindMatches(cellController, colour).Count;
+            if (ItemType != ItemType.Cube && ItemType != ItemType.MultipleCube) return 0;
+            var matchCountTemp = BoardController.Instance.MatchFinder.FindMatches(cellController, colour).Count;
+            var matchCount = matchCountTemp - 1 <= 0 ? 0 : matchCountTemp - 1;
             OnMatchCountChanged(matchCount);
-            return matchCount > 1;
+            return matchCount;
         }
         
         protected virtual void OnMatchCountChanged(int matchCount) { }
@@ -98,6 +99,11 @@ namespace Casual.Abstracts
             cellController.ItemExecuted();
             if(FallAnimation != null) FallAnimation.PrepareRemove();
             CellController.Item = null;
+        }
+
+        public bool IsCube()
+        {
+            return ItemType == ItemType.Cube || ItemType == ItemType.MultipleCube;
         }
 
         protected void RemoveItem() // TODO

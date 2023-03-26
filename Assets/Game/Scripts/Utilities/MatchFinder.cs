@@ -26,13 +26,13 @@ namespace Casual.Utilities
         private void FindMatches(CellController cellController, Colour colour, List<CellController> resultCells)
         {
             if (cellController == null) return;
-            if (!cellController.CanTap()) return;
+            if (cellController.HasItem() && !cellController.IsItemCanTap && cellController.Item.IsCube()) return;
 			    
             var row = cellController.GridPosition.x;
             var column = cellController.GridPosition.y;
             if (visitedCells[LevelManager.Instance.CurrentLevel.GridWidth * column + row]) return;
 
-            if (cellController.HasItem() && cellController.Item.Colour == colour)
+            if (cellController.Item.Colour == colour)
             {
                 visitedCells[LevelManager.Instance.CurrentLevel.GridWidth * column + row] = true;
                 resultCells.Add(cellController);

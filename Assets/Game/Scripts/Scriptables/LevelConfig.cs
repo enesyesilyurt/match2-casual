@@ -5,6 +5,8 @@ using UnityEngine.Serialization;
 [CreateAssetMenu(menuName = "NewLevelConfig", fileName = "LevelConfig")]
 public class LevelConfig : ScriptableObject
 {
+    public int StarCount;
+    public int CoinCount;
     public int GridHeight;
     public int GridWidth;
     public int maxMove;

@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f943bee3d8669fc4997bb1c300478fbe, type: 3}
   m_Name: dene
   m_EditorClassIdentifier: 
+  StarCount: 2
+  CoinCount: 12
   GridHeight: 11
   GridWidth: 9
-  maxMove: 50
+  maxMove: 3
   ColourRatios: []
   Blocks:
   - ItemType: 0
