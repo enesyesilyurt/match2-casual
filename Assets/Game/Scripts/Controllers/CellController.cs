@@ -16,9 +16,15 @@ namespace Casual.Controllers
         private Vector2Int gridPosition;
         private bool isFillingCell;
         private Item item;
+        private Obstacle obstacle;
 
         public Vector2Int GridPosition => gridPosition;
         public bool IsFillingCell => isFillingCell;
+        
+        public bool IsItemCanTap { get; set; } = true;
+
+        public bool IsItemCanFall { get; set; } = true;
+        public bool IsItemCanExecute { get; set; } = true;
 
         public Item Item
         {
@@ -36,6 +42,23 @@ namespace Casual.Controllers
                 }
             }
         }
+        
+        public Obstacle Obstacle
+        {
+            get => obstacle;
+            set
+            {
+                if (obstacle == value) return;
+                
+                obstacle = value;
+                
+                if (value != null)
+                {
+                    value.CellController = this;
+                    value.SetSortingOrder(gridPosition.y + 1);
+                }
+            }
+        }
 
         public void Initialize(int row, int column, Transform parent)
         {
@@ -47,7 +70,7 @@ namespace Casual.Controllers
 
         public bool CanTap()
         {
-            return HasItem() && item.FallAnimation != null && !item.FallAnimation.IsFalling;
+            return IsItemCanTap && HasItem() && !item.FallAnimation.IsFalling;
         }
         
         public void Prepare()
@@ -61,6 +84,14 @@ namespace Casual.Controllers
             
             UpdateLabel();
             CreateBorder();
+        }
+
+        public void ItemExecuted()
+        {
+            if (obstacle != null)
+            {
+                obstacle.OnItemExecuted();
+            }
         }
 
         private void CreateBorder()
@@ -85,6 +116,11 @@ namespace Casual.Controllers
         public bool HasItem()
         {
             return Item != null;
+        }
+        
+        public bool HasObstacle()
+        {
+            return Obstacle != null;
         }
 
         public CellController GetFallTarget() // todo

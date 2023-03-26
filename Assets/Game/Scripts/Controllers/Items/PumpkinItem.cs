@@ -22,6 +22,7 @@ namespace Casual
 
         public override void OnNeighbourExecute()
         {
+            if(!CellController.IsItemCanExecute) return;
             health--;
             if (health <= 0)
             {
@@ -37,6 +38,7 @@ namespace Casual
 
         public override void ExecuteWithSpecial()
         {
+            if(!CellController.IsItemCanExecute) return;
             health--;
             if (health <= 0)
             {

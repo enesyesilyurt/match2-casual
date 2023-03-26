@@ -37,7 +37,7 @@ public class LevelEditor : EditorWindow
     private bool isBlockSelected;
     private Texture itemTexture;
     private ItemType selectedItemType = ItemType.None;
-    private ObstacleType selectedObstacleType = ObstacleType.None;
+    private ItemType selectedObstacleType = ItemType.None;
     private Colour selectedColour = Colour.None;
 
     [MenuItem("Casual/Level editor")]
@@ -52,7 +52,7 @@ public class LevelEditor : EditorWindow
             {
                 SquareBlock sqBlocks = new SquareBlock();
                 sqBlocks.ItemType = ItemType.None;
-                sqBlocks.ObstacleType = ObstacleType.None;
+                sqBlocks.ObstacleType = ItemType.None;
 
                 levelSquares[gridWidth * y + x] = sqBlocks;
             }
@@ -145,8 +145,9 @@ public class LevelEditor : EditorWindow
             GUILayout.Width(100),
             GUILayout.Height(50)
         });
-        AddSelectedObstacleTypeButton(null, ObstacleType.None);
-        AddSelectedObstacleTypeButton(ImageLibrary.Instance.Balloon, ObstacleType.Box);
+        AddSelectedObstacleTypeButton(null, ItemType.None);
+        AddSelectedObstacleTypeButton(ImageLibrary.Instance.Bubble, ItemType.Bubble);
+        AddSelectedObstacleTypeButton(ImageLibrary.Instance.Bush, ItemType.Bush);
         GUILayout.EndHorizontal();
     }
 
@@ -236,17 +237,17 @@ public class LevelEditor : EditorWindow
                 }
                 else
                 {
-                    if (sqr.ObstacleType == ObstacleType.None)
+                    if (sqr.ObstacleType == ItemType.None)
                     {
                         imageButton = null;
                     }
-                    if (sqr.ObstacleType == ObstacleType.Bush)
+                    if (sqr.ObstacleType == ItemType.Bush)
                     {
-                        imageButton = ImageLibrary.Instance.Balloon;
+                        imageButton = ImageLibrary.Instance.Bush;
                     }
-                    if (sqr.ObstacleType == ObstacleType.Box)
+                    if (sqr.ObstacleType == ItemType.Bubble)
                     {
-                        imageButton = ImageLibrary.Instance.Balloon;
+                        imageButton = ImageLibrary.Instance.Bubble;
                     }
                 }
                 
@@ -427,7 +428,7 @@ public class LevelEditor : EditorWindow
         GUILayout.EndHorizontal();
     }
     
-    void AddSelectedObstacleTypeButton(Texture texture, ObstacleType obstacleType)
+    void AddSelectedObstacleTypeButton(Texture texture, ItemType obstacleType)
     {
         if (GUILayout.Button(texture as Texture, new GUILayoutOption[]
             {
@@ -440,7 +441,7 @@ public class LevelEditor : EditorWindow
         }
     }
 
-    void SetType(int x, int y, ItemType itemType, ObstacleType obstacleType, Colour colour)
+    void SetType(int x, int y, ItemType itemType, ItemType obstacleType, Colour colour)
     {
         levelSquares[gridWidth * y + x].ItemType = itemType;
         levelSquares[gridWidth * y + x].ObstacleType = obstacleType;

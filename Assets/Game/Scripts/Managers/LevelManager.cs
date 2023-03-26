@@ -100,9 +100,15 @@ namespace Casual.Managers
 				 Item item = (itemData.Colour == Colour.Empty || itemData.Colour == Colour.None) && itemData.ItemType == ItemType.Cube
 					 ? ItemFactory.Instance.CreateRandomItem(boardController.ItemsParent)
 					 : ItemFactory.Instance.CreateItem(itemData.Colour, boardController.ItemsParent, itemData.ItemType);
-    			 						
+				 
 				 cell.Item = item;
 				 item.transform.position = cell.transform.position;
+				 
+				 if (CurrentLevel.Blocks[i].ObstacleType == ItemType.None) continue;
+				 Obstacle obstacle = ItemFactory.Instance.CreateObstacle(cell, boardController.ItemsParent, itemData.ObstacleType);
+    			 						
+				 cell.Obstacle = obstacle;
+				 obstacle.transform.position = cell.transform.position;
 		    }
 	    }
 	}

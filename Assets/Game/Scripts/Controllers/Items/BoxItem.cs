@@ -19,18 +19,9 @@ namespace Casual
             AddSprite(boxSprite);
         }
 
-        public override void Fall()
-        {
-            
-        }
-
-        protected override void Execute()
-        {
-            CellController.Item = null;
-        }
-
         public override void OnNeighbourExecute()
         {
+            if(!CellController.IsItemCanExecute) return;
             health--;
             if (health <= 0)
             {
@@ -46,6 +37,7 @@ namespace Casual
 
         public override void ExecuteWithSpecial()
         {
+            if(!CellController.IsItemCanExecute) return;
             health--;
             if (health <= 0)
             {

@@ -23,6 +23,7 @@ public class PropellerItem : Item // TODO
 
     public override void ExecuteWithSpecial()
     {
+        if(!CellController.IsItemCanExecute) return;
         base.ExecuteWithSpecial();
         foreach (var neighbor in CellController.GetNeighbours())
         {
@@ -36,6 +37,7 @@ public class PropellerItem : Item // TODO
 
     public override void ExecuteWithTapp()
     {
+        if(!CellController.IsItemCanExecute) return;
         base.ExecuteWithTapp();
         foreach (var neighbor in CellController.GetNeighbours())
         {

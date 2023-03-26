@@ -25,12 +25,14 @@ namespace Casual
 
         public override void ExecuteWithSpecial()
         {
+            if(!CellController.IsItemCanExecute) return;
             base.ExecuteWithSpecial();
             RemoveItem();
         }
 
         public override void OnNeighbourExecute()
         {
+            if(!CellController.IsItemCanExecute) return;
             base.OnNeighbourExecute();
             RemoveItem();
         }

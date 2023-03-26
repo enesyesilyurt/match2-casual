@@ -14,6 +14,7 @@ namespace Casual.Utilities
     public class ItemFactory : MonoSingleton<ItemFactory>
     {
         [SerializeField] private ItemBase itemBasePrefab;
+        [SerializeField] private ObstacleBase obstacleBasePrefab;
 
         private Colour[] colours =
         {
@@ -24,6 +25,7 @@ namespace Casual.Utilities
         private int totalColourRatio = 0;
 
         private Dictionary<ItemType, Type> itemDict = new ();
+        private Dictionary<ItemType, Type> obstacleDict = new ();
         private Dictionary<Vector2, Colour> colourRatioDict = new();
 
         public void Setup()
@@ -43,6 +45,9 @@ namespace Casual.Utilities
             itemDict.Add(ItemType.Balloon, typeof(BalloonItem));
             itemDict.Add(ItemType.Box, typeof(BoxItem));
             itemDict.Add(ItemType.Pumpkin, typeof(PumpkinItem));
+
+            obstacleDict.Add(ItemType.Bubble, typeof(BubbleObstacle));
+            obstacleDict.Add(ItemType.Bush, typeof(BushObstacle));
         }
         
         public Item CreateItem(Colour colour, Transform parent, ItemType itemType = ItemType.Cube) // TODO
@@ -54,6 +59,15 @@ namespace Casual.Utilities
             Item item = itemDict.ContainsKey(itemType) ? CreateItemWithType(itemBase, itemDict[itemType], colour) : null;
 
             return item;
+        }
+        
+        public Obstacle CreateObstacle(CellController cell, Transform parent, ItemType type) // TODO
+        {
+            var obstacleBase = SimplePool.Spawn(obstacleBasePrefab.gameObject, Vector3.zero, Quaternion.Euler(Vector3.zero)).GetComponent<ObstacleBase>();
+            obstacleBase.gameObject.SetActive(true);
+            obstacleBase.transform.parent = parent;
+            Obstacle obstacle = obstacleDict.ContainsKey(type) ? CreateObstacleWithType(cell, obstacleBase, obstacleDict[type]) : null;
+            return obstacle;
         }
 
         public Item CreateRandomItem(Transform parent)
@@ -67,7 +81,7 @@ namespace Casual.Utilities
             return  CreateItem(colour, parent);
         }
 
-        private Colour GetRandomColourWithRatio()
+        private Colour GetRandomColourWithRatio() // TODO
         {
             int value = Random.Range(0, totalColourRatio);
             foreach (var temp in colourRatioDict.Keys)
@@ -101,6 +115,14 @@ namespace Casual.Utilities
             item.Prepare(itemBase, colour);
 
             return item;
+        }
+        
+        private Obstacle CreateObstacleWithType(CellController cell, ObstacleBase obstacleBase, Type type)
+        {
+            var obstacle = (Obstacle)obstacleBase.gameObject.AddComponent(type);
+            obstacle.Prepare(cell);
+
+            return obstacle;
         }
     }
 }

@@ -72,27 +72,31 @@ namespace Casual.Abstracts
             spriteRenderer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
         }
 
-        public int CheckMatches()
+        public bool CheckMatches()
         {
-            if (ItemType != ItemType.Cube && ItemType != ItemType.MultipleCube) return 0;
+            if (ItemType != ItemType.Cube && ItemType != ItemType.MultipleCube) return false;
             var matchCount = BoardController.Instance.MatchFinder.FindMatches(cellController, colour).Count;
             OnMatchCountChanged(matchCount);
-            return matchCount - 1;
+            return matchCount > 1;
         }
         
         protected virtual void OnMatchCountChanged(int matchCount) { }
         
-        public virtual void Fall() => FallAnimation.FallToTarget(CellController.GetFallTarget());
-
+        public virtual void Fall()
+        {
+            if(cellController.IsItemCanFall) 
+                FallAnimation.FallToTarget(CellController.GetFallTarget());
+        }
 
         public virtual void OnNeighbourExecute() => Execute();
         
         public virtual void ExecuteWithTapp() => Execute();
         public virtual void ExecuteWithSpecial() => Execute();
 
-        protected virtual void Execute()
+        private void Execute()
         {
-            FallAnimation.PrepareRemove();
+            cellController.ItemExecuted();
+            if(FallAnimation != null) FallAnimation.PrepareRemove();
             CellController.Item = null;
         }
 

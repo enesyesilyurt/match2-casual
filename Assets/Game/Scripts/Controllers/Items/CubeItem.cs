@@ -23,12 +23,16 @@ namespace Casual.Controllers.Items
         
         public override void ExecuteWithTapp()
         {
+            if(!CellController.IsItemCanExecute) return;
             base.ExecuteWithTapp();
             CreateParticle();
             foreach (var neighbor in CellController.GetNeighbours())
             {
                 if(neighbor != null && neighbor.HasItem())
                     neighbor.Item.OnNeighbourExecute();
+                
+                if(neighbor != null && neighbor.HasObstacle())
+                    neighbor.Obstacle.OnNeighbourExecute();
             }
             
             RemoveItem();
@@ -36,12 +40,16 @@ namespace Casual.Controllers.Items
 
         public override void ExecuteWithSpecial()
         {
+            if(!CellController.IsItemCanExecute) return;
             base.ExecuteWithSpecial();
             CreateParticle();
             foreach (var neighbor in CellController.GetNeighbours())
             {
                 if(neighbor != null && neighbor.HasItem())
                     neighbor.Item.OnNeighbourExecute();
+
+                if(neighbor != null && neighbor.HasObstacle())
+                    neighbor.Obstacle.OnNeighbourExecute();
             }
             
             RemoveItem();

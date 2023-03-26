@@ -3682,6 +3682,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentLevelIndex: 1
   levels:
+  - {fileID: 11400000, guid: 90b08b2f683a7c34488b789234be7675, type: 2}
   - {fileID: 11400000, guid: 3bf582ba35e1f254e9c62b4dea5248e1, type: 2}
   - {fileID: 11400000, guid: 74c637d18d0ec1b4b8287d0f1edbccf3, type: 2}
   boardController: {fileID: 1885619620}
@@ -11923,6 +11924,8 @@ MonoBehaviour:
   balloonSprite: {fileID: 21300000, guid: 178311532f2b20f459cce863cae6702c, type: 3}
   boxSprite: {fileID: 21300000, guid: e06fe33369ba8e74fba15f90fcefef7c, type: 3}
   pumpkinSprite: {fileID: 21300000, guid: c0d609371826bb04fbfc5824a1330e0c, type: 3}
+  bushSprite: {fileID: 21300000, guid: 237add0575042964f96a884c33879e15, type: 3}
+  bubbleSprite: {fileID: 21300000, guid: 237add0575042964f96a884c33879e15, type: 3}
   BlueCube: {fileID: 2800000, guid: 5e5d1b718aef8664ea2375d674caf446, type: 3}
   GreenCube: {fileID: 2800000, guid: caad5af19bf27fe418dd3b9f4d2f5b46, type: 3}
   PinkCube: {fileID: 2800000, guid: ea3d40ad91149224d8407dd758ee99cc, type: 3}
@@ -11932,6 +11935,8 @@ MonoBehaviour:
   Balloon: {fileID: 2800000, guid: 178311532f2b20f459cce863cae6702c, type: 3}
   Pumpkin: {fileID: 2800000, guid: c0d609371826bb04fbfc5824a1330e0c, type: 3}
   Box: {fileID: 2800000, guid: e06fe33369ba8e74fba15f90fcefef7c, type: 3}
+  Bubble: {fileID: 2800000, guid: 742f52afe0a104f478d877db51a3321a, type: 3}
+  Bush: {fileID: 2800000, guid: bdd674017bb6b4807aa77daf5310b898, type: 3}
 --- !u!1 &975622749
 GameObject:
   m_ObjectHideFlags: 0
@@ -12521,6 +12526,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemBasePrefab: {fileID: 485355811722257603, guid: 211984e0aa8111546ae02940a2bd2c91, type: 3}
+  obstacleBasePrefab: {fileID: 2198275718264902022, guid: 681ce0781acc014468061fa99804d288, type: 3}
 --- !u!1 &1011502522
 GameObject:
   m_ObjectHideFlags: 0

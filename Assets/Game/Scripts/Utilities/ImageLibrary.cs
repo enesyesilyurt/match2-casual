@@ -15,6 +15,8 @@ namespace Casual.Utilities
         [SerializeField] private Sprite balloonSprite;
         [SerializeField] private Sprite boxSprite;
         [SerializeField] private Sprite pumpkinSprite;
+        [SerializeField] private Sprite bushSprite;
+        [SerializeField] private Sprite bubbleSprite;
 
         [Header("EditorTextures")] 
         public Texture BlueCube;
@@ -26,6 +28,8 @@ namespace Casual.Utilities
         public Texture Balloon;
         public Texture Pumpkin;
         public Texture Box;
+        public Texture Bubble;
+        public Texture Bush;
         
         private Dictionary<Colour, SpriteSet> colourSetsDict = new();
 
@@ -53,6 +57,10 @@ namespace Casual.Utilities
                     return boxSprite;
                 case ItemType.Pumpkin:
                     return pumpkinSprite;
+                case ItemType.Bubble:
+                    return bubbleSprite;
+                case ItemType.Bush:
+                    return bushSprite;
                 default:
                     return colourSetsDict[colour].DefaultSprite;
             }

@@ -9,6 +9,8 @@ namespace Casual.Enums
         Balloon,
         Box,
         Pumpkin,
-        Empty
+        Empty,
+        Bubble,
+        Bush
     }
 }
