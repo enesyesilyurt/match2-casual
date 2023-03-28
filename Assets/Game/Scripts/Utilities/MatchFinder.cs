@@ -26,7 +26,8 @@ namespace Casual.Utilities
         private void FindMatches(CellController cellController, Colour colour, List<CellController> resultCells)
         {
             if (cellController == null) return;
-            if (cellController.HasItem() && !cellController.IsItemCanTap && cellController.Item.IsCube()) return;
+            if (cellController.Obstacle is IItemExecuteBlocker || 
+                cellController.Item is not IMatchable) return;
 			    
             var row = cellController.GridPosition.x;
             var column = cellController.GridPosition.y;

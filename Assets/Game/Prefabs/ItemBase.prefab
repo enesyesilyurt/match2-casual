@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c34466a140695274989fcbd1dbe1d6dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FallAnimation: {fileID: 5544277274156236321}
+  fallAnimation: {fileID: 5544277274156236321}
 --- !u!114 &5544277274156236321
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58,5 +58,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 983e410bec27ff544bb6817bae380526, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Item: {fileID: 0}
-  targetCellController: {fileID: 0}

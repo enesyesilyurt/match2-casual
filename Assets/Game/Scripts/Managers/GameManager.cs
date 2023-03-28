@@ -18,8 +18,12 @@ namespace Casual.Managers
         [SerializeField] private float offsetY;
         [SerializeField, Header("Match Counts")] private int propellerMatchCount = 6;
         [SerializeField, Header("Objects")] private GameObject border;
-
+        [SerializeField] private GameObject itemBasePrefab;
+        [SerializeField] private GameObject obstacleBasePrefab;
+        
         public GameObject Border => border;
+        public GameObject ItemBasePrefab => itemBasePrefab;
+        public GameObject ObstacleBasePrefab => obstacleBasePrefab;
         public int PropellerMatchCount => propellerMatchCount;
         public float CubeMaxSpeed => cubeMaxSpeed;
         public float ShuffleSpeed => shuffleSpeed;
@@ -38,7 +42,6 @@ namespace Casual.Managers
             DOTween.Init();
             DOTween.SetTweensCapacity(300,100);
             
-            ItemFactory.Instance.Initialize();
             ImageLibrary.Instance.Setup();
             ParticleLibrary.Instance.Setup();
             CollectibleManager.Instance.Setup();

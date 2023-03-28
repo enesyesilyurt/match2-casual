@@ -2,7 +2,10 @@ using Casual.Controllers;
 using Casual.Enums;
 using Casual.Managers;
 using Casual.Utilities;
+using UnityEditor;
 using UnityEngine;
+using System;
+using Unity.VisualScripting;
 
 namespace Casual.Abstracts
 {
@@ -10,12 +13,12 @@ namespace Casual.Abstracts
     {
         private const int BaseSortingOrder = 10;
 
-        public FallAnimation FallAnimation;
-        
+        private FallAnimation fallAnimation;
         private CellController cellController;
         protected SpriteRenderer spriteRenderer;
         protected Colour colour;
 
+        public FallAnimation FallAnimation => fallAnimation;
         public Colour Colour => colour;
         
         public ItemType ItemType { get; protected set; }
@@ -43,10 +46,13 @@ namespace Casual.Abstracts
             }
         }
 
-        public virtual void Prepare(ItemBase itemBase, Colour colour)
+        public static Item SpawnItem(Type type, Vector3 position, out ItemBase itemBase)
         {
-            FallAnimation = itemBase.FallAnimation;
-            FallAnimation.Prepare(this);
+            itemBase = SimplePool
+                .Spawn(GameManager.Instance.ItemBasePrefab, position, Quaternion.Euler(Vector3.zero))
+                .GetComponent<ItemBase>();
+            itemBase.Prepare();
+            return (Item)itemBase.gameObject.AddComponent(type);
         }
 
         public void SetSortingOrder(int y)
@@ -82,34 +88,22 @@ namespace Casual.Abstracts
         }
         
         protected virtual void OnMatchCountChanged(int matchCount) { }
-        
-        public virtual void Fall()
+
+        protected void Prepare(ItemBase itemBase, Sprite sprite)
         {
-            if(cellController.IsItemCanFall) 
-                FallAnimation.FallToTarget(CellController.GetFallTarget());
+            fallAnimation = itemBase.FallAnimation;
+            fallAnimation.Prepare(this);
+            AddSprite(sprite);
         }
 
-        public virtual void OnNeighbourExecute() => Execute();
-        
-        public virtual void ExecuteWithTapp() => Execute();
-        public virtual void ExecuteWithSpecial() => Execute();
-
-        private void Execute()
+        protected void PrepareRemove()
         {
-            cellController.ItemExecuted();
-            if(FallAnimation != null) FallAnimation.PrepareRemove();
             CellController.Item = null;
-        }
-
-        public bool IsCube()
-        {
-            return ItemType == ItemType.Cube || ItemType == ItemType.MultipleCube;
-        }
-
-        protected void RemoveItem() // TODO
-        {
-            CellController = null;
             LevelManager.Instance.ItemExecute(this);
+        }
+
+        protected void RemoveItem()
+        {
             Destroy(gameObject.GetComponent<Item>());
             SimplePool.Despawn(gameObject);
         }

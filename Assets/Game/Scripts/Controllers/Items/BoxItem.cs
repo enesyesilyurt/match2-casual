@@ -8,42 +8,39 @@ using UnityEngine;
 
 namespace Casual
 {
-    public class BoxItem : Item
+    public class BoxItem : Item, IInitializableWithData, IExecutableWithNeighbor, IExecutableWithSpecial
     {
         private int health = 2;
         
-        public override void Prepare(ItemBase itemBase, Colour colour)
+        public void InitializeWithData(ItemData itemData, ItemBase itemBase)
         {
             ItemType = ItemType.Box;
-            var boxSprite = ImageLibrary.Instance.GetSprite(Colour.Empty, ItemType.Box);
-            AddSprite(boxSprite);
+            AddSprite(ImageLibrary.Instance.GetSprite(Colour.Empty, ItemType.Box));
         }
 
-        public override void OnNeighbourExecute()
+        public void Execute()
         {
-            if(!CellController.IsItemCanExecute) return;
             health--;
             if (health <= 0)
             {
-                base.OnNeighbourExecute();
+                PrepareExecute();
                 RemoveItem();
             }
         }
 
-        public override void ExecuteWithTapp()
+        public void PrepareExecute()
         {
-            
+            PrepareRemove();
         }
 
-        public override void ExecuteWithSpecial()
+        public void ExecuteWithSpecial()
         {
-            if(!CellController.IsItemCanExecute) return;
-            health--;
-            if (health <= 0)
-            {
-                base.ExecuteWithSpecial();
-                RemoveItem();
-            }
+            Execute();
+        }
+
+        public void ExecuteWithNeighbor()
+        {
+            Execute();
         }
     }
 }

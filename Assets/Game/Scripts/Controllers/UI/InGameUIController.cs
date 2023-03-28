@@ -31,7 +31,7 @@ namespace Casual
                 targetObject.Setup(targets[i]);
             }
         
-            moveCountText.text = LevelManager.Instance.CurrentLevel.maxMove.ToString();
+            moveCountText.text = LevelManager.Instance.CurrentLevel.MaxMove.ToString();
         }
 
         public void ResetLevel()

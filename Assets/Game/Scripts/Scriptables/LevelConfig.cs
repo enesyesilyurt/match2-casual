@@ -1,4 +1,7 @@
 using Casual.Entities;
+using NaughtyAttributes;
+using UnityEditor;
+using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -9,9 +12,9 @@ public class LevelConfig : ScriptableObject
     public int CoinCount;
     public int GridHeight;
     public int GridWidth;
-    public int maxMove;
-    public ColourRatio[] ColourRatios;
-    public SquareBlock[] Blocks;
+    public int MaxMove;
+    public ItemRatio[] ItemRatios;
+    public ItemData[] ItemDatas;
     public Target[] Targets;
 }
 

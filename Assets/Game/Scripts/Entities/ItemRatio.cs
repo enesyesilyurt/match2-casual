@@ -5,9 +5,9 @@ using UnityEngine;
 namespace Casual.Entities
 {
     [Serializable]
-    public class ColourRatio
+    public class ItemRatio
     {
-        public Colour Colour;
+        public ItemData ItemData;
         public int Ratio;
     }
 }

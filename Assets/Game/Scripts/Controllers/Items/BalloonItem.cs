@@ -8,33 +8,44 @@ using UnityEngine;
 
 namespace Casual
 {
-    public class BalloonItem : Item
+    public class BalloonItem : Item, IInitializableWithData, IInitializableWithoutData, IExecutableWithNeighbor, IExecutableWithSpecial, IMovable
     {
-        public override void Prepare(ItemBase itemBase, Colour colour)
+        public void InitializeWithData(ItemData itemData, ItemBase itemBase)
         {
             ItemType = ItemType.Balloon;
-            var sprite = ImageLibrary.Instance.GetSprite(Colour.Empty, ItemType.Balloon);
-            AddSprite(sprite);
-            base.Prepare(itemBase, colour);
+            Prepare(itemBase, ImageLibrary.Instance.GetSprite(Colour.Empty, ItemType.Balloon));
+        }
+
+        public void InitializeWithoutData(ItemBase itemBase)
+        {
+            ItemType = ItemType.Balloon;
+            Prepare(itemBase, ImageLibrary.Instance.GetSprite(Colour.Empty, ItemType.Balloon));
         }
     
-        public override void ExecuteWithTapp()
+        public void Fall()
         {
-            
+            FallAnimation.FallToTarget(CellController.GetFallTarget());
         }
 
-        public override void ExecuteWithSpecial()
+        public void Execute()
         {
-            if(!CellController.IsItemCanExecute) return;
-            base.ExecuteWithSpecial();
+            PrepareExecute();
             RemoveItem();
         }
 
-        public override void OnNeighbourExecute()
+        public void PrepareExecute()
         {
-            if(!CellController.IsItemCanExecute) return;
-            base.OnNeighbourExecute();
-            RemoveItem();
+            PrepareRemove();
+        }
+
+        public void ExecuteWithSpecial()
+        {
+            Execute();
+        }
+
+        public void ExecuteWithNeighbor()
+        {
+            Execute();
         }
     }
 }

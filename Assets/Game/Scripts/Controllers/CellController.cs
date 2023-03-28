@@ -20,11 +20,6 @@ namespace Casual.Controllers
 
         public Vector2Int GridPosition => gridPosition;
         public bool IsFillingCell => isFillingCell;
-        
-        public bool IsItemCanTap { get; set; } = true;
-
-        public bool IsItemCanFall { get; set; } = true;
-        public bool IsItemCanExecute { get; set; } = true;
 
         public Item Item
         {
@@ -70,7 +65,8 @@ namespace Casual.Controllers
 
         public bool CanTap()
         {
-            return IsItemCanTap && HasItem() && !item.FallAnimation.IsFalling;
+            var blocker = (IItemExecuteBlocker)obstacle;
+            return blocker == null && HasItem() && !item.FallAnimation.IsFalling;
         }
         
         public void Prepare()
@@ -84,14 +80,6 @@ namespace Casual.Controllers
             
             UpdateLabel();
             CreateBorder();
-        }
-
-        public void ItemExecuted()
-        {
-            if (obstacle != null)
-            {
-                obstacle.OnItemExecuted();
-            }
         }
 
         private void CreateBorder()

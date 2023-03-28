@@ -1,51 +1,54 @@
 using System.Collections;
 using System.Collections.Generic;
+using Casual;
 using Casual.Abstracts;
 using Casual.Controllers;
 using Casual.Enums;
+using Casual.Managers;
 using Casual.Utilities;
 using UnityEngine;
 
-public class PropellerItem : Item // TODO
+public class PropellerItem : Item, IInitializableWithoutData, IExecutableWithTap, IExecutableWithSpecial, IMovable
 {
-    public override void Prepare(ItemBase itemBase, Colour colour)
+    public void InitializeWithoutData(ItemBase itemBase)
     {
         ItemType = ItemType.Propeller;
         var propellerSprite = ImageLibrary.Instance.GetSprite(Colour.Empty, ItemType.Propeller);
-        AddSprite(propellerSprite);
-        base.Prepare(itemBase, colour);
+        Prepare(itemBase, propellerSprite);
+    }
+
+    public void Execute()
+    {
+        PrepareExecute();
+        foreach (var neighbor in CellController.GetNeighbours())
+        {
+            if (neighbor != null && neighbor.HasItem())
+            {
+                var item = (IExecutableWithSpecial)neighbor.Item;
+                item?.ExecuteWithSpecial();
+            }
+        }
+        FallAndFillManager.Instance.Proccess();
+        RemoveItem();
+    }
+
+    public void PrepareExecute()
+    {
+        PrepareRemove();
+    }
+
+    public void Fall()
+    {
+        FallAnimation.FallToTarget(CellController.GetFallTarget());
     }
     
-    public override void OnNeighbourExecute()
+    public void ExecuteWithSpecial()
     {
-        
+        Execute();
     }
 
-    public override void ExecuteWithSpecial()
+    public void ExecuteWithTap()
     {
-        if(!CellController.IsItemCanExecute) return;
-        base.ExecuteWithSpecial();
-        foreach (var neighbor in CellController.GetNeighbours())
-        {
-            if (neighbor != null && neighbor.HasItem())
-            {
-                neighbor.Item.ExecuteWithSpecial();
-            }
-        }
-        RemoveItem();
-    }
-
-    public override void ExecuteWithTapp()
-    {
-        if(!CellController.IsItemCanExecute) return;
-        base.ExecuteWithTapp();
-        foreach (var neighbor in CellController.GetNeighbours())
-        {
-            if (neighbor != null && neighbor.HasItem())
-            {
-                neighbor.Item.ExecuteWithSpecial();
-            }
-        }
-        RemoveItem();
+        Execute();
     }
 }

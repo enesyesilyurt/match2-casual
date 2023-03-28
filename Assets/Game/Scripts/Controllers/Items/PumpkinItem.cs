@@ -8,43 +8,50 @@ using UnityEngine;
 
 namespace Casual
 {
-    public class PumpkinItem : Item
+    public class PumpkinItem : Item, IInitializableWithData, IInitializableWithoutData, IExecutableWithNeighbor, IExecutableWithSpecial, IMovable
     {
         private int health = 2;
-        
-        public override void Prepare(ItemBase itemBase, Colour colour)
+
+        public void InitializeWithData(ItemData itemData, ItemBase itemBase)
         {
             ItemType = ItemType.Pumpkin;
-            var pumpkinSprite = ImageLibrary.Instance.GetSprite(Colour.Empty, ItemType.Pumpkin);
-            AddSprite(pumpkinSprite);
-            base.Prepare(itemBase, colour);
+            Prepare(itemBase, ImageLibrary.Instance.GetSprite(Colour.Empty, ItemType.Pumpkin));
         }
 
-        public override void OnNeighbourExecute()
+        public void InitializeWithoutData(ItemBase itemBase)
         {
-            if(!CellController.IsItemCanExecute) return;
+            ItemType = ItemType.Pumpkin;
+            Prepare(itemBase, ImageLibrary.Instance.GetSprite(Colour.Empty, ItemType.Pumpkin));
+        }
+    
+        public void Fall()
+        {
+            FallAnimation.FallToTarget(CellController.GetFallTarget());
+        }
+
+        public void Execute()
+        {
             health--;
             if (health <= 0)
             {
-                base.OnNeighbourExecute();
+                PrepareExecute();
                 RemoveItem();
             }
         }
 
-        public override void ExecuteWithTapp()
+        public void PrepareExecute()
         {
-            
+            PrepareRemove();
         }
 
-        public override void ExecuteWithSpecial()
+        public void ExecuteWithSpecial()
         {
-            if(!CellController.IsItemCanExecute) return;
-            health--;
-            if (health <= 0)
-            {
-                base.ExecuteWithSpecial();
-                RemoveItem();
-            }
+            Execute();
+        }
+
+        public void ExecuteWithNeighbor()
+        {
+            Execute();
         }
     }
 }

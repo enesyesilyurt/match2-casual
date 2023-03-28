@@ -7,6 +7,7 @@ using Casual.Managers;
 using Casual.Utilities;
 using DG.Tweening;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -14,7 +15,6 @@ namespace Casual.Controllers
 {
     public class BoardController : MonoSingleton<BoardController>
     {
-        public const int MinimumMatchCount = 2;
         public static Vector2Int[] directions = new[]
         {
             Vector2Int.up,
@@ -87,7 +87,7 @@ namespace Casual.Controllers
             {
                 for (var y = 0; y < LevelManager.Instance.CurrentLevel.GridHeight; y++)
                 {
-                    if (LevelManager.Instance.CurrentLevel.Blocks[y * gridWidth + x].ItemType == ItemType.None) continue;
+                    if (LevelManager.Instance.CurrentLevel.ItemDatas[y * gridWidth + x].ItemType == null) continue;
                     cellCount++;
                     var cell = SimplePool.Spawn(cellControllerPrefab.gameObject, Vector3.zero, Quaternion.identity).GetComponent<CellController>();
                     Cells[y * gridWidth + x] = cell;
@@ -109,85 +109,12 @@ namespace Casual.Controllers
         {
             if(onAnim) return;
             if (!cellController.CanTap()) return;
-
-            if (cellController.Item.ItemType != ItemType.Cube && cellController.Item.ItemType != ItemType.MultipleCube)
-            {
-                cellController.Item.ExecuteWithTapp();
-                TargetManager.Instance.DecreaseMoveCount();
-                FallAndFillManager.Instance.DoFalls();
-                FallAndFillManager.Instance.DoFills();
-                return;
-            }
             
-            var cells = matchFinder.FindMatches(cellController, cellController.Item.Colour);
-            if (cells.Count < MinimumMatchCount) 
-                FailMatchSequence(cellController.Item.transform);
-            else if (cellController.Item.ItemType == ItemType.Cube)
-            {
-                ExplodeMatchingCells(cells);
-                FallAndFillManager.Instance.DoFalls();
-                FallAndFillManager.Instance.DoFills();
-                TargetManager.Instance.DecreaseMoveCount();
-            }
-            else
-            {
-                StartCoroutine(TappedSpecialItemRoutine(cellController, cells));
-                TargetManager.Instance.DecreaseMoveCount();
-            }
-        }
-
-        private void FailMatchSequence(Transform target)
-        {
-            var sequence = DOTween.Sequence();
-            sequence.Append(target.DORotate(Vector3.forward * 5, .1f).SetEase(Ease.OutSine));
-            sequence.Append(target.DORotate(Vector3.forward * -5, .1f).SetEase(Ease.OutSine));
-            sequence.Append(target.DORotate(Vector3.zero, .1f).SetEase(Ease.OutSine));
-            sequence.OnComplete(() => target.rotation = quaternion.identity);
-        }
-
-        private IEnumerator TappedSpecialItemRoutine(CellController cell, List<CellController> cells)
-        {
-            onAnim = true;
-            var itemType = cell.Item.ItemType;
-            for (var i = 0; i < cells.Count; i++)
-            {
-                var explodedCell = cells[i];
-                var item = explodedCell.Item;
-                item.IncreaseSortingOrder(LevelManager.Instance.CurrentLevel.GridHeight);
-                item.FallAnimation.PrepareRemove();
-                item.transform.DOMove(cell.transform.position, GameManager.Instance.SpecialMergeTime)
-                    .SetEase(Ease.InBack, GameManager.Instance.SpecialMergeOverShoot)
-                    .OnComplete(() =>
-                    {
-                        item.ExecuteWithTapp();
-                        onAnim = false;
-                    });
-            }
-
-            yield return new WaitForSeconds(GameManager.Instance.SpecialMergeTime + .1f);
+            var executableWithTap = (IExecutableWithTap)cellController.Item;
+            if (executableWithTap == null) return;
             
-            if(itemType == ItemType.MultipleCube)
-            {
-                CreatePropeller(cell);
-            }
-            FallAndFillManager.Instance.DoFalls();
-            FallAndFillManager.Instance.DoFills();
-        }
-
-        private void CreatePropeller(CellController cell)
-        {
-            cell.Item = ItemFactory.Instance.CreateItem(
-                Colour.None, this.ItemsParent, ItemType.Propeller);
-            cell.Item.transform.position = cell.transform.position;
-            cell.Item.Fall();
-        }
-        
-        private void ExplodeMatchingCells(List<CellController> cells)
-        {
-            for (var i = 0; i < cells.Count; i++)
-            {
-                cells[i].Item.ExecuteWithTapp();
-            }
+            executableWithTap.ExecuteWithTap();
+            TargetManager.Instance.DecreaseMoveCount();
         }
 
         public void CheckMatches()
@@ -236,6 +163,26 @@ namespace Casual.Controllers
             yield return new WaitForSeconds(GameManager.Instance.ShuffleSpeed);
             onAnim = false;
             CheckMatches();
+        }
+
+        public void CreatePropeller(CellController cell, float delay)
+        {
+            StartCoroutine(CreatePropellerRoutine(cell, delay));
+        }
+
+        private IEnumerator CreatePropellerRoutine(CellController cell, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            CreatePropeller(cell);
+            FallAndFillManager.Instance.Proccess();
+        }
+
+        private void CreatePropeller(CellController cell)
+        {
+            var item = Item.SpawnItem(typeof(PropellerItem), cell.transform.position, out ItemBase itemBase);
+            var initializableWithoutData = (IInitializableWithoutData)item;
+            initializableWithoutData.InitializeWithoutData(itemBase);
+            cell.Item = item;
         }
 
         public CellController GetCell(Vector2Int position)

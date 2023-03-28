@@ -1,450 +1,294 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Casual.Controllers.Items;
 using Casual.Entities;
 using Casual.Enums;
 using Casual.Utilities;
+using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.Callbacks;
 using UnityEngine;
 
-public class LevelEditor : EditorWindow
+namespace Casual
 {
-    private static LevelEditor window;
-    public static SquareBlock[] levelSquares;
-    public static Target[] targetSquares = new Target[4];
-    public static ColourRatio[] itemSpawnRatios = new ColourRatio[9];
-
-    private static Colour[] colours = new[]
-        { Colour.Blue, Colour.Red, Colour.Green, Colour.Yellow, Colour.Pink, Colour.Purple };
-
-    private static Texture[] itemTextures = new[]
+    public class LevelEditor : EditorWindow
     {
-        ImageLibrary.Instance.BlueCube,
-        ImageLibrary.Instance.RedCube,
-        ImageLibrary.Instance.YellowCube,
-        ImageLibrary.Instance.PinkCube,
-        ImageLibrary.Instance.PurpleCube,
-        ImageLibrary.Instance.GreenCube,
-        ImageLibrary.Instance.Balloon,
-        ImageLibrary.Instance.Box,
-        ImageLibrary.Instance.Pumpkin
-    };
-    
-    static int gridWidth = 9;
-    static int gridHeight = 11;
-    private int maxMove;
-    private string levelName;
-    private bool isBlockSelected;
-    private Texture itemTexture;
-    private ItemType selectedItemType = ItemType.None;
-    private ItemType selectedObstacleType = ItemType.None;
-    private Colour selectedColour = Colour.None;
+        private static LevelConfig levelConfig;
+        private Vector2 scrollPos;
+        private int width;
+        private int height;
+        private ItemData selectedItemData;
+        private bool isItemSelected = false;
+        private int gridSize;
 
-    [MenuItem("Casual/Level editor")]
-    public static void Init()
-    {
-        window = (LevelEditor)EditorWindow.GetWindow(typeof(LevelEditor));
-        
-        levelSquares = new SquareBlock[gridHeight * gridWidth];
-        for (int x = 0; x < gridWidth; x++)
+        [OnOpenAsset]
+        public static bool OpenData(int instanceId, int line)
         {
-            for (int y = 0; y < gridHeight; y++)
+            levelConfig = EditorUtility.InstanceIDToObject(instanceId) as LevelConfig;
+            if (levelConfig == null)
             {
-                SquareBlock sqBlocks = new SquareBlock();
-                sqBlocks.ItemType = ItemType.None;
-                sqBlocks.ObstacleType = ItemType.None;
+                return false;
+            }
 
-                levelSquares[gridWidth * y + x] = sqBlocks;
+            CreateWindow<LevelEditor>("Level Editor", typeof(SceneView)).Init(levelConfig);
+            return true;
+        }
+
+        void Init(LevelConfig obj)
+        {
+            levelConfig = obj;
+            width = levelConfig.GridWidth;
+            height = levelConfig.GridHeight;
+            gridSize = width * height;
+            if (levelConfig.ItemDatas == null)
+            {
+                levelConfig.ItemDatas = new ItemData[gridSize];
+                for (int x = 0; x < levelConfig.GridWidth; x++)
+                {
+                    for (int y = 0; y < levelConfig.GridHeight; y++)
+                    {
+                        ItemData sqBlocks = new ItemData();
+                        sqBlocks.ItemType = null;
+                        sqBlocks.ObstacleType = null;
+                        levelConfig.ItemDatas[levelConfig.GridWidth * y + x] = sqBlocks;
+                    }
+                }
+            }
+            selectedItemData = new ItemData();
+
+            levelConfig.ItemRatios = new ItemRatio[4];
+            for (int i = 0; i < 4; i++)
+            {
+                levelConfig.ItemRatios[i] = new ItemRatio();
+                levelConfig.ItemRatios[i].ItemData = new ItemData();
             }
         }
 
-        for (int i = 0; i < 4; i++)
+        private void OnGUI()
         {
-            Target target = new Target();
-            target.Colour = Colour.None;
-            targetSquares[i] = target;
+            scrollPos = GUILayout.BeginScrollView(scrollPos);
+            DrawLevelName();
+            SetGridSize();
+            if(gridSize != levelConfig.GridHeight * levelConfig.GridWidth) return;
+            SetMoveCount();
+            SetAwards();
+            SetColourRatios();
+            SetSelectableItems();
+            SetSelectableObstacles();
+            DrawBlocks();
+            GUILayout.EndScrollView();
+            // GUI.DrawTexture(new Rect(50,50,50,50),ImageLibrary.Instance.GreenCube);
+            // GUI.DrawTexture(new Rect(50,50,50,50),ImageLibrary.Instance.Balloon);
         }
-        
-        window.Show();
-    }
 
-    private void OnGUI()
-    {
-        GUI.changed = false;
-        Color squareColor = new Color(0.8f, 0.8f, 0.8f);
-        GUI.color = squareColor;
-        
-        GUILayout.Space(10);
-        // SetSize();
-        GUILayout.Space(10);
-        SetMaxMoves();
-        GUILayout.Space(10);
-        SetColourRatios();
-        GUILayout.Space(10);
-        AddTargetButtons();
-        GUILayout.Space(10);
-        SetItems();
-        GUILayout.Space(10);
-        SetObstacles();
-        GUILayout.Space(10);
-        SetGrid();
-        GUILayout.Space(10);
-        CreateLevel();
-    }
-
-    void SetColourRatios()
-    {
-        GUILayout.Label("Item Spawn Ratios:", EditorStyles.boldLabel, new GUILayoutOption[]
+        private void DrawLevelName()
         {
-            GUILayout.Width(150),
-            GUILayout.Height(15)
-        });
-        GUILayout.BeginHorizontal();
-
-        for (int i = 0; i < itemTextures.Length; i++)
-        {
-            GUILayout.Box(itemTextures[i], new GUILayoutOption[]
+            GUILayout.Label(levelConfig.name, EditorStyles.boldLabel, new GUILayoutOption[]
             {
-                GUILayout.Width(50),
-                GUILayout.Height(50)
+                GUILayout.Width(150),
+                GUILayout.Height(15)
             });
         }
-        GUILayout.EndHorizontal();
-        GUILayout.BeginHorizontal();
-        for (int i = 0; i < 9; i++)
-        {
-            var colourRatio = itemSpawnRatios[i] == null ? new ColourRatio() : itemSpawnRatios[i];
-            //colourRatio.Colour = colours[i]; TODO
-            colourRatio.Ratio = EditorGUILayout.IntField("", colourRatio.Ratio, new GUILayoutOption[] {
-                GUILayout.Width (51)
-            });
-            itemSpawnRatios[i] = colourRatio;
-        }
-        GUILayout.EndHorizontal();
-    }
 
-    void SetMaxMoves()
-    {
-        GUILayout.Label("Max Move:", EditorStyles.boldLabel, new GUILayoutOption[]
-        {
-            GUILayout.Width(100),
-            GUILayout.Height(15)
-        });
-        
-        maxMove = EditorGUILayout.IntField("", maxMove, new GUILayoutOption[] {
-            GUILayout.Width (50),
-            GUILayout.MaxWidth (200)
-        });
-    }
-
-    void SetObstacles()
-    {
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Obstacle Type:", EditorStyles.boldLabel, new GUILayoutOption[]
-        {
-            GUILayout.Width(100),
-            GUILayout.Height(50)
-        });
-        AddSelectedObstacleTypeButton(null, ItemType.None);
-        AddSelectedObstacleTypeButton(ImageLibrary.Instance.Bubble, ItemType.Bubble);
-        AddSelectedObstacleTypeButton(ImageLibrary.Instance.Bush, ItemType.Bush);
-        GUILayout.EndHorizontal();
-    }
-
-    void SetItems()
-    {
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Item Type:", EditorStyles.boldLabel, new GUILayoutOption[]
-        {
-            GUILayout.Width(100),
-            GUILayout.Height(50)
-        });
-        AddSelectedItemTypeButton(null, ItemType.None, Colour.None);
-        AddSelectedItemTypeButton(new Texture2D(40,40), ItemType.Empty, Colour.Empty);
-        AddSelectedItemTypeButton(ImageLibrary.Instance.BlueCube, ItemType.Cube, Colour.Blue);
-        AddSelectedItemTypeButton(ImageLibrary.Instance.PinkCube, ItemType.Cube, Colour.Pink);
-        AddSelectedItemTypeButton(ImageLibrary.Instance.GreenCube, ItemType.Cube, Colour.Green);
-        AddSelectedItemTypeButton(ImageLibrary.Instance.PurpleCube, ItemType.Cube, Colour.Purple);
-        AddSelectedItemTypeButton(ImageLibrary.Instance.RedCube, ItemType.Cube, Colour.Red);
-        AddSelectedItemTypeButton(ImageLibrary.Instance.YellowCube, ItemType.Cube, Colour.Yellow);
-        AddSelectedItemTypeButton(ImageLibrary.Instance.Balloon, ItemType.Balloon, Colour.None);
-        AddSelectedItemTypeButton(ImageLibrary.Instance.Pumpkin, ItemType.Pumpkin, Colour.None);
-        AddSelectedItemTypeButton(ImageLibrary.Instance.Box, ItemType.Box, Colour.None);
-        GUILayout.EndHorizontal();
-    }
-
-    void SetGrid()
-    {
-        var imageButton = new object();
-        
-        GUILayout.BeginVertical();
-
-        for (int y = 0; y < gridHeight; y++)
+        private void SetMoveCount()
         {
             GUILayout.BeginHorizontal();
-            for (int x = 0; x < gridWidth; x++)
+            GUILayout.Label("Max Move:", EditorStyles.boldLabel, new GUILayoutOption[]
             {
-                var sqr = levelSquares[gridWidth * y + x];
-                if (isBlockSelected)
+                GUILayout.Width(150),
+                GUILayout.Height(15)
+            });
+            levelConfig.MaxMove = EditorGUILayout.IntField("", levelConfig.MaxMove, new GUILayoutOption[]
+            {
+                GUILayout.Width(150),
+                GUILayout.MaxWidth(200)
+            });
+            GUILayout.EndHorizontal();
+        }
+
+        private void SetGridSize()
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Grid Width/Height:", EditorStyles.boldLabel, new GUILayoutOption[]
+            {
+                GUILayout.Width(150),
+                GUILayout.Height(15)
+            });
+             width = EditorGUILayout.IntField("", Math.Clamp(width, 0, 9), new GUILayoutOption[] {
+                GUILayout.Width (50)
+            });
+            height = EditorGUILayout.IntField("", Math.Clamp(height, 0, 11), new GUILayoutOption[] {
+                GUILayout.Width (50),
+            });
+
+            levelConfig.GridWidth = Math.Clamp(width, 0, 9);
+            levelConfig.GridHeight = Math.Clamp(height, 0, 11);
+            if (gridSize != (levelConfig.GridHeight * levelConfig.GridWidth))
+            {
+                gridSize = levelConfig.GridWidth * levelConfig.GridHeight;
+                levelConfig.ItemDatas = new ItemData[gridSize];
+                for (int x = 0; x < levelConfig.GridWidth; x++)
                 {
-                    if (sqr.ItemType == ItemType.None)
+                    for (int y = 0; y < levelConfig.GridHeight; y++)
                     {
-                        imageButton = null;
-                    }
-                    else if (sqr.ItemType == ItemType.Empty)
-                    {
-                        imageButton = new Texture2D(40,40);
-                    }
-                    else if (sqr.ItemType == ItemType.Balloon)
-                    {
-                        imageButton = ImageLibrary.Instance.Balloon;
-                    }
-                    else if (sqr.ItemType == ItemType.Pumpkin)
-                    {
-                        imageButton = ImageLibrary.Instance.Pumpkin;
-                    }
-                    else if (sqr.ItemType == ItemType.Box)
-                    {
-                        imageButton = ImageLibrary.Instance.Box;
-                    }
-                    else if (sqr.ItemType == ItemType.Cube)
-                    {
-                        if (sqr.Colour == Colour.Blue)
-                        {
-                            imageButton = ImageLibrary.Instance.BlueCube;
-                        }
-                        else if (sqr.Colour == Colour.Red)
-                        {
-                            imageButton = ImageLibrary.Instance.RedCube;
-                        }
-                        else if (sqr.Colour == Colour.Green)
-                        {
-                            imageButton = ImageLibrary.Instance.GreenCube;
-                        }
-                        else if (sqr.Colour == Colour.Yellow)
-                        {
-                            imageButton = ImageLibrary.Instance.YellowCube;
-                        }
-                        else if (sqr.Colour == Colour.Pink)
-                        {
-                            imageButton = ImageLibrary.Instance.PinkCube;
-                        }
-                        else if (sqr.Colour == Colour.Purple)
-                        {
-                            imageButton = ImageLibrary.Instance.PurpleCube;
-                        }
-                    }
-                }
-                else
-                {
-                    if (sqr.ObstacleType == ItemType.None)
-                    {
-                        imageButton = null;
-                    }
-                    if (sqr.ObstacleType == ItemType.Bush)
-                    {
-                        imageButton = ImageLibrary.Instance.Bush;
-                    }
-                    if (sqr.ObstacleType == ItemType.Bubble)
-                    {
-                        imageButton = ImageLibrary.Instance.Bubble;
-                    }
-                }
-                
-                if (GUILayout.Button(imageButton as Texture, new GUILayoutOption[]
-                    {
-                        GUILayout.Width(50),
-                        GUILayout.Height(50)
-                    }))
-                {
-                    if (isBlockSelected)
-                    {
-                        SetType(x, y, selectedItemType, sqr.ObstacleType, selectedColour);
-                    }
-                    else
-                    {
-                        SetType(x, y, sqr.ItemType, selectedObstacleType, sqr.Colour);
+                        ItemData sqBlocks = new ItemData();
+                        sqBlocks.ItemType = null;
+                        sqBlocks.ObstacleType = null;
+                        levelConfig.ItemDatas[levelConfig.GridWidth * y + x] = sqBlocks;
                     }
                 }
             }
             GUILayout.EndHorizontal();
         }
-        GUILayout.EndVertical();
-    }
 
-    void CreateLevel()
-    {
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Level Name:", new GUILayoutOption[]
+        private void SetAwards()
         {
-            GUILayout.Width(75),
-            GUILayout.Height(20)
-        });
-        levelName = EditorGUILayout.TextField(levelName, new GUILayoutOption[]
-        {
-            GUILayout.Width(100),
-            GUILayout.Height(20)
-        });
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Star Count:", EditorStyles.boldLabel, new GUILayoutOption[]
+            {
+                GUILayout.Width(150),
+                GUILayout.Height(15)
+            });
+            levelConfig.GridHeight = EditorGUILayout.IntField("", levelConfig.GridHeight, new GUILayoutOption[] {
+                GUILayout.Width (50)
+            });
+            GUILayout.EndHorizontal();
+            
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Coin Count:", EditorStyles.boldLabel, new GUILayoutOption[]
+            {
+                GUILayout.Width(150),
+                GUILayout.Height(15)
+            });
+            levelConfig.GridWidth = EditorGUILayout.IntField("", levelConfig.GridWidth, new GUILayoutOption[] {
+                GUILayout.Width (50)
+            });
+            GUILayout.EndHorizontal();
+        }
         
-        if (GUILayout.Button("Create Level", new GUILayoutOption[]
+        private void SetSelectableItems()
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Obstacle Type:", EditorStyles.boldLabel, new GUILayoutOption[]
             {
                 GUILayout.Width(100),
-                GUILayout.Height(20)
-            }))
+                GUILayout.Height(50)
+            });
+            AddSelectedTypeButton(null, null);
+            AddSelectedTypeButton(new Texture2D(40,40), null);
+            AddSelectedTypeButton(ImageLibrary.Instance.BlueCube, typeof(CubeItem).FullName, true, Colour.Blue);
+            AddSelectedTypeButton(ImageLibrary.Instance.PinkCube, "Casual.Controllers.Items.CubeItem", true, Colour.Pink);
+            AddSelectedTypeButton(ImageLibrary.Instance.GreenCube, "Casual.Controllers.Items.CubeItem",  true, Colour.Green);
+            AddSelectedTypeButton(ImageLibrary.Instance.PurpleCube, "Casual.Controllers.Items.CubeItem",  true, Colour.Purple);
+            AddSelectedTypeButton(ImageLibrary.Instance.RedCube, "Casual.Controllers.Items.CubeItem",  true, Colour.Red);
+            AddSelectedTypeButton(ImageLibrary.Instance.YellowCube, "Casual.Controllers.Items.CubeItem",  true, Colour.Yellow);
+            AddSelectedTypeButton(ImageLibrary.Instance.Balloon, "Casual.Controllers.Items.BalloonItem");
+            AddSelectedTypeButton(ImageLibrary.Instance.Pumpkin, "Casual.Controllers.Items.PumpkinItem");
+            AddSelectedTypeButton(ImageLibrary.Instance.Box, "Casual.Controllers.Items.BoxItem");
+            GUILayout.EndHorizontal();
+        }
+
+        private void SetColourRatios()
         {
-            var scriptable = ScriptableObject.CreateInstance<LevelConfig>();
-            AssetDatabase.CreateAsset(scriptable, "Assets/Game/Scriptables/Levels/" + levelName + ".asset");
-
-            scriptable.GridWidth = gridWidth;
-            scriptable.GridHeight = gridHeight;
-            List<ColourRatio> temp = new ();
-            for (int i = 0; i < itemSpawnRatios.Length; i++)
-            {
-                if(itemSpawnRatios[i].Ratio == 0) continue;
-                temp.Add(itemSpawnRatios[i]);
-            }
-            if(temp.Count > 0)
-                scriptable.ColourRatios = temp.ToArray();
-
-            List<Target> tempTarget = new ();
-
+            GUILayout.BeginHorizontal();
             for (int i = 0; i < 4; i++)
             {
-                if ((targetSquares[i].Colour != Colour.None || targetSquares[i].ItemType != ItemType.None) && targetSquares[i].Count > 0)
-                {
-                    Target target = new Target();
-                    target.ItemType = targetSquares[i].ItemType;
-                    target.Colour = targetSquares[i].Colour;
-                    target.Count = targetSquares[i].Count;
-                    tempTarget.Add(target);
-                }
+                AddSpawnRatioButton(levelConfig.ItemRatios[i]);
             }
-            
-            if(tempTarget.Count > 0)
-                scriptable.Targets = tempTarget.ToArray();
-
-            scriptable.maxMove = maxMove;
-            scriptable.Blocks = new SquareBlock[gridWidth * gridHeight];
-
-            for (int x = 0; x < gridWidth; x++)
-            {
-                for (int y = gridHeight - 1; y >= 0; y--)
-                {
-                    var block = new SquareBlock();
-                    block.Colour = levelSquares[gridWidth * y + x].Colour;
-                    block.ItemType = levelSquares[gridWidth * y + x].ItemType;
-                    block.ObstacleType = levelSquares[gridWidth * y + x].ObstacleType;
-                    scriptable.Blocks[(gridHeight - 1 - y) * gridWidth + x] = block;
-                }
-            }
-
-            AssetDatabase.SaveAssets();
-            EditorUtility.FocusProjectWindow();
-
-            Selection.activeObject = scriptable;
+            GUILayout.EndHorizontal();
         }
-        GUILayout.EndHorizontal();
-    }
 
-    void AddSelectedItemTypeButton(Texture texture, ItemType itemType, Colour colour)
-    {
-        if (GUILayout.Button(texture as Texture, new GUILayoutOption[]
-            {
-                GUILayout.Width(50),
-                GUILayout.Height(50)
-            }))
+        private void AddSpawnRatioButton(ItemRatio itemRatio)
         {
-            selectedItemType = itemType;
-            selectedColour = colour;
-            isBlockSelected = true;
-        }
-    }
-    
-    void AddTargetButtons()
-    {
-        GUILayout.Label("Targets:", EditorStyles.boldLabel, new GUILayoutOption[]
-        {
-            GUILayout.Width(100),
-            GUILayout.Height(15)
-        });
-        
-        GUILayout.BeginHorizontal();
-        
-        var image = new object();
-        for (int i = 0; i < 4; i++)
-        {
-            if (targetSquares[i].Colour == Colour.None)
-            {
-                image = null;
-            }
-            else if (targetSquares[i].Colour == Colour.Blue)
-            {
-                image = ImageLibrary.Instance.BlueCube;
-            }
-            else if (targetSquares[i].Colour == Colour.Red)
-            {
-                image = ImageLibrary.Instance.RedCube;
-            }
-            else if (targetSquares[i].Colour == Colour.Green)
-            {
-                image = ImageLibrary.Instance.GreenCube;
-            }
-            else if (targetSquares[i].Colour == Colour.Yellow)
-            {
-                image = ImageLibrary.Instance.YellowCube;
-            }
-            else if (targetSquares[i].Colour == Colour.Pink)
-            {
-                image = ImageLibrary.Instance.PinkCube;
-            }
-            else if (targetSquares[i].Colour == Colour.Purple)
-            {
-                image = ImageLibrary.Instance.PurpleCube;
-            }
-            else if (targetSquares[i].ItemType == ItemType.Balloon)
-            {
-                image = ImageLibrary.Instance.Balloon;
-            }
-            
-            if (GUILayout.Button(image as Texture, new GUILayoutOption[]
+            GUILayout.BeginVertical();
+
+            if (GUILayout.Button(itemRatio.ItemData.Texture as Texture, new GUILayoutOption[]
                 {
                     GUILayout.Width(50),
                     GUILayout.Height(50)
                 }))
             {
-                targetSquares[i].Colour = selectedColour;
+                itemRatio.ItemData.ItemType = selectedItemData.ItemType;
+                itemRatio.ItemData.Colour = selectedItemData.Colour;
+                itemRatio.ItemData.Texture = selectedItemData.Texture;
             }
             
-        }
-        GUILayout.EndHorizontal();
-
-        GUILayout.BeginHorizontal();
-        for (int i = 0; i < 4; i++)
-        {
-            targetSquares[i].Count = EditorGUILayout.IntField(targetSquares[i].Count, new GUILayoutOption[] {
+            itemRatio.Ratio = EditorGUILayout.IntField("", itemRatio.Ratio, new GUILayoutOption[] {
                 GUILayout.Width (50)
             });
+            GUILayout.EndVertical();
         }
-        GUILayout.EndHorizontal();
-    }
-    
-    void AddSelectedObstacleTypeButton(Texture texture, ItemType obstacleType)
-    {
-        if (GUILayout.Button(texture as Texture, new GUILayoutOption[]
-            {
-                GUILayout.Width(50),
-                GUILayout.Height(50)
-            }))
-        {
-            selectedObstacleType = obstacleType;
-            isBlockSelected = false;
-        }
-    }
 
-    void SetType(int x, int y, ItemType itemType, ItemType obstacleType, Colour colour)
-    {
-        levelSquares[gridWidth * y + x].ItemType = itemType;
-        levelSquares[gridWidth * y + x].ObstacleType = obstacleType;
-        levelSquares[gridWidth * y + x].Colour = colour;
+        private void SetSelectableObstacles()
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Obstacle Type:", EditorStyles.boldLabel, new GUILayoutOption[]
+            {
+                GUILayout.Width(100),
+                GUILayout.Height(50)
+            });
+            AddSelectedTypeButton(null, null, false);
+            AddSelectedTypeButton(ImageLibrary.Instance.Bubble, "BubbleObstacle", false);
+            AddSelectedTypeButton(ImageLibrary.Instance.Bush, "BushObstacle", false);
+            GUILayout.EndHorizontal();
+        }
+
+        private void DrawBlocks()
+        {
+            GUILayout.BeginVertical();
+            for (int y = 0; y < levelConfig.GridHeight; y++)
+            {
+                GUILayout.BeginHorizontal();
+                for (int x = 0; x < levelConfig.GridWidth; x++)
+                {
+                    var itemData = levelConfig.ItemDatas[y * levelConfig.GridWidth + x];
+                    if (GUILayout.Button(itemData.Texture, new GUILayoutOption[]
+                        {
+                            GUILayout.Width(50),
+                            GUILayout.Height(50)
+                        }))
+                    {
+                        if (isItemSelected)
+                        {
+                            itemData.ItemType = selectedItemData.ItemType;
+                        }
+                        else
+                        {
+                            itemData.ObstacleType = selectedItemData.ObstacleType;
+                        }
+
+                        itemData.Colour = selectedItemData.Colour;
+                        itemData.Texture = selectedItemData.Texture;
+                    }
+                }
+                GUILayout.EndHorizontal();
+            }
+            GUILayout.EndVertical();
+        }
+        
+        void AddSelectedTypeButton(Texture texture, string type, bool isItem = true, Colour colour = Colour.None)
+        {
+            if (GUILayout.Button(texture as Texture, new GUILayoutOption[]
+                {
+                    GUILayout.Width(50),
+                    GUILayout.Height(50)
+                }))
+            {
+                if (isItem)
+                {
+                    selectedItemData.ItemType = type;
+
+                }
+                else
+                {
+                    selectedItemData.ObstacleType = type;
+                }
+
+                selectedItemData.Texture = texture;
+                selectedItemData.Colour = colour;
+                isItemSelected = isItem;
+            }
+        }
     }
 }

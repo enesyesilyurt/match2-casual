@@ -22,6 +22,8 @@ namespace Casual.Managers
 	    
 	    public void Initialize()
 	    {
+		    currentLevelIndex = PlayerPrefs.GetInt(currentLevelName);
+
 		    TargetManager.Instance.Initialize();
 		    
 		    GameManager.Instance.GameStateChanged += OnGameStateChanged;
@@ -49,7 +51,7 @@ namespace Casual.Managers
 	    private void Prepare()
 	    {
 		    currentLevelIndex = PlayerPrefs.GetInt(currentLevelName);
-		    ItemFactory.Instance.Setup();
+
 		    PrepareBoard();
 		    PrepareLevel();
 		    StartFalls();
@@ -77,8 +79,7 @@ namespace Casual.Managers
 	    private void StartFalls()
 	    {
 		    fallAndFillManager.Init(boardController);
-		    FallAndFillManager.Instance.DoFalls();
-		    FallAndFillManager.Instance.DoFills();
+		    FallAndFillManager.Instance.Proccess();
 		    fallAndFillManager.StartFalls();
 	    }
 
@@ -97,21 +98,20 @@ namespace Casual.Managers
 	    {
 		    for (var i = 0; i < boardController.Cells.Length; i++)
 		    {
-			     if (CurrentLevel.Blocks[i].ItemType == ItemType.None) continue;
-				 var itemData = CurrentLevel.Blocks[i];
+			     if (CurrentLevel.ItemDatas[i].ItemType == null) continue;
+				 var itemData = CurrentLevel.ItemDatas[i];
 				 var cell = boardController.Cells[i];
-				 Item item = (itemData.Colour == Colour.Empty || itemData.Colour == Colour.None) && itemData.ItemType == ItemType.Cube
-					 ? ItemFactory.Instance.CreateRandomItem(boardController.ItemsParent)
-					 : ItemFactory.Instance.CreateItem(itemData.Colour, boardController.ItemsParent, itemData.ItemType);
+
+				 var item = Item.SpawnItem(Type.GetType(itemData.ItemType), cell.transform.position, out ItemBase itemBase);
+				 var initializableWithData = (IInitializableWithData)item;
+				 initializableWithData.InitializeWithData(itemData, itemBase);
 				 
 				 cell.Item = item;
-				 item.transform.position = cell.transform.position;
 				 
-				 if (CurrentLevel.Blocks[i].ObstacleType == ItemType.None) continue;
-				 Obstacle obstacle = ItemFactory.Instance.CreateObstacle(cell, boardController.ItemsParent, itemData.ObstacleType);
+				 // if (CurrentLevel.ItemDatas[i].ObstacleType == null) continue;
+				 // Obstacle obstacle = Obstacle.SpawnObstacle(Type.GetType(itemData.ItemType), cell.transform.position, out ObstacleBase obstacleBase); //ItemFactory.Instance.CreateObstacle(cell, boardController.ItemsParent, itemData.ObstacleType);
     			 						
-				 cell.Obstacle = obstacle;
-				 obstacle.transform.position = cell.transform.position;
+				 // cell.Obstacle = obstacle;
 		    }
 	    }
 	}

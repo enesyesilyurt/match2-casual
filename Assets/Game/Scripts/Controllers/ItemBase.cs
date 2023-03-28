@@ -5,6 +5,14 @@ namespace Casual.Controllers
 {
     public class ItemBase : MonoBehaviour
     {
-        public FallAnimation FallAnimation;
+        [SerializeField] private FallAnimation fallAnimation;
+
+        public FallAnimation FallAnimation => fallAnimation;
+
+        public void Prepare()
+        {
+            gameObject.SetActive(true);
+            transform.SetParent(BoardController.Instance.ItemsParent);
+        }
     }
 }

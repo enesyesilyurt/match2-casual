@@ -14,308 +14,71 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StarCount: 2
   CoinCount: 12
-  GridHeight: 11
-  GridWidth: 9
-  maxMove: 3
-  ColourRatios: []
-  Blocks:
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 1
-    ObstacleType: 9
-    Colour: 5
-  - ItemType: 1
-    ObstacleType: 9
-    Colour: 5
-  - ItemType: 1
-    ObstacleType: 9
-    Colour: 5
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 1
-    ObstacleType: 8
-    Colour: 5
-  - ItemType: 1
-    ObstacleType: 8
-    Colour: 5
-  - ItemType: 1
-    ObstacleType: 8
-    Colour: 2
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 3
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 3
-  - ItemType: 1
-    ObstacleType: 0
-    Colour: 3
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 1
-    ObstacleType: 0
+  GridHeight: 3
+  GridWidth: 3
+  MaxMove: 50
+  ItemRatios:
+  - ItemData:
+      Texture: {fileID: 2800000, guid: 5e5d1b718aef8664ea2375d674caf446, type: 3}
+      ItemType: Casual.Controllers.Items.CubeItem
+      ObstacleType: 
+      Colour: 1
+    Ratio: 5
+  - ItemData:
+      Texture: {fileID: 2800000, guid: caad5af19bf27fe418dd3b9f4d2f5b46, type: 3}
+      ItemType: Casual.Controllers.Items.CubeItem
+      ObstacleType: 
+      Colour: 2
+    Ratio: 5
+  - ItemData:
+      Texture: {fileID: 0}
+      ItemType: 
+      ObstacleType: 
+      Colour: 0
+    Ratio: 0
+  - ItemData:
+      Texture: {fileID: 0}
+      ItemType: 
+      ObstacleType: 
+      Colour: 0
+    Ratio: 0
+  ItemDatas:
+  - Texture: {fileID: 2800000, guid: 5e5d1b718aef8664ea2375d674caf446, type: 3}
+    ItemType: Casual.Controllers.Items.CubeItem
+    ObstacleType: 
     Colour: 1
-  - ItemType: 1
-    ObstacleType: 0
+  - Texture: {fileID: 2800000, guid: 5e5d1b718aef8664ea2375d674caf446, type: 3}
+    ItemType: Casual.Controllers.Items.CubeItem
+    ObstacleType: 
     Colour: 1
-  - ItemType: 1
-    ObstacleType: 0
+  - Texture: {fileID: 2800000, guid: 5e5d1b718aef8664ea2375d674caf446, type: 3}
+    ItemType: Casual.Controllers.Items.CubeItem
+    ObstacleType: 
     Colour: 1
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
-  - ItemType: 0
-    ObstacleType: 0
-    Colour: 0
+  - Texture: {fileID: 2800000, guid: 5e5d1b718aef8664ea2375d674caf446, type: 3}
+    ItemType: Casual.Controllers.Items.CubeItem
+    ObstacleType: 
+    Colour: 1
+  - Texture: {fileID: 2800000, guid: 5e5d1b718aef8664ea2375d674caf446, type: 3}
+    ItemType: Casual.Controllers.Items.CubeItem
+    ObstacleType: 
+    Colour: 1
+  - Texture: {fileID: 2800000, guid: 5e5d1b718aef8664ea2375d674caf446, type: 3}
+    ItemType: Casual.Controllers.Items.CubeItem
+    ObstacleType: 
+    Colour: 1
+  - Texture: {fileID: 2800000, guid: 5e5d1b718aef8664ea2375d674caf446, type: 3}
+    ItemType: Casual.Controllers.Items.CubeItem
+    ObstacleType: 
+    Colour: 1
+  - Texture: {fileID: 2800000, guid: 5e5d1b718aef8664ea2375d674caf446, type: 3}
+    ItemType: Casual.Controllers.Items.CubeItem
+    ObstacleType: 
+    Colour: 1
+  - Texture: {fileID: 2800000, guid: 5e5d1b718aef8664ea2375d674caf446, type: 3}
+    ItemType: Casual.Controllers.Items.CubeItem
+    ObstacleType: 
+    Colour: 1
   Targets:
   - Colour: 3
     ItemType: 1

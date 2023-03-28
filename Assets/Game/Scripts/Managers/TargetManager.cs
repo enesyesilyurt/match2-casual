@@ -1,6 +1,7 @@
 using System;
 using Casual.Managers;
 using Casual.Utilities;
+using UnityEngine;
 
 public class TargetManager : MonoSingleton<TargetManager>
 {
@@ -19,7 +20,7 @@ public class TargetManager : MonoSingleton<TargetManager>
     private void Prepare()
     {
         targetCount = LevelManager.Instance.CurrentLevel.Targets.Length;
-        moveCount = LevelManager.Instance.CurrentLevel.maxMove;
+        moveCount = LevelManager.Instance.CurrentLevel.MaxMove;
     }
 
     public void DecreaseMoveCount()
