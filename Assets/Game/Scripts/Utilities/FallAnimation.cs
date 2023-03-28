@@ -37,7 +37,7 @@ namespace Casual.Utilities
 
         public void FallToTarget(CellController targetCellController)
         {
-            if (this.targetCellController != null && targetCellController.GridPosition.y >= this.targetCellController.GridPosition.y) return;
+            if (item != null && this.targetCellController != null && targetCellController.GridPosition.y >= this.targetCellController.GridPosition.y) return;
             
             if(jumpSequence != null)
                 jumpSequence.Kill();
@@ -52,6 +52,7 @@ namespace Casual.Utilities
         {
             if(jumpSequence != null)
                 jumpSequence.Kill();
+            StopFalling();
         }
 
         public void StopFalling()

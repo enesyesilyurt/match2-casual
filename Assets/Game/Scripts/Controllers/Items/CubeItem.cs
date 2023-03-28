@@ -10,10 +10,21 @@ using UnityEngine;
 
 namespace Casual.Controllers.Items
 {
-    public class CubeItem : Item, IInitializableWithData, IExecutableWithTap, IExecutableWithSpecial, IMatchable, IMovable
+    public class CubeItem : Item, IInitializableWithData, IExecutableWithTap, IExecutableWithSpecial, IMatchableWithColour, IMovable
     {
         public static int MinimumMatchCount = 2;
         public static int PropellerSpawnCount = 6;
+
+        public Colour Value => colour;
+        
+        public bool CanMove
+        {
+            get
+            {
+                return CellController.GetFirstCellBelow() != null &&
+                       !CellController.GetFirstCellBelow().HasItem();
+            }
+        }
         
         public void InitializeWithData(ItemData itemData, ItemBase itemBase)
         {
@@ -29,10 +40,9 @@ namespace Casual.Controllers.Items
             {
                 if (neighbor != null && neighbor.HasItem())
                 {
-                    if ((IExecutableWithNeighbor)(neighbor.Item) != null)
+                    if (neighbor.Item.TryGetComponent<IExecutableWithNeighbor>(out IExecutableWithNeighbor executableWithNeighbor))
                     {
-                        var executableWithNeighbor = (IExecutableWithNeighbor)(neighbor.Item);
-                        executableWithNeighbor?.ExecuteWithNeighbor();
+                        executableWithNeighbor.ExecuteWithNeighbor();
                     }
                 }
             }
@@ -49,8 +59,8 @@ namespace Casual.Controllers.Items
             CreateParticle();
             RemoveItem();
         }
-    
-        public void Fall()
+
+        public void Move()
         {
             FallAnimation.FallToTarget(CellController.GetFallTarget());
         }
@@ -78,7 +88,7 @@ namespace Casual.Controllers.Items
             }
         }
 
-        protected override void OnMatchCountChanged(int matchCount)
+        public void OnMatchCountChanged(int matchCount)
         {
             if (matchCount < GameManager.Instance.PropellerMatchCount)
             {
@@ -127,7 +137,6 @@ namespace Casual.Controllers.Items
                 var executable = (IExecutable)item;
                 executable.PrepareExecute();
                 item.IncreaseSortingOrder(LevelManager.Instance.CurrentLevel.GridHeight);
-                item.FallAnimation.PrepareRemove();
                 item.transform.DOMove(cell.transform.position, GameManager.Instance.SpecialMergeTime)
                     .SetEase(Ease.InBack, GameManager.Instance.SpecialMergeOverShoot)
                     .OnComplete(() =>
@@ -136,6 +145,14 @@ namespace Casual.Controllers.Items
                     });
             }
             BoardController.Instance.CreatePropeller(cell, GameManager.Instance.SpecialMergeTime);
+        }
+
+        public int CheckMatchWithColour()
+        {
+            var matchCountTemp = BoardController.Instance.MatchFinder.FindMatches(CellController, colour).Count;
+            var matchCount = matchCountTemp - 1 <= 0 ? 0 : matchCountTemp - 1;
+            OnMatchCountChanged(matchCount);
+            return matchCount;
         }
     }
 }

@@ -6,6 +6,7 @@ namespace Casual
 {
     public interface IMovable
     {
-        void Fall();
+        bool CanMove { get; }
+        void Move();
     }
 }

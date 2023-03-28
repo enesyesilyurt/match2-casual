@@ -10,6 +10,15 @@ using UnityEngine;
 
 public class PropellerItem : Item, IInitializableWithoutData, IExecutableWithTap, IExecutableWithSpecial, IMovable
 {
+    public bool CanMove
+    {
+        get
+        {
+            return CellController.GetFirstCellBelow() != null &&
+                   !CellController.GetFirstCellBelow().HasItem();
+        }
+    }
+    
     public void InitializeWithoutData(ItemBase itemBase)
     {
         ItemType = ItemType.Propeller;
@@ -19,8 +28,10 @@ public class PropellerItem : Item, IInitializableWithoutData, IExecutableWithTap
 
     public void Execute()
     {
+        var cell = CellController;
         PrepareExecute();
-        foreach (var neighbor in CellController.GetNeighbours())
+        RemoveItem();
+        foreach (var neighbor in cell.GetNeighbours())
         {
             if (neighbor != null && neighbor.HasItem())
             {
@@ -29,7 +40,6 @@ public class PropellerItem : Item, IInitializableWithoutData, IExecutableWithTap
             }
         }
         FallAndFillManager.Instance.Proccess();
-        RemoveItem();
     }
 
     public void PrepareExecute()
@@ -37,7 +47,7 @@ public class PropellerItem : Item, IInitializableWithoutData, IExecutableWithTap
         PrepareRemove();
     }
 
-    public void Fall()
+    public void Move()
     {
         FallAnimation.FallToTarget(CellController.GetFallTarget());
     }

@@ -11,6 +11,15 @@ namespace Casual
     public class PumpkinItem : Item, IInitializableWithData, IInitializableWithoutData, IExecutableWithNeighbor, IExecutableWithSpecial, IMovable
     {
         private int health = 2;
+        
+        public bool CanMove
+        {
+            get
+            {
+                return CellController.GetFirstCellBelow() != null &&
+                       !CellController.GetFirstCellBelow().HasItem();
+            }
+        }
 
         public void InitializeWithData(ItemData itemData, ItemBase itemBase)
         {
@@ -24,7 +33,7 @@ namespace Casual
             Prepare(itemBase, ImageLibrary.Instance.GetSprite(Colour.Empty, ItemType.Pumpkin));
         }
     
-        public void Fall()
+        public void Move()
         {
             FallAnimation.FallToTarget(CellController.GetFallTarget());
         }

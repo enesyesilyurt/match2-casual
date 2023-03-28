@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -119,17 +120,19 @@ namespace Casual.Controllers
 
         public void CheckMatches()
         {
-            int totalMatchCount = 0;
+            int totalColourMatchCount = 0;
             int counter = 0;
             for (var i = 0; i < gridSize; i++)
             {
                 if (Cells[i] == null) continue;
-                if(!Cells[i].HasItem()) continue;
-                totalMatchCount += Cells[i].Item.CheckMatches();
+                if(Cells[i].Item == null) continue;
+                if(!Cells[i].Item.TryGetComponent<IMatchableWithColour>(out IMatchableWithColour matchable)) continue;
+                var value = matchable.CheckMatchWithColour();
+                totalColourMatchCount += value;
                 counter++;
             }
 
-            if (totalMatchCount <= 0 && counter == cellCount)
+            if (totalColourMatchCount <= 0 && counter == cellCount)
             {
                 onAnim = true;
                 StartCoroutine(ShuffleRoutine());
@@ -175,6 +178,7 @@ namespace Casual.Controllers
             yield return new WaitForSeconds(delay);
             CreatePropeller(cell);
             FallAndFillManager.Instance.Proccess();
+            CheckMatches();
         }
 
         private void CreatePropeller(CellController cell)

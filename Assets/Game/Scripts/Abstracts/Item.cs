@@ -78,17 +78,6 @@ namespace Casual.Abstracts
             spriteRenderer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
         }
 
-        public int CheckMatches()
-        {
-            if (ItemType != ItemType.Cube && ItemType != ItemType.MultipleCube) return 0;
-            var matchCountTemp = BoardController.Instance.MatchFinder.FindMatches(cellController, colour).Count;
-            var matchCount = matchCountTemp - 1 <= 0 ? 0 : matchCountTemp - 1;
-            OnMatchCountChanged(matchCount);
-            return matchCount;
-        }
-        
-        protected virtual void OnMatchCountChanged(int matchCount) { }
-
         protected void Prepare(ItemBase itemBase, Sprite sprite)
         {
             fallAnimation = itemBase.FallAnimation;
@@ -98,12 +87,13 @@ namespace Casual.Abstracts
 
         protected void PrepareRemove()
         {
-            CellController.Item = null;
+            FallAnimation.PrepareRemove();
             LevelManager.Instance.ItemExecute(this);
         }
 
         protected void RemoveItem()
         {
+            CellController.Item = null;
             Destroy(gameObject.GetComponent<Item>());
             SimplePool.Despawn(gameObject);
         }

@@ -46,21 +46,19 @@ namespace Casual.Managers
             boardController.CheckMatches();
         }
 
-        public void DoFalls()
+        private void DoFalls()
         {
             for (var i = 0; i < gridSize; i++)
             {
                 var cell = boardController.Cells[i];
                 if(cell == null) continue;
+                
                 var movable = (IMovable)cell.Item;
-                if (cell.HasItem() && cell.GetFirstCellBelow() != null && !cell.GetFirstCellBelow().HasItem())
-                {
-                    movable.Fall();
-                }
+                if (movable is { CanMove: true }) movable.Move();
             }
         }
 
-        public void DoFills()
+        private void DoFills()
         {
             for (var i = 0; i < fillingCells.Length; i++)
             {
@@ -86,7 +84,7 @@ namespace Casual.Managers
                     if (!cell.HasItem()) continue;
                     cell.Item.transform.position = cellPosition;
                     var movable = (IMovable)cell.Item;
-                    movable.Fall();
+                    movable.Move();
                 }
             }
             boardController.CheckMatches();

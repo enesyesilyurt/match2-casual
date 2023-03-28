@@ -4,9 +4,8 @@ using UnityEngine;
 
 namespace Casual
 {
-    public interface IMatchableItem<T>
+    public interface IMatchableWithType
     {
-        public T Value { get; }
-        int CheckMatch();
+        bool CheckMatchWithType();
     }
 }

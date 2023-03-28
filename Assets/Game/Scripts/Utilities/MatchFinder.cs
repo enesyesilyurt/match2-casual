@@ -26,25 +26,24 @@ namespace Casual.Utilities
         private void FindMatches(CellController cellController, Colour colour, List<CellController> resultCells)
         {
             if (cellController == null) return;
-            if (cellController.Obstacle is IItemExecuteBlocker || 
-                cellController.Item is not IMatchable) return;
-			    
+            if(cellController.Item == null) return;
+            if (cellController.Obstacle is IItemExecuteBlocker) return;
+            if (!cellController.Item.TryGetComponent<IMatchableWithColour>(out IMatchableWithColour matchable)) return;
+            
             var row = cellController.GridPosition.x;
             var column = cellController.GridPosition.y;
             if (visitedCells[LevelManager.Instance.CurrentLevel.GridWidth * column + row]) return;
+            if(cellController.Item.Colour != colour) return;
 
-            if (cellController.Item.Colour == colour)
-            {
-                visitedCells[LevelManager.Instance.CurrentLevel.GridWidth * column + row] = true;
-                resultCells.Add(cellController);
-			    
-                var neighbours = cellController.GetNeighbours();
-                if (neighbours.Length == 0) return;
+            visitedCells[LevelManager.Instance.CurrentLevel.GridWidth * column + row] = true;
+            resultCells.Add(cellController);
+			
+            var neighbours = cellController.GetNeighbours();
+            if (neighbours.Length == 0) return;
 	    
-                for (var i = 0; i < neighbours.Length; i++)
-                {	
-                    FindMatches(neighbours[i], colour, resultCells);
-                }
+            for (var i = 0; i < neighbours.Length; i++)
+            {	
+                FindMatches(neighbours[i], colour, resultCells);
             }
         }
 

@@ -20,10 +20,8 @@ namespace Casual.Managers
 
         private void PrepareCamera()
         {
-            cam.orthographicSize = (9 / cam.aspect) / 2 + GameManager.Instance.OffsetX;
-
-            cam.transform.position = Vector3.right * (9 * GameManager.Instance.OffsetX / 2f - .5f) +
-                                     Vector3.up * 9 * GameManager.Instance.OffsetY / 2f + Vector3.back;
+            cam.transform.position = Vector3.right * (LevelManager.Instance.CurrentLevel.GridWidth * GameManager.Instance.OffsetX / 2f - .5f) +
+                                     Vector3.up * (LevelManager.Instance.CurrentLevel.GridHeight * GameManager.Instance.OffsetY / 2f) + Vector3.back;
         }
     }
 }
