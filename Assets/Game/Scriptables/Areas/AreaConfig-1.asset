@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd2ad2084eb622843b3d180c1a9c9ba5, type: 3}
+  m_Name: AreaConfig-1
+  m_EditorClassIdentifier: 
+  areaName: Wonderville
+  startLevel: 0
+  endLevel: 15
+  menuBackGround: {fileID: 0}
+  upgradeConfigs:
+  - {fileID: 11400000, guid: a7ac9513ea92d724a944a7f3684d17c8, type: 2}
+  - {fileID: 11400000, guid: b174694bacfad314c9aa9cf32eaa8605, type: 2}
