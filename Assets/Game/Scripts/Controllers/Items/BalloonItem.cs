@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Casual
 {
-    public class BalloonItem : Item, IInitializableWithData, IInitializableWithoutData, IExecutableWithNeighbor, IExecutableWithSpecial, IMovable
+    public class BalloonItem : Item, IInitializableWithData, IInitializableWithoutData, IExecutableWithNeighbor, IExecutableWithSpecial, IMovable, ITargetable<string>
     {
         public bool CanMove
         {
@@ -19,16 +19,16 @@ namespace Casual
             }
         }
         
-        public void InitializeWithData(ItemData itemData, ItemBase itemBase)
+        public string Value => nameof(BalloonItem);
+        
+        public void InitializeWithData(ItemData itemData)
         {
-            ItemType = ItemType.Balloon;
-            Prepare(itemBase, ImageLibrary.Instance.GetSprite(Colour.Empty, ItemType.Balloon));
+            Prepare(ImageLibrary.Instance.GetSprite(nameof(BalloonItem)));
         }
 
-        public void InitializeWithoutData(ItemBase itemBase)
+        public void InitializeWithoutData()
         {
-            ItemType = ItemType.Balloon;
-            Prepare(itemBase, ImageLibrary.Instance.GetSprite(Colour.Empty, ItemType.Balloon));
+            Prepare(ImageLibrary.Instance.GetSprite(nameof(BalloonItem)));
         }
     
         public void Move()

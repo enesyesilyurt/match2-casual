@@ -24,7 +24,7 @@ namespace Casual
             targetList.Clear();
             
             var targets = LevelManager.Instance.CurrentLevel.Targets;
-            for (int i = 0; i < targets.Length; i++)
+            for (int i = 0; i < targets.Count; i++)
             {
                 var targetObject = Instantiate(targetPrefab, targetParent);
                 targetList.Add(targetObject);

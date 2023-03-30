@@ -7,7 +7,8 @@ using UnityEngine;
 [Serializable]
 public class Target
 {
+    public Texture Texture;
     public Colour Colour;
-    public ItemType ItemType;
+    public string ItemType;
     public int Count;
 }

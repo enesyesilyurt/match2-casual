@@ -11,7 +11,7 @@ namespace Casual
     {
         public override void Prepare(CellController cell)
         {
-            AddSprite(ImageLibrary.Instance.GetSprite(Colour.None, ItemType.Bubble));
+            AddSprite(ImageLibrary.Instance.GetSprite(nameof(BubbleObstacle)));
         }
         
         public override void OnItemExecuted()

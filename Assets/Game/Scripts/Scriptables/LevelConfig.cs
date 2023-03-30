@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Casual.Entities;
 using NaughtyAttributes;
 using UnityEditor;
@@ -13,8 +14,8 @@ public class LevelConfig : ScriptableObject
     public int GridHeight;
     public int GridWidth;
     public int MaxMove;
-    public ItemRatio[] ItemRatios;
+    public List<ItemRatio> ItemRatios;
     public ItemData[] ItemDatas;
-    public Target[] Targets;
+    public List<Target> Targets;
 }
 

@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
+using Casual.Controllers.Items;
 using Casual.Entities;
 using Casual.Enums;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Casual.Utilities
 {
@@ -41,25 +42,23 @@ namespace Casual.Utilities
             }
         }
 
-        public Sprite GetSprite(Colour colour, ItemType itemType = ItemType.Cube)
+        public Sprite GetSprite(string itemType, Colour colour = Colour.Empty, bool isDefault = true)
         {
             switch (itemType)
             {
-                case ItemType.MultipleCube:
-                    return colourSetsDict[colour].PropellerSprite;
-                case ItemType.Cube:
-                    return colourSetsDict[colour].DefaultSprite;
-                case ItemType.Balloon:
+                case nameof(CubeItem):
+                    return isDefault ? colourSetsDict[colour].DefaultSprite : colourSetsDict[colour].PropellerSprite;
+                case nameof(BalloonItem):
                     return balloonSprite;
-                case ItemType.Propeller:
+                case nameof(PropellerItem):
                     return propellerSprite;
-                case ItemType.Box:
+                case nameof(BoxItem):
                     return boxSprite;
-                case ItemType.Pumpkin:
+                case nameof(PumpkinItem):
                     return pumpkinSprite;
-                case ItemType.Bubble:
+                case nameof(BubbleObstacle):
                     return bubbleSprite;
-                case ItemType.Bush:
+                case nameof(BushObstacle):
                     return bushSprite;
                 default:
                     return colourSetsDict[colour].DefaultSprite;

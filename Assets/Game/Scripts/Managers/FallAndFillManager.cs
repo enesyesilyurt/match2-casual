@@ -53,7 +53,7 @@ namespace Casual.Managers
                 var cell = boardController.Cells[i];
                 if(cell == null) continue;
                 
-                var movable = (IMovable)cell.Item;
+                var movable = cell.Item as IMovable;
                 if (movable is { CanMove: true }) movable.Move();
             }
         }
@@ -73,7 +73,7 @@ namespace Casual.Managers
                     {
                         if (targetCellBelow.Item != null)
                         {
-                            offsetY = targetCellBelow.Item.transform.position.y + GameManager.Instance.OffsetY;
+                            offsetY = targetCellBelow.Item.ItemBase.transform.position.y + GameManager.Instance.OffsetY;
                         }
                     }
 
@@ -82,7 +82,7 @@ namespace Casual.Managers
                     cellPosition.y = cellPosition.y > offsetY ? cellPosition.y : offsetY;
 
                     if (!cell.HasItem()) continue;
-                    cell.Item.transform.position = cellPosition;
+                    cell.Item.ItemBase.transform.position = cellPosition;
                     var movable = (IMovable)cell.Item;
                     movable.Move();
                 }
@@ -93,9 +93,13 @@ namespace Casual.Managers
         private Item CreateRandomItem(Vector3 position)
         {
             var itemData = GetRandomDataWithRatio();
-            var item = Item.SpawnItem(Type.GetType(itemData.ItemType), position, out ItemBase itemBase);
+            var item = ItemFactory.GetItem(itemData.ItemType);
+            
             var initializableWithData = (IInitializableWithData)item;
-            initializableWithData.InitializeWithData(itemData, itemBase);
+            initializableWithData.InitializeWithData(itemData);
+
+            item.ItemBase.transform.position = position;
+            
             return item;
         }
 
@@ -129,7 +133,7 @@ namespace Casual.Managers
             if(LevelManager.Instance.CurrentLevel.ItemRatios == null) return;
             itemRatios.Clear();
             totalColourRatio = 0;
-            for (var i = 0; i < LevelManager.Instance.CurrentLevel.ItemRatios.Length; i++)
+            for (var i = 0; i < LevelManager.Instance.CurrentLevel.ItemRatios.Count; i++)
             {
                 var colourRatio = LevelManager.Instance.CurrentLevel.ItemRatios[i];
                 if(colourRatio.Ratio <= 0) continue;

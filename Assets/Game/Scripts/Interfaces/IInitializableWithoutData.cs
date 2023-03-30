@@ -7,6 +7,6 @@ namespace Casual
 {
     public interface IInitializableWithoutData
     {
-        void InitializeWithoutData(ItemBase itemBase);
+        void InitializeWithoutData();
     }
 }

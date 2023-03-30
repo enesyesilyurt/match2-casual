@@ -8,14 +8,15 @@ using UnityEngine;
 
 namespace Casual
 {
-    public class BoxItem : Item, IInitializableWithData, IExecutableWithNeighbor, IExecutableWithSpecial
+    public class BoxItem : Item, IInitializableWithData, IExecutableWithNeighbor, IExecutableWithSpecial, ITargetable<string>
     {
         private int health = 2;
         
-        public void InitializeWithData(ItemData itemData, ItemBase itemBase)
+        public string Value => nameof(BoxItem);
+        
+        public void InitializeWithData(ItemData itemData)
         {
-            ItemType = ItemType.Box;
-            AddSprite(ImageLibrary.Instance.GetSprite(Colour.Empty, ItemType.Box));
+            Prepare(ImageLibrary.Instance.GetSprite(nameof(BoxItem)));
         }
 
         public void Execute()

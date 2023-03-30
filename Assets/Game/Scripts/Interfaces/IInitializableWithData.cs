@@ -7,6 +7,6 @@ namespace Casual
 {
     public interface IInitializableWithData
     {
-        void InitializeWithData(ItemData itemData, ItemBase itemBase);
+        void InitializeWithData(ItemData itemData);
     }
 }

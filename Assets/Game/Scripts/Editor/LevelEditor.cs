@@ -57,12 +57,8 @@ namespace Casual
             }
             selectedItemData = new ItemData();
 
-            levelConfig.ItemRatios = new ItemRatio[4];
-            for (int i = 0; i < 4; i++)
-            {
-                levelConfig.ItemRatios[i] = new ItemRatio();
-                levelConfig.ItemRatios[i].ItemData = new ItemData();
-            }
+            levelConfig.Targets = new List<Target>();
+            levelConfig.ItemRatios = new List<ItemRatio>();
         }
 
         private void OnGUI()
@@ -73,7 +69,8 @@ namespace Casual
             if(gridSize != levelConfig.GridHeight * levelConfig.GridWidth) return;
             SetMoveCount();
             SetAwards();
-            SetColourRatios();
+            SetItemRatios();
+            SetTargets();
             SetSelectableItems();
             SetSelectableObstacles();
             DrawBlocks();
@@ -150,7 +147,7 @@ namespace Casual
                 GUILayout.Width(150),
                 GUILayout.Height(15)
             });
-            levelConfig.GridHeight = EditorGUILayout.IntField("", levelConfig.GridHeight, new GUILayoutOption[] {
+            levelConfig.StarCount = EditorGUILayout.IntField("", levelConfig.StarCount, new GUILayoutOption[] {
                 GUILayout.Width (50)
             });
             GUILayout.EndHorizontal();
@@ -161,7 +158,7 @@ namespace Casual
                 GUILayout.Width(150),
                 GUILayout.Height(15)
             });
-            levelConfig.GridWidth = EditorGUILayout.IntField("", levelConfig.GridWidth, new GUILayoutOption[] {
+            levelConfig.CoinCount = EditorGUILayout.IntField("", levelConfig.CoinCount, new GUILayoutOption[] {
                 GUILayout.Width (50)
             });
             GUILayout.EndHorizontal();
@@ -170,33 +167,98 @@ namespace Casual
         private void SetSelectableItems()
         {
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Obstacle Type:", EditorStyles.boldLabel, new GUILayoutOption[]
+            GUILayout.Label("Item Type:", EditorStyles.boldLabel, new GUILayoutOption[]
             {
                 GUILayout.Width(100),
                 GUILayout.Height(50)
             });
+            
             AddSelectedTypeButton(null, null);
-            AddSelectedTypeButton(new Texture2D(40,40), null);
-            AddSelectedTypeButton(ImageLibrary.Instance.BlueCube, typeof(CubeItem).FullName, true, Colour.Blue);
-            AddSelectedTypeButton(ImageLibrary.Instance.PinkCube, "Casual.Controllers.Items.CubeItem", true, Colour.Pink);
-            AddSelectedTypeButton(ImageLibrary.Instance.GreenCube, "Casual.Controllers.Items.CubeItem",  true, Colour.Green);
-            AddSelectedTypeButton(ImageLibrary.Instance.PurpleCube, "Casual.Controllers.Items.CubeItem",  true, Colour.Purple);
-            AddSelectedTypeButton(ImageLibrary.Instance.RedCube, "Casual.Controllers.Items.CubeItem",  true, Colour.Red);
-            AddSelectedTypeButton(ImageLibrary.Instance.YellowCube, "Casual.Controllers.Items.CubeItem",  true, Colour.Yellow);
-            AddSelectedTypeButton(ImageLibrary.Instance.Balloon, "Casual.Controllers.Items.BalloonItem");
-            AddSelectedTypeButton(ImageLibrary.Instance.Pumpkin, "Casual.Controllers.Items.PumpkinItem");
-            AddSelectedTypeButton(ImageLibrary.Instance.Box, "Casual.Controllers.Items.BoxItem");
+            AddSelectedTypeButton(new Texture2D(40,40), "Empty");
+            AddSelectedTypeButton(ImageLibrary.Instance.BlueCube, nameof(CubeItem), true, Colour.Blue);
+            AddSelectedTypeButton(ImageLibrary.Instance.PinkCube, nameof(CubeItem), true, Colour.Pink);
+            AddSelectedTypeButton(ImageLibrary.Instance.GreenCube, nameof(CubeItem),  true, Colour.Green);
+            AddSelectedTypeButton(ImageLibrary.Instance.PurpleCube, nameof(CubeItem),  true, Colour.Purple);
+            AddSelectedTypeButton(ImageLibrary.Instance.RedCube, nameof(CubeItem),  true, Colour.Red);
+            AddSelectedTypeButton(ImageLibrary.Instance.YellowCube, nameof(CubeItem),  true, Colour.Yellow);
+            AddSelectedTypeButton(ImageLibrary.Instance.Balloon, nameof(BalloonItem));
+            AddSelectedTypeButton(ImageLibrary.Instance.Pumpkin, nameof(PumpkinItem));
+            AddSelectedTypeButton(ImageLibrary.Instance.Box, nameof(BoxItem));
             GUILayout.EndHorizontal();
         }
 
-        private void SetColourRatios()
+        private void SetItemRatios()
         {
+            GUILayout.Label("Item Ratios", EditorStyles.boldLabel, new GUILayoutOption[]
+            {
+                GUILayout.Width(100),
+                GUILayout.Height(50)
+            });
             GUILayout.BeginHorizontal();
-            for (int i = 0; i < 4; i++)
+            if (GUILayout.Button(null as Texture, new GUILayoutOption[]
+                {
+                    GUILayout.Width(50),
+                    GUILayout.Height(50)
+                }))
+            {
+                var itemRatio = new ItemRatio();
+                itemRatio.ItemData = new ItemData();
+                levelConfig.ItemRatios.Add(itemRatio);
+            }
+            
+            for (int i = 0; i < levelConfig.ItemRatios.Count; i++)
             {
                 AddSpawnRatioButton(levelConfig.ItemRatios[i]);
             }
+            
             GUILayout.EndHorizontal();
+        }
+        
+        private void SetTargets()
+        {
+            GUILayout.Label("Targets", EditorStyles.boldLabel, new GUILayoutOption[]
+            {
+                GUILayout.Width(100),
+                GUILayout.Height(50)
+            });
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button(null as Texture, new GUILayoutOption[]
+                {
+                    GUILayout.Width(50),
+                    GUILayout.Height(50)
+                }))
+            {
+                var target = new Target();
+                levelConfig.Targets.Add(target);
+            }
+            
+            for (int i = 0; i < levelConfig.Targets.Count; i++)
+            {
+                AddSpawnTargetButton(levelConfig.Targets[i]);
+            }
+            
+            GUILayout.EndHorizontal();
+        }
+        
+        private void AddSpawnTargetButton(Target target)
+        {
+            GUILayout.BeginVertical();
+
+            if (GUILayout.Button(target.Texture as Texture, new GUILayoutOption[]
+                {
+                    GUILayout.Width(50),
+                    GUILayout.Height(50)
+                }))
+            {
+                target.ItemType = selectedItemData.ItemType;
+                target.Colour = selectedItemData.Colour;
+                target.Texture = selectedItemData.Texture;
+            }
+            
+            target.Count = EditorGUILayout.IntField("", target.Count, new GUILayoutOption[] {
+                GUILayout.Width (50)
+            });
+            GUILayout.EndVertical();
         }
 
         private void AddSpawnRatioButton(ItemRatio itemRatio)
@@ -229,8 +291,8 @@ namespace Casual
                 GUILayout.Height(50)
             });
             AddSelectedTypeButton(null, null, false);
-            AddSelectedTypeButton(ImageLibrary.Instance.Bubble, "BubbleObstacle", false);
-            AddSelectedTypeButton(ImageLibrary.Instance.Bush, "BushObstacle", false);
+            AddSelectedTypeButton(ImageLibrary.Instance.Bubble, nameof(BubbleObstacle), false);
+            AddSelectedTypeButton(ImageLibrary.Instance.Bush, nameof(BushObstacle), false);
             GUILayout.EndHorizontal();
         }
 

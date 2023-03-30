@@ -28,12 +28,13 @@ namespace Casual.Utilities
             if (cellController == null) return;
             if(cellController.Item == null) return;
             if (cellController.Obstacle is IItemExecuteBlocker) return;
-            if (!cellController.Item.TryGetComponent<IMatchableWithColour>(out IMatchableWithColour matchable)) return;
+            var matchable = cellController.Item as IMatchableWithColour;
+            if (matchable == null) return;
             
             var row = cellController.GridPosition.x;
             var column = cellController.GridPosition.y;
             if (visitedCells[LevelManager.Instance.CurrentLevel.GridWidth * column + row]) return;
-            if(cellController.Item.Colour != colour) return;
+            if(matchable.Colour != colour) return;
 
             visitedCells[LevelManager.Instance.CurrentLevel.GridWidth * column + row] = true;
             resultCells.Add(cellController);

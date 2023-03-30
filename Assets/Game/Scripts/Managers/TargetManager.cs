@@ -19,7 +19,7 @@ public class TargetManager : MonoSingleton<TargetManager>
 
     private void Prepare()
     {
-        targetCount = LevelManager.Instance.CurrentLevel.Targets.Length;
+        targetCount = LevelManager.Instance.CurrentLevel.Targets.Count;
         moveCount = LevelManager.Instance.CurrentLevel.MaxMove;
     }
 

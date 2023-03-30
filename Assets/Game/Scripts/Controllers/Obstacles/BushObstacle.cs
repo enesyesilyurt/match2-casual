@@ -13,7 +13,7 @@ namespace Casual
         
         public override void Prepare(CellController cell)
         {
-            AddSprite(ImageLibrary.Instance.GetSprite(Colour.None, ItemType.Bush));
+            AddSprite(ImageLibrary.Instance.GetSprite(nameof(BushObstacle)));
         }
 
         public override void OnNeighbourExecute()

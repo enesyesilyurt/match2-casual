@@ -21,17 +21,26 @@ namespace Casual.Utilities
         private bool isFalling;
 
         public bool IsFalling => isFalling;
+        private bool canMovable = true;
         private float maxSpeed;
         
         public void Prepare(Item item)
         {
             this.item = item;
-            maxSpeed = GameManager.Instance.CubeMaxSpeed;
+            var movable = item as IMovable;
+            if (movable == null)
+            {
+                canMovable = false;
+            }
+            else
+            {
+                maxSpeed = GameManager.Instance.CubeMaxSpeed;
+            }
         }
 
         public void Update()
         {
-            if(!isFalling) return;
+            if(canMovable && !isFalling) return;
             FallMovementHandler();
         }
 
@@ -64,7 +73,7 @@ namespace Casual.Utilities
         {
             velocity += GameManager.Instance.CubeAcceleration;
             velocity = velocity >= maxSpeed ? maxSpeed : velocity;
-            var tempPosition = item.transform.position;
+            var tempPosition = item.ItemBase.transform.position;
             tempPosition.y -= velocity * Time.deltaTime;
             if (tempPosition.y <= targetPosition.y)
             {
@@ -80,7 +89,7 @@ namespace Casual.Utilities
                 }
             }
             
-            item.transform.position = tempPosition;
+            item.ItemBase.transform.position = tempPosition;
             
             // item.transform.DOKill();
             //

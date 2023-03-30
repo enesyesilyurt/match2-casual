@@ -10,12 +10,14 @@ using UnityEngine;
 
 namespace Casual.Controllers.Items
 {
-    public class CubeItem : Item, IInitializableWithData, IExecutableWithTap, IExecutableWithSpecial, IMatchableWithColour, IMovable
+    public class CubeItem : Item, IInitializableWithData, IExecutableWithTap, IExecutableWithSpecial, IMatchableWithColour, IMovable, ITargetable<Colour>
     {
         public static int MinimumMatchCount = 2;
         public static int PropellerSpawnCount = 6;
 
+        private Colour colour;
         public Colour Value => colour;
+        public Colour Colour => colour;
         
         public bool CanMove
         {
@@ -26,11 +28,10 @@ namespace Casual.Controllers.Items
             }
         }
         
-        public void InitializeWithData(ItemData itemData, ItemBase itemBase)
+        public void InitializeWithData(ItemData itemData)
         {
             colour = itemData.Colour;
-            ItemType = ItemType.Cube;
-            Prepare(itemBase, ImageLibrary.Instance.GetSprite(colour));
+            Prepare(ImageLibrary.Instance.GetSprite(nameof(CubeItem), Colour));
         }
 
         public void PrepareExecute()
@@ -40,18 +41,13 @@ namespace Casual.Controllers.Items
             {
                 if (neighbor != null && neighbor.HasItem())
                 {
-                    if (neighbor.Item.TryGetComponent<IExecutableWithNeighbor>(out IExecutableWithNeighbor executableWithNeighbor))
-                    {
-                        executableWithNeighbor.ExecuteWithNeighbor();
-                    }
+                    var executableWithNeighbor = neighbor.Item as IExecutableWithNeighbor;
+                    executableWithNeighbor?.ExecuteWithNeighbor();
                 }
             }
             
-            var listener = (IItemExecuteListener)CellController.Obstacle;
+            var listener = CellController.Obstacle as IItemExecuteListener;
             listener?.OnItemExecuted();
-            
-            // if(neighbor != null && neighbor.HasObstacle())
-            //     neighbor.Obstacle.OnNeighbourExecute();
         }
 
         public void Execute()
@@ -76,7 +72,7 @@ namespace Casual.Controllers.Items
             var cells = BoardController.Instance.MatchFinder.FindMatches(CellController, colour);
             if (cells.Count < MinimumMatchCount)
             {
-                FailMatchSequence(transform);
+                FailMatchSequence(ItemBase.transform);
             }
             else if (cells.Count < PropellerSpawnCount)
             {
@@ -92,19 +88,17 @@ namespace Casual.Controllers.Items
         {
             if (matchCount < GameManager.Instance.PropellerMatchCount)
             {
-                spriteRenderer.sprite = ImageLibrary.Instance.GetSprite(colour);
-                ItemType = ItemType.Cube;
+                ItemBase.SetSprite(ImageLibrary.Instance.GetSprite(nameof(CubeItem), colour));
             }
             else
             {
-                spriteRenderer.sprite = ImageLibrary.Instance.GetSprite(colour, ItemType.MultipleCube);
-                ItemType = ItemType.MultipleCube;
+                ItemBase.SetSprite(ImageLibrary.Instance.GetSprite(nameof(CubeItem), colour, false));
             }
         }
 
         private void CreateParticle()
         {
-            var particle = SimplePool.Spawn(ParticleLibrary.Instance.GetParticle(colour).gameObject, transform.position,
+            var particle = SimplePool.Spawn(ParticleLibrary.Instance.GetParticle(colour).gameObject, ItemBase.transform.position,
                 Quaternion.identity);
             particle.SetActive(true);
             particle.transform.SetParent(BoardController.Instance.ParticleParent);
@@ -115,8 +109,9 @@ namespace Casual.Controllers.Items
             FallAndFillManager.Instance.Proccess();
             for (var i = 0; i < cells.Count; i++)
             {
-                var item = (IExecutable)cells[i].Item;
-                item.Execute();
+                var item = cells[i].Item as IExecutable;
+                item?.PrepareExecute();
+                item?.Execute();
             }
         }
         
@@ -136,8 +131,8 @@ namespace Casual.Controllers.Items
                 var item = cells[i].Item;
                 var executable = (IExecutable)item;
                 executable.PrepareExecute();
-                item.IncreaseSortingOrder(LevelManager.Instance.CurrentLevel.GridHeight);
-                item.transform.DOMove(cell.transform.position, GameManager.Instance.SpecialMergeTime)
+                item.ItemBase.IncreaseSortingOrder(LevelManager.Instance.CurrentLevel.GridHeight);
+                item.ItemBase.transform.DOMove(cell.transform.position, GameManager.Instance.SpecialMergeTime)
                     .SetEase(Ease.InBack, GameManager.Instance.SpecialMergeOverShoot)
                     .OnComplete(() =>
                     {
@@ -150,9 +145,10 @@ namespace Casual.Controllers.Items
         public int CheckMatchWithColour()
         {
             var matchCountTemp = BoardController.Instance.MatchFinder.FindMatches(CellController, colour).Count;
-            var matchCount = matchCountTemp - 1 <= 0 ? 0 : matchCountTemp - 1;
+            var matchCount = matchCountTemp - 1 <= 0 ? 0 : matchCountTemp;
             OnMatchCountChanged(matchCount);
             return matchCount;
         }
+
     }
 }

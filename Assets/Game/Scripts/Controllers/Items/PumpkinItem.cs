@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Casual
 {
-    public class PumpkinItem : Item, IInitializableWithData, IInitializableWithoutData, IExecutableWithNeighbor, IExecutableWithSpecial, IMovable
+    public class PumpkinItem : Item, IInitializableWithData, IInitializableWithoutData, IExecutableWithNeighbor, IExecutableWithSpecial, IMovable, ITargetable<string>
     {
         private int health = 2;
         
@@ -20,17 +20,17 @@ namespace Casual
                        !CellController.GetFirstCellBelow().HasItem();
             }
         }
+        
+        public string Value => nameof(PumpkinItem);
 
-        public void InitializeWithData(ItemData itemData, ItemBase itemBase)
+        public void InitializeWithData(ItemData itemData)
         {
-            ItemType = ItemType.Pumpkin;
-            Prepare(itemBase, ImageLibrary.Instance.GetSprite(Colour.Empty, ItemType.Pumpkin));
+            Prepare(ImageLibrary.Instance.GetSprite(nameof(PumpkinItem)));
         }
 
-        public void InitializeWithoutData(ItemBase itemBase)
+        public void InitializeWithoutData()
         {
-            ItemType = ItemType.Pumpkin;
-            Prepare(itemBase, ImageLibrary.Instance.GetSprite(Colour.Empty, ItemType.Pumpkin));
+            Prepare(ImageLibrary.Instance.GetSprite(nameof(PumpkinItem)));
         }
     
         public void Move()

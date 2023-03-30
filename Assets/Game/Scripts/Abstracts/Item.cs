@@ -9,20 +9,15 @@ using Unity.VisualScripting;
 
 namespace Casual.Abstracts
 {
-    public abstract class Item : MonoBehaviour
+    public abstract class Item
     {
-        private const int BaseSortingOrder = 10;
-
         private FallAnimation fallAnimation;
         private CellController cellController;
-        protected SpriteRenderer spriteRenderer;
-        protected Colour colour;
+        private ItemBase itemBase;
 
         public FallAnimation FallAnimation => fallAnimation;
-        public Colour Colour => colour;
-        
-        public ItemType ItemType { get; protected set; }
-        
+        public ItemBase ItemBase => itemBase;
+
         public CellController CellController
         {
             get => cellController;
@@ -41,48 +36,24 @@ namespace Casual.Abstracts
                 if (value != null)
                 {
                     value.Item = this;
-                    gameObject.name = cellController.gameObject.name + " " + GetType().Name;
+                    itemBase.gameObject.name = cellController.gameObject.name + " " + GetType().Name;
                 }
             }
         }
 
-        public static Item SpawnItem(Type type, Vector3 position, out ItemBase itemBase)
+        protected Item()
         {
             itemBase = SimplePool
-                .Spawn(GameManager.Instance.ItemBasePrefab, position, Quaternion.Euler(Vector3.zero))
+                .Spawn(GameManager.Instance.ItemBasePrefab, Vector3.zero, Quaternion.Euler(Vector3.zero))
                 .GetComponent<ItemBase>();
             itemBase.Prepare();
-            return (Item)itemBase.gameObject.AddComponent(type);
         }
 
-        public void SetSortingOrder(int y)
-        {
-            spriteRenderer.sortingOrder = BaseSortingOrder + y;
-        }
-
-        public void IncreaseSortingOrder(int value)
-        {
-            spriteRenderer.sortingOrder += value;
-        }
-
-        protected void AddSprite(Sprite sprite)
-        {
-            var tempRenderer = GetComponent<SpriteRenderer>();
-
-            spriteRenderer = tempRenderer == null
-                ? gameObject.AddComponent<SpriteRenderer>()
-                : spriteRenderer = tempRenderer;
-
-            spriteRenderer.sprite = sprite;
-            spriteRenderer.sortingOrder = BaseSortingOrder;
-            spriteRenderer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
-        }
-
-        protected void Prepare(ItemBase itemBase, Sprite sprite)
+        protected void Prepare(Sprite sprite)
         {
             fallAnimation = itemBase.FallAnimation;
             fallAnimation.Prepare(this);
-            AddSprite(sprite);
+            itemBase.AddSprite(sprite);
         }
 
         protected void PrepareRemove()
@@ -94,8 +65,7 @@ namespace Casual.Abstracts
         protected void RemoveItem()
         {
             CellController.Item = null;
-            Destroy(gameObject.GetComponent<Item>());
-            SimplePool.Despawn(gameObject);
+            SimplePool.Despawn(itemBase.gameObject);
         }
     }
 }

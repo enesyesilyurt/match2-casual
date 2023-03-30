@@ -19,11 +19,10 @@ public class PropellerItem : Item, IInitializableWithoutData, IExecutableWithTap
         }
     }
     
-    public void InitializeWithoutData(ItemBase itemBase)
+    public void InitializeWithoutData()
     {
-        ItemType = ItemType.Propeller;
-        var propellerSprite = ImageLibrary.Instance.GetSprite(Colour.Empty, ItemType.Propeller);
-        Prepare(itemBase, propellerSprite);
+        var propellerSprite = ImageLibrary.Instance.GetSprite(nameof(PropellerItem));
+        Prepare(propellerSprite);
     }
 
     public void Execute()

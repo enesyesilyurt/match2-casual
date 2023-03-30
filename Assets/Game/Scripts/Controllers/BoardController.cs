@@ -109,10 +109,11 @@ namespace Casual.Controllers
         public void CellTapped(CellController cellController)
         {
             if(onAnim) return;
-            if (!cellController.CanTap()) return;
             
-            var executableWithTap = (IExecutableWithTap)cellController.Item;
-            if (executableWithTap == null) return;
+            var blocker = cellController.Obstacle as IItemExecuteBlocker;
+            var executableWithTap = cellController.Item as IExecutableWithTap;
+            
+            if (executableWithTap == null || blocker != null) return;
             
             executableWithTap.ExecuteWithTap();
             TargetManager.Instance.DecreaseMoveCount();
@@ -126,7 +127,8 @@ namespace Casual.Controllers
             {
                 if (Cells[i] == null) continue;
                 if(Cells[i].Item == null) continue;
-                if(!Cells[i].Item.TryGetComponent<IMatchableWithColour>(out IMatchableWithColour matchable)) continue;
+                var matchable = Cells[i].Item as IMatchableWithColour;
+                if(matchable == null) continue;
                 var value = matchable.CheckMatchWithColour();
                 totalColourMatchCount += value;
                 counter++;
@@ -158,9 +160,8 @@ namespace Casual.Controllers
                 var index = Random.Range(0, items.Count);
                 Cells[i].Item = items[index];
                 items.RemoveAt(index);
-                Cells[i].Item.transform.DOMove(Cells[i].transform.position, GameManager.Instance.ShuffleSpeed)
+                Cells[i].Item.ItemBase.transform.DOMove(Cells[i].transform.position, GameManager.Instance.ShuffleSpeed)
                     .SetEase(Ease.InBack);
-                
             }
             
             yield return new WaitForSeconds(GameManager.Instance.ShuffleSpeed);
@@ -183,9 +184,10 @@ namespace Casual.Controllers
 
         private void CreatePropeller(CellController cell)
         {
-            var item = Item.SpawnItem(typeof(PropellerItem), cell.transform.position, out ItemBase itemBase);
+            var item = ItemFactory.GetItem(nameof(PropellerItem));
+            item.ItemBase.transform.position = cell.transform.position;
             var initializableWithoutData = (IInitializableWithoutData)item;
-            initializableWithoutData.InitializeWithoutData(itemBase);
+            initializableWithoutData.InitializeWithoutData();
             cell.Item = item;
         }
 

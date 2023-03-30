@@ -102,15 +102,16 @@ namespace Casual.Managers
 				 var itemData = CurrentLevel.ItemDatas[i];
 				 var cell = boardController.Cells[i];
 
-				 var item = Item.SpawnItem(Type.GetType(itemData.ItemType), cell.transform.position, out ItemBase itemBase);
+				 var item = ItemFactory.GetItem(itemData.ItemType);
+				 if(item == null) continue;
+				 item.ItemBase.transform.position = cell.transform.position;
 				 var initializableWithData = (IInitializableWithData)item;
-				 initializableWithData.InitializeWithData(itemData, itemBase);
+				 initializableWithData.InitializeWithData(itemData);
 				 
 				 cell.Item = item;
 				 
 				 // if (CurrentLevel.ItemDatas[i].ObstacleType == null) continue;
 				 // Obstacle obstacle = Obstacle.SpawnObstacle(Type.GetType(itemData.ItemType), cell.transform.position, out ObstacleBase obstacleBase); //ItemFactory.Instance.CreateObstacle(cell, boardController.ItemsParent, itemData.ObstacleType);
-    			 						
 				 // cell.Obstacle = obstacle;
 		    }
 	    }

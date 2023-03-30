@@ -1,4 +1,6 @@
+using Casual;
 using Casual.Abstracts;
+using Casual.Controllers.Items;
 using Casual.Enums;
 using Casual.Managers;
 using Casual.Utilities;
@@ -12,17 +14,17 @@ public class TargetController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI countText;
     
     private Colour colour;
-    private ItemType itemType;
     private int count;
+    private string type;
 
     public void Setup(Target target)
     {
         colour = target.Colour;
-        itemType = target.ItemType;
         count = target.Count;
+        type = target.ItemType;
 
         countText.text = count.ToString();
-        image.texture = ImageLibrary.Instance.GetSprite(colour, itemType).texture;
+        image.texture = ImageLibrary.Instance.GetSprite(target.ItemType, colour).texture;
 
         LevelManager.Instance.ItemExecuted += OnItemExecuted;
         GameManager.Instance.GameStateChanged += OnGameStateChanged;
@@ -37,7 +39,10 @@ public class TargetController : MonoBehaviour
 
     private void OnItemExecuted(Item item)
     {
-        if (item.Colour == colour)
+        var targetableColour = item as ITargetable<Colour>;
+        var targetableType = item as ITargetable<string>;
+        
+        if (targetableColour?.Value == colour || targetableType?.Value == type)
         {
             count--;
             if (count <= 0)

@@ -33,7 +33,7 @@ namespace Casual.Controllers
                 if (value != null)
                 {
                     value.CellController = this;
-                    value.SetSortingOrder(gridPosition.y);
+                    //value.SetSortingOrder(gridPosition.y);
                 }
             }
         }
@@ -61,12 +61,6 @@ namespace Casual.Controllers
             transform.localPosition = new Vector3(row * GameManager.Instance.OffsetX, column * GameManager.Instance.OffsetY);
             gameObject.SetActive(true);
             transform.SetParent(parent);
-        }
-
-        public bool CanTap()
-        {
-            var blocker = (IItemExecuteBlocker)obstacle;
-            return blocker == null && HasItem() && !item.FallAnimation.IsFalling;
         }
         
         public void Prepare()
