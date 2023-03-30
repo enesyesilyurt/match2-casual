@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using NaughtyAttributes;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -9,9 +10,9 @@ namespace Casual
     {
         [SerializeField] private GameObject upgradeButtonContainer;
         [SerializeField] private Transform upgradeButtonParent;
-        
-        private AreaConfig areaConfig;
 
+        private List<UpgradeController> activeUpgradeButtons = new ();
+        private AreaConfig areaConfig;
         private int currentPriorityIndex;
         
         public void Initialize(AreaConfig config)
@@ -20,16 +21,30 @@ namespace Casual
             ActivateUpgradeButtonsByPriority();
         }
 
+        [Button]
+        public void IncreaseUpgradeLevel()
+        {
+            currentPriorityIndex++;
+            ActivateUpgradeButtonsByPriority();
+        }
+
         private void ActivateUpgradeButtonsByPriority()
         {
+            foreach (var button in activeUpgradeButtons)
+            {
+                button.Despawn();
+            }
+            activeUpgradeButtons.Clear();
+            
             for (int i = 0; i < areaConfig.UpgradeConfigs.Length; i++)
             {
                 if (areaConfig.UpgradeConfigs[i].Priority == currentPriorityIndex)
                 {
-                    var button = SimplePool.Spawn(upgradeButtonContainer, areaConfig.UpgradeConfigs[i].ButtonPosition,
+                    var buttonGO = SimplePool.Spawn(upgradeButtonContainer, areaConfig.UpgradeConfigs[i].ButtonPosition,
                         quaternion.identity);
-                    button.SetActive(true);
-                    button.GetComponent<UpgradeController>().Initialize(areaConfig.UpgradeConfigs[i], upgradeButtonParent);
+                    var upgradeController = buttonGO.GetComponent<UpgradeController>();
+                    activeUpgradeButtons.Add(upgradeController);
+                    upgradeController.Initialize(areaConfig.UpgradeConfigs[i], upgradeButtonParent);
                 }
             }
         }

@@ -300,6 +300,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   button: {fileID: 2000237244744363055}
+  nameText: {fileID: 2000237244843324221}
+  starCountText: {fileID: 2000237244307567866}
+  upgradeConfig: {fileID: 0}
+  canvasGroup: {fileID: 2000237244744363043}
+  inDelay: 0.2
+  outDelay: 0.2
 --- !u!1 &2000237244843324223
 GameObject:
   m_ObjectHideFlags: 0

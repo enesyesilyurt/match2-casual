@@ -12,6 +12,8 @@ public class HomeUIController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI areaUpgradeText;
     [SerializeField] private TextMeshProUGUI timedRewardText;
     [SerializeField] private Button playButton;
+    [SerializeField] private Button eventButton;
+    [SerializeField] private Button buildButton;
     
     [SerializeField] private HomeElementActivatorBase[] homeElements;
     [SerializeField] private ActivableUIElement[] movables;
@@ -23,10 +25,15 @@ public class HomeUIController : MonoBehaviour
     private Star star;
     private AreaUpgrade areaUpgrade;
     private TimedReward timedReward;
+    
+    public static bool BuildsActive = false;
+    public static bool EventButtonActive = false;
+    public static event Action EventButtonClicked;
+    public static event Action BuildButtonClicked;
 
     public void Initialize()
     {
-        // SetupActivableElements(); // TODO
+        SetupActivableElements();
         ReferanceAttachments();
         AddListenerCollectibles();
         SetupTexts();
@@ -63,32 +70,17 @@ public class HomeUIController : MonoBehaviour
 
     private void SetupActivableElements()
     {
-        for (int i = 0; i < homeElements.Length; i++)
+        buildButton.onClick.AddListener(()=>
         {
-            var elementIndex = i;
-            
-            if(homeElements[elementIndex].Button == null) continue;
-            homeElements[elementIndex].Button.onClick.AddListener(()=>ActivateElements(elementIndex));
-        }
-
-        for (int i = 0; i < movables.Length; i++)
+            BuildsActive = !BuildsActive;
+            BuildButtonClicked?.Invoke();
+        });
+        
+        eventButton.onClick.AddListener(()=>
         {
-            movables[i].Setup(false);
-        }
-        
-        homeElements[0].SetupElements();
-    }
-
-    private void ActivateElements(int index)
-    {
-        if(homeElements[0].IsActive && index == 0) return;
-        
-        activeIndex = index == activeIndex ? 0 : index;
-        
-        for (int i = 0; i < homeElements.Length; i++)
-        {
-            homeElements[i].ChangeSituation(activeIndex == i);
-        }
+            EventButtonActive = !EventButtonActive;
+            EventButtonClicked?.Invoke();
+        });
     }
 
     #region CallBacks

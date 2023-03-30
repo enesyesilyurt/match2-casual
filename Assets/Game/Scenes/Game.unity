@@ -23929,6 +23929,8 @@ MonoBehaviour:
   areaUpgradeText: {fileID: 1221642404}
   timedRewardText: {fileID: 626744201}
   playButton: {fileID: 389793400}
+  eventButton: {fileID: 1895229175}
+  buildButton: {fileID: 1048732011}
   homeElements:
   - Button: {fileID: 0}
     activeElements:

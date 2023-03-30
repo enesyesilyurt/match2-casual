@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upgradeName: second
   priority: 0
-  buttonPosition: {x: 0, y: 100, z: 0}
+  starCount: 1
+  buttonPosition: {x: 500, y: 600, z: 0}
